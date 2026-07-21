@@ -1,2 +1,2 @@
-# TIL-Today-I-Learned-
+# TIL(Today-I-Learned)
 매일의 배움을 기록합니다.
