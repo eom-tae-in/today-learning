@@ -1,0 +1,25 @@
+{
+  "name": "til",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "매일 학습한 내용을 기록하며 꾸준히 성장하기 위한 개인 학습 저장소입니다.",
+  "main": "script.js",
+  "scripts": {
+    "test": "node --check script.js && node --check scripts/main.js && node --check scripts/git.js && node --check scripts/llm.js && node --check scripts/posts.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eom-tae-in/TIL.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eom-tae-in/TIL/issues"
+  },
+  "homepage": "https://github.com/eom-tae-in/TIL#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "openai": "^6.48.0"
+  }
+}

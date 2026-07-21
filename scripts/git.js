@@ -1,0 +1,78 @@
+import { execFileSync } from "child_process";
+
+const TIL_DIRECTORY = "TIL/";
+
+function isMarkdownPath(path) {
+    return path.startsWith(TIL_DIRECTORY) && path.endsWith(".md");
+}
+
+export function getChangedFiles() {
+    const output = execFileSync(
+        "git",
+        [
+            "diff",
+            "--name-status",
+            "--find-renames",
+            "-z",
+            "HEAD~1",
+            "HEAD",
+            "--",
+            "TIL",
+        ],
+        {
+            encoding: "utf8",
+        }
+    );
+
+    if (!output) {
+        return [];
+    }
+
+    const fields = output.split("\0");
+    const changedFiles = [];
+
+    let index = 0;
+
+    while (index < fields.length) {
+        const rawStatus = fields[index++];
+
+        if (!rawStatus) {
+            break;
+        }
+
+        const status = rawStatus[0];
+
+        if (status === "R") {
+            const oldPath = fields[index++];
+            const newPath = fields[index++];
+
+            // 기존 경로나 새 경로 중 하나라도 TIL Markdown이면 처리한다.
+            if (
+                isMarkdownPath(oldPath) ||
+                isMarkdownPath(newPath)
+            ) {
+                changedFiles.push({
+                    status: "R",
+                    oldPath,
+                    newPath,
+                });
+            }
+
+            continue;
+        }
+
+        const path = fields[index++];
+
+        if (
+            ["A", "M", "D"].includes(status) &&
+            isMarkdownPath(path)
+        ) {
+            changedFiles.push({
+                status,
+                path,
+            });
+        }
+    }
+
+    return changedFiles;
+}
