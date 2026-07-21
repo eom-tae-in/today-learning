@@ -1,0 +1,68 @@
+name: Update posts.json
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "TIL/**/*.md"
+
+permissions:
+  contents: write
+
+jobs:
+  update-posts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          path: main
+          fetch-depth: 2
+
+      - name: Checkout prod
+        uses: actions/checkout@v4
+        with:
+          ref: prod
+          path: prod
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: main/package-lock.json
+
+      - name: Install dependencies
+        working-directory: main
+        run: npm ci
+
+      - name: Update posts.json
+        working-directory: main
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/main.js
+
+      - name: Sync TIL files
+        run: |
+          mkdir -p prod/TIL
+          rsync -a --delete main/TIL/ prod/TIL/
+
+      - name: Commit & Push
+        working-directory: prod
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add posts.json
+          git add TIL
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+
+          git commit -m "deploy: sync til files"
+          git push origin prod
