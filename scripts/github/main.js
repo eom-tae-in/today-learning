@@ -12,6 +12,11 @@ import {
 
 const PROD_DIRECTORY = "../prod";
 const REVIEW_DIRECTORY = "Reviews";
+const DEFAULT_HASHTAGS = [
+    "LG CNS 6기",
+    "개발자",
+    "LGNSINSPIRECMAP",
+];
 
 const RECORD_STATUS = {
     reviewed: {
@@ -177,6 +182,7 @@ function createFallbackMetadata(date, existingPost) {
         title: existingPost?.title ?? date,
         summary: existingPost?.summary ?? "TIL이 작성되어 있지 않은 학습 계획 기록",
         tags: existingPost?.tags ?? [],
+        hashtags: DEFAULT_HASHTAGS,
     };
 }
 
@@ -222,6 +228,7 @@ async function createPost(date, existingPost, shouldSummarize) {
 
     return {
         ...metadata,
+        hashtags: DEFAULT_HASHTAGS,
         date,
         status,
         statusMessage: statusMeta.message,
