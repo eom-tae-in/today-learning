@@ -1,23 +1,23 @@
 {
-  "name": "til",
+  "name": "today-learning",
   "type": "module",
   "version": "1.0.0",
-  "description": "매일 학습한 내용을 기록하며 꾸준히 성장하기 위한 개인 학습 저장소입니다.",
+  "description": "TLP로 하루를 계획하고, TIL로 학습과 회고를 기록하는 개인 학습 저장소입니다.",
   "main": "scripts/github/main.js",
   "scripts": {
     "test": "node --check scripts/github/main.js && node --check scripts/github/git.js && node --check scripts/github/llm.js && node --check scripts/github/posts.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eom-tae-in/TIL.git"
+    "url": "git+https://github.com/eom-tae-in/today-learning.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/eom-tae-in/TIL/issues"
+    "url": "https://github.com/eom-tae-in/today-learning/issues"
   },
-  "homepage": "https://github.com/eom-tae-in/TIL#readme",
+  "homepage": "https://github.com/eom-tae-in/today-learning#readme",
   "dependencies": {
     "dotenv": "^17.4.2",
     "openai": "^6.48.0"
