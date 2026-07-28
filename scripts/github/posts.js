@@ -35,7 +35,7 @@ export async function savePosts(posts) {
 
 export function upsertPost(posts, post) {
     const index = posts.findIndex(
-        existingPost => existingPost.path === post.path
+        existingPost => existingPost.date === post.date
     );
 
     if (index === -1) {
@@ -46,9 +46,15 @@ export function upsertPost(posts, post) {
     posts[index] = post;
 }
 
-export function removePost(posts, path) {
+export function removePost(posts, recordId) {
     const index = posts.findIndex(
-        post => post.path === path
+        post => {
+            if (post.date === recordId || post.path === recordId) {
+                return true;
+            }
+
+            return Object.values(post.paths ?? {}).includes(recordId);
+        }
     );
 
     if (index === -1) {

@@ -2,13 +2,29 @@ import "dotenv/config";
 import fs from "fs/promises";
 import OpenAI from "openai";
 
-const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+function createClient() {
+    return new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY,
+    });
+}
 
-export async function summarizeMarkdown(markdownPath) {
-    const prompt = await fs.readFile("./prompts/summarize.md", "utf8");
+async function readOptionalMarkdown(label, markdownPath) {
+    if (markdownPath === undefined) {
+        return "";
+    }
+
     const markdown = await fs.readFile(markdownPath, "utf8");
+
+    return `# ${label}\n\n${markdown}`;
+}
+
+export async function summarizeRecord(paths) {
+    const client = createClient();
+    const prompt = await fs.readFile("./prompts/summarize.md", "utf8");
+    const markdown = [
+        await readOptionalMarkdown("TLP", paths.tlp),
+        await readOptionalMarkdown("TIL", paths.til),
+    ].filter(Boolean).join("\n\n---\n\n");
 
     const response = await client.responses.create({
         model: "gpt-5.5",

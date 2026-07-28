@@ -1,9 +1,11 @@
 import { execFileSync } from "child_process";
 
-const TIL_DIRECTORY = "TIL/";
+const RECORD_DIRECTORIES = ["TLP", "TIL"];
 
-function isMarkdownPath(path) {
-    return path.startsWith(TIL_DIRECTORY) && path.endsWith(".md");
+function isRecordMarkdown(path) {
+    return RECORD_DIRECTORIES.some(
+        directory => path.startsWith(`${directory}/`)
+    ) && path.endsWith(".md");
 }
 
 export function getChangedFiles() {
@@ -17,7 +19,7 @@ export function getChangedFiles() {
             "HEAD~1",
             "HEAD",
             "--",
-            "TIL",
+            ...RECORD_DIRECTORIES,
         ],
         {
             encoding: "utf8",
@@ -46,10 +48,9 @@ export function getChangedFiles() {
             const oldPath = fields[index++];
             const newPath = fields[index++];
 
-            // 기존 경로나 새 경로 중 하나라도 TIL Markdown이면 처리한다.
             if (
-                isMarkdownPath(oldPath) ||
-                isMarkdownPath(newPath)
+                isRecordMarkdown(oldPath) ||
+                isRecordMarkdown(newPath)
             ) {
                 changedFiles.push({
                     status: "R",
@@ -65,7 +66,7 @@ export function getChangedFiles() {
 
         if (
             ["A", "M", "D"].includes(status) &&
-            isMarkdownPath(path)
+            isRecordMarkdown(path)
         ) {
             changedFiles.push({
                 status,
