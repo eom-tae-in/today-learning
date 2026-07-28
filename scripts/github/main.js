@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import path from "path";
 
 import { getChangedFiles } from "./git.js";
 import { summarizeRecord } from "./llm.js";
@@ -8,6 +9,9 @@ import {
     upsertPost,
     removePost,
 } from "./posts.js";
+
+const PROD_DIRECTORY = "../prod";
+const REVIEW_DIRECTORY = "Reviews";
 
 const RECORD_STATUS = {
     reviewed: {
@@ -59,6 +63,7 @@ async function collectRecordPaths(date) {
     const paths = {};
     const tlpPath = createRecordPath("TLP", date);
     const tilPath = createRecordPath("TIL", date);
+    const reviewPath = createRecordPath(REVIEW_DIRECTORY, date);
 
     if (await pathExists(tlpPath)) {
         paths.tlp = tlpPath;
@@ -66,6 +71,10 @@ async function collectRecordPaths(date) {
 
     if (await pathExists(tilPath)) {
         paths.til = tilPath;
+    }
+
+    if (await pathExists(path.join(PROD_DIRECTORY, reviewPath))) {
+        paths.review = reviewPath;
     }
 
     return paths;
@@ -85,23 +94,131 @@ function inferStatus(paths) {
         : "reviewed";
 }
 
+function normalizeMarkdownList(value) {
+    if (!Array.isArray(value)) {
+        return [];
+    }
+
+    return value
+        .map(item => String(item).replace(/\s+/g, " ").trim())
+        .filter(Boolean);
+}
+
+function createMarkdownList(items, fallback) {
+    const listItems = items.length === 0
+        ? [fallback]
+        : items;
+
+    return listItems
+        .map(item => `- ${item}`)
+        .join("\n");
+}
+
+function createReviewMarkdown(date, review) {
+    const overview = String(review?.overview ?? "")
+        .replace(/\s+/g, " ")
+        .trim();
+    const strengths = normalizeMarkdownList(review?.strengths);
+    const improvements = normalizeMarkdownList(review?.improvements);
+    const nextActions = normalizeMarkdownList(review?.nextActions);
+
+    return [
+        `# AI 학습 점검 - ${date}`,
+        "",
+        "## 종합",
+        "",
+        overview || "TLP와 TIL을 바탕으로 오늘의 학습 흐름을 점검했습니다.",
+        "",
+        "## 잘한 점",
+        "",
+        createMarkdownList(strengths, "계획과 회고를 함께 남겨 학습 흐름을 추적할 수 있습니다."),
+        "",
+        "## 보완할 점",
+        "",
+        createMarkdownList(improvements, "다음 기록에서 실행 결과와 근거를 더 구체적으로 남기면 좋습니다."),
+        "",
+        "## 다음 액션",
+        "",
+        createMarkdownList(nextActions, "다음 학습 계획에 오늘의 보완점을 반영합니다."),
+        "",
+    ].join("\n");
+}
+
+async function saveReview(date, review) {
+    const reviewPath = createRecordPath(REVIEW_DIRECTORY, date);
+    const outputPath = path.join(PROD_DIRECTORY, reviewPath);
+
+    await fs.mkdir(path.dirname(outputPath), {
+        recursive: true,
+    });
+    await fs.writeFile(
+        outputPath,
+        createReviewMarkdown(date, review),
+        "utf8"
+    );
+
+    return reviewPath;
+}
+
+async function removeReview(date) {
+    const reviewPath = createRecordPath(REVIEW_DIRECTORY, date);
+
+    try {
+        await fs.unlink(path.join(PROD_DIRECTORY, reviewPath));
+    } catch (error) {
+        if (error.code !== "ENOENT") {
+            throw error;
+        }
+    }
+}
+
+function createFallbackMetadata(date, existingPost) {
+    return {
+        title: existingPost?.title ?? date,
+        summary: existingPost?.summary ?? "TIL이 작성되어 있지 않은 학습 계획 기록",
+        tags: existingPost?.tags ?? [],
+    };
+}
+
+function pickMetadata(analysis, fallback) {
+    return {
+        title: String(analysis.title ?? fallback.title).trim() || fallback.title,
+        summary: String(analysis.summary ?? fallback.summary).trim() || fallback.summary,
+        tags: Array.isArray(analysis.tags)
+            ? analysis.tags.map(tag => String(tag).trim()).filter(Boolean)
+            : fallback.tags,
+    };
+}
+
 async function createPost(date, existingPost, shouldSummarize) {
     const paths = await collectRecordPaths(date);
-    const path = paths.review ?? paths.til ?? paths.tlp;
+    const recordPath = paths.review ?? paths.til ?? paths.tlp;
 
-    if (path === undefined) {
+    if (recordPath === undefined) {
         return null;
     }
 
-    const metadata = paths.til === undefined || !shouldSummarize
-        ? {
-            title: existingPost?.title ?? date,
-            summary: existingPost?.summary ?? "TIL이 작성되어 있지 않은 학습 계획 기록",
-            tags: existingPost?.tags ?? [],
+    const fallbackMetadata = createFallbackMetadata(date, existingPost);
+    let metadata = fallbackMetadata;
+
+    if (paths.til !== undefined && shouldSummarize) {
+        const analysis = await summarizeRecord(paths);
+
+        metadata = pickMetadata(analysis, fallbackMetadata);
+
+        if (paths.tlp !== undefined) {
+            paths.review = await saveReview(date, analysis.review);
         }
-        : await summarizeRecord(paths);
+    }
+
+    if (paths.tlp === undefined || paths.til === undefined) {
+        await removeReview(date);
+        delete paths.review;
+    }
+
     const status = inferStatus(paths);
     const statusMeta = RECORD_STATUS[status];
+    const primaryPath = paths.review ?? paths.til ?? paths.tlp;
 
     return {
         ...metadata,
@@ -111,12 +228,15 @@ async function createPost(date, existingPost, shouldSummarize) {
         completionLabel: statusMeta.completionLabel,
         completionLevel: statusMeta.level,
         paths,
-        path,
+        path: primaryPath,
     };
 }
 
-function isTilPath(path) {
-    return path?.startsWith("TIL/") === true;
+function isReviewablePath(path) {
+    return (
+        path?.startsWith("TLP/") === true ||
+        path?.startsWith("TIL/") === true
+    );
 }
 
 function addChangedRecord(changedRecords, path) {
@@ -131,7 +251,7 @@ function addChangedRecord(changedRecords, path) {
         shouldSummarize: false,
     };
 
-    changedRecord.shouldSummarize ||= isTilPath(path);
+    changedRecord.shouldSummarize ||= isReviewablePath(path);
     changedRecords.set(date, changedRecord);
 }
 

@@ -66,6 +66,9 @@ jobs:
           git add posts.json
           git add TLP
           git add TIL
+          if [ -d Reviews ]; then
+            git add -A Reviews
+          fi
 
           if git diff --cached --quiet; then
             echo "No changes"
