@@ -196,8 +196,26 @@ function pickMetadata(analysis, fallback) {
     };
 }
 
+function shouldCreateMetadata(paths, shouldSummarize) {
+    return paths.til !== undefined && shouldSummarize;
+}
+
+function shouldCreateReview(paths) {
+    return paths.tlp !== undefined && paths.til !== undefined;
+}
+
+function hasRecordFile(paths) {
+    return paths.tlp !== undefined || paths.til !== undefined;
+}
+
 async function createPost(date, existingPost, shouldSummarize) {
     const paths = await collectRecordPaths(date);
+
+    if (!hasRecordFile(paths)) {
+        await removeReview(date);
+        return null;
+    }
+
     const recordPath = paths.review ?? paths.til ?? paths.tlp;
 
     if (recordPath === undefined) {
@@ -207,17 +225,17 @@ async function createPost(date, existingPost, shouldSummarize) {
     const fallbackMetadata = createFallbackMetadata(date, existingPost);
     let metadata = fallbackMetadata;
 
-    if (paths.til !== undefined && shouldSummarize) {
+    if (shouldCreateMetadata(paths, shouldSummarize)) {
         const analysis = await summarizeRecord(paths);
 
         metadata = pickMetadata(analysis, fallbackMetadata);
 
-        if (paths.tlp !== undefined) {
+        if (shouldCreateReview(paths)) {
             paths.review = await saveReview(date, analysis.review);
         }
     }
 
-    if (paths.tlp === undefined || paths.til === undefined) {
+    if (!shouldCreateReview(paths)) {
         await removeReview(date);
         delete paths.review;
     }
