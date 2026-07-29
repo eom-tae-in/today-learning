@@ -17,6 +17,12 @@ const DEFAULT_HASHTAGS = [
     "개발자",
     "LGNSINSPIRECMAP",
 ];
+const DEFAULT_REVIEW_TEXT = {
+    overview: "TLP와 TIL을 바탕으로 오늘의 학습 흐름을 점검했습니다.",
+    strengths: "오늘 기록에서는 뚜렷하게 강조할 잘한 점이 보이지 않습니다.",
+    improvements: "오늘 기록에서는 뚜렷한 보완할 부분이 보이지 않습니다.",
+    nextActions: "오늘 기록에서는 별도의 다음 액션이 뚜렷하게 보이지 않습니다.",
+};
 
 const RECORD_STATUS = {
     reviewed: {
@@ -132,19 +138,19 @@ function createReviewMarkdown(date, review) {
         "",
         "## 종합",
         "",
-        overview || "TLP와 TIL을 바탕으로 오늘의 학습 흐름을 점검했습니다.",
+        overview || DEFAULT_REVIEW_TEXT.overview,
         "",
         "## 잘한 점",
         "",
-        createMarkdownList(strengths, "계획과 회고를 함께 남겨 학습 흐름을 추적할 수 있습니다."),
+        createMarkdownList(strengths, DEFAULT_REVIEW_TEXT.strengths),
         "",
         "## 보완할 점",
         "",
-        createMarkdownList(improvements, "다음 기록에서 실행 결과와 근거를 더 구체적으로 남기면 좋습니다."),
+        createMarkdownList(improvements, DEFAULT_REVIEW_TEXT.improvements),
         "",
         "## 다음 액션",
         "",
-        createMarkdownList(nextActions, "다음 학습 계획에 오늘의 보완점을 반영합니다."),
+        createMarkdownList(nextActions, DEFAULT_REVIEW_TEXT.nextActions),
         "",
     ].join("\n");
 }
