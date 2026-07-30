@@ -1,5 +1,7 @@
 node_modules/
 .env
+DESIG.md
+DESIGN.md
 
 .codegraph/
 
