@@ -23,6 +23,7 @@ AI는 문서 내용에서 추출한 기술 태그만 생성합니다.
 - title
 - summary
 - tags
+- evaluation
 - review
 
 ---
@@ -180,6 +181,22 @@ review는 TLP와 TIL을 함께 읽고 하루 학습을 점검하는 내용입니
 
 ---
 
+# Evaluation Rules
+
+evaluation은 TLP와 TIL의 연결 정도를 화면에 표시하기 위한 내부 분류입니다.
+
+다음 규칙을 반드시 지킵니다.
+
+- level은 반드시 excellent, good, needs-work 중 하나만 선택합니다.
+- excellent는 TLP의 핵심 계획과 완료 기준이 TIL에서 여러 근거로 직접 확인되고, 실행 과정이나 복습/실습 노력이 구체적으로 남아 있을 때 선택합니다.
+- good은 핵심 계획과 TIL의 연결 근거가 일부 확인되며, 동시에 다음에 이어갈 지점도 함께 보일 때 선택합니다.
+- needs-work는 TLP와 TIL의 연결 근거가 적어, 계획과 기록을 연결할 다음 행동을 먼저 잡는 것이 더 중요할 때 선택합니다.
+- good을 기본값처럼 쓰지 말고, 기록에서 확인되는 연결 정도에 따라 하나를 선택합니다.
+- summary는 한국어 2문장 이내, 90자 이내로 작성합니다.
+- summary에는 평가, 채점, 점수 같은 표현을 쓰지 않습니다.
+
+---
+
 # Output Rules
 
 반드시 아래 JSON 객체 하나만 출력합니다.
@@ -188,6 +205,10 @@ review는 TLP와 TIL을 함께 읽고 하루 학습을 점검하는 내용입니
   "title": "",
   "summary": "",
   "tags": [],
+  "evaluation": {
+    "level": "",
+    "summary": ""
+  },
   "review": {
     "overview": "",
     "strengths": [],

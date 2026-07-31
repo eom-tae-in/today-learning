@@ -1,6 +1,12 @@
 name: Update posts.json
 
 on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Record date in YYYY-MM-DD"
+        required: true
+        type: string
   push:
     branches:
       - main
@@ -44,6 +50,7 @@ jobs:
         working-directory: main
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          REVIEW_DATE: ${{ github.event.inputs.date || '' }}
         run: node scripts/github/main.js
 
       - name: Sync record files

@@ -9,6 +9,10 @@ import {
     upsertPost,
     removePost,
 } from "./posts.js";
+import {
+    createReviewMarkdown,
+    normalizeEvaluation,
+} from "./review.js";
 
 const PROD_DIRECTORY = "../prod";
 const REVIEW_DIRECTORY = "Reviews";
@@ -17,39 +21,6 @@ const DEFAULT_HASHTAGS = [
     "개발자",
     "LGNSINSPIRECMAP",
 ];
-const DEFAULT_REVIEW_TEXT = {
-    overview: "TLP와 TIL을 바탕으로 오늘의 학습 흐름을 점검했습니다.",
-    strengths: "오늘 기록에서는 뚜렷하게 강조할 잘한 점이 보이지 않습니다.",
-    improvements: "오늘 기록에서는 뚜렷한 보완할 부분이 보이지 않습니다.",
-    nextActions: "오늘 기록에서는 별도의 다음 액션이 뚜렷하게 보이지 않습니다.",
-};
-
-const RECORD_STATUS = {
-    reviewed: {
-        label: "AI 점검 완료",
-        completionLabel: "평가 완료",
-        message: "TLP와 TIL을 바탕으로 AI 학습 점검이 완료되었습니다.",
-        level: "reviewed",
-    },
-    "pending-review": {
-        label: "AI 점검 대기",
-        completionLabel: "점검 대기",
-        message: "TLP와 TIL은 작성되어 있지만 AI 점검이 아직 생성되지 않았어요.",
-        level: "not-evaluated",
-    },
-    "missing-tlp": {
-        label: "TLP 없음",
-        completionLabel: "평가 미진행",
-        message: "TLP가 작성되어 있지 않아 오늘의 계획 이행 여부를 평가하기 어려워요.",
-        level: "not-evaluated",
-    },
-    "missing-til": {
-        label: "TIL 없음",
-        completionLabel: "평가 미진행",
-        message: "TIL이 작성되어 있지 않아 오늘의 학습 결과를 평가하기 어려워요.",
-        level: "not-evaluated",
-    },
-};
 
 function extractDateFromPath(path) {
     return path.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? null;
@@ -91,71 +62,7 @@ async function collectRecordPaths(date) {
     return paths;
 }
 
-function inferStatus(paths) {
-    if (paths.tlp === undefined) {
-        return "missing-tlp";
-    }
-
-    if (paths.til === undefined) {
-        return "missing-til";
-    }
-
-    return paths.review === undefined
-        ? "pending-review"
-        : "reviewed";
-}
-
-function normalizeMarkdownList(value) {
-    if (!Array.isArray(value)) {
-        return [];
-    }
-
-    return value
-        .map(item => String(item).replace(/\s+/g, " ").trim())
-        .filter(Boolean);
-}
-
-function createMarkdownList(items, fallback) {
-    const listItems = items.length === 0
-        ? [fallback]
-        : items;
-
-    return listItems
-        .map(item => `- ${item}`)
-        .join("\n");
-}
-
-function createReviewMarkdown(date, review) {
-    const overview = String(review?.overview ?? "")
-        .replace(/\s+/g, " ")
-        .trim();
-    const strengths = normalizeMarkdownList(review?.strengths);
-    const improvements = normalizeMarkdownList(review?.improvements);
-    const nextActions = normalizeMarkdownList(review?.nextActions);
-
-    return [
-        `# AI 학습 점검 - ${date}`,
-        "",
-        "## 종합",
-        "",
-        overview || DEFAULT_REVIEW_TEXT.overview,
-        "",
-        "## 잘한 점",
-        "",
-        createMarkdownList(strengths, DEFAULT_REVIEW_TEXT.strengths),
-        "",
-        "## 보완할 점",
-        "",
-        createMarkdownList(improvements, DEFAULT_REVIEW_TEXT.improvements),
-        "",
-        "## 다음 액션",
-        "",
-        createMarkdownList(nextActions, DEFAULT_REVIEW_TEXT.nextActions),
-        "",
-    ].join("\n");
-}
-
-async function saveReview(date, review) {
+async function saveReview(date, review, evaluation) {
     const reviewPath = createRecordPath(REVIEW_DIRECTORY, date);
     const outputPath = path.join(PROD_DIRECTORY, reviewPath);
 
@@ -164,7 +71,7 @@ async function saveReview(date, review) {
     });
     await fs.writeFile(
         outputPath,
-        createReviewMarkdown(date, review),
+        createReviewMarkdown(date, review, evaluation),
         "utf8"
     );
 
@@ -222,14 +129,9 @@ async function createPost(date, existingPost, shouldSummarize) {
         return null;
     }
 
-    const recordPath = paths.review ?? paths.til ?? paths.tlp;
-
-    if (recordPath === undefined) {
-        return null;
-    }
-
     const fallbackMetadata = createFallbackMetadata(date, existingPost);
     let metadata = fallbackMetadata;
+    let aiEvaluation = existingPost?.aiEvaluation;
 
     if (shouldCreateMetadata(paths, shouldSummarize)) {
         const analysis = await summarizeRecord(paths);
@@ -237,30 +139,29 @@ async function createPost(date, existingPost, shouldSummarize) {
         metadata = pickMetadata(analysis, fallbackMetadata);
 
         if (shouldCreateReview(paths)) {
-            paths.review = await saveReview(date, analysis.review);
+            aiEvaluation = normalizeEvaluation(analysis.evaluation, date);
+            paths.review = await saveReview(date, analysis.review, aiEvaluation);
         }
     }
 
     if (!shouldCreateReview(paths)) {
         await removeReview(date);
         delete paths.review;
+        aiEvaluation = undefined;
     }
 
-    const status = inferStatus(paths);
-    const statusMeta = RECORD_STATUS[status];
-    const primaryPath = paths.review ?? paths.til ?? paths.tlp;
-
-    return {
+    const post = {
         ...metadata,
         hashtags: DEFAULT_HASHTAGS,
         date,
-        status,
-        statusMessage: statusMeta.message,
-        completionLabel: statusMeta.completionLabel,
-        completionLevel: statusMeta.level,
         paths,
-        path: primaryPath,
     };
+
+    if (aiEvaluation !== undefined) {
+        post.aiEvaluation = aiEvaluation;
+    }
+
+    return post;
 }
 
 function isReviewablePath(path) {
@@ -302,16 +203,36 @@ function collectChangedRecords(changedFiles) {
     return Array.from(changedRecords.values());
 }
 
-async function main() {
-    const changedFiles = getChangedFiles();
+function collectRequestedRecords() {
+    const date = process.env.REVIEW_DATE;
 
-    if (changedFiles.length === 0) {
+    if (date === undefined || date.length === 0) {
+        return null;
+    }
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        throw new Error(`Invalid REVIEW_DATE: ${date}`);
+    }
+
+    return [{
+        date,
+        shouldSummarize: true,
+    }];
+}
+
+async function main() {
+    const requestedRecords = collectRequestedRecords();
+    const changedFiles = requestedRecords === null
+        ? getChangedFiles()
+        : [];
+
+    if (requestedRecords === null && changedFiles.length === 0) {
         console.log("변경된 학습 기록 Markdown 파일이 없습니다.");
         return;
     }
 
     const posts = await loadPosts();
-    const changedRecords = collectChangedRecords(changedFiles);
+    const changedRecords = requestedRecords ?? collectChangedRecords(changedFiles);
 
     for (const { date, shouldSummarize } of changedRecords) {
         const existingPost = posts.find(post => post.date === date);

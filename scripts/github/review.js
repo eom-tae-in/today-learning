@@ -1,0 +1,88 @@
+const VALID_LEVELS = new Set(["excellent", "good", "needs-work"]);
+const DEFAULT_REVIEW_TEXT = {
+    overview: "TLP와 TIL을 바탕으로 오늘의 학습 흐름을 점검했습니다.",
+    strengths: "오늘 기록에서는 뚜렷하게 강조할 잘한 점이 보이지 않습니다.",
+    improvements: "오늘 기록에서는 뚜렷한 보완할 부분이 보이지 않습니다.",
+    nextActions: "오늘 기록에서는 별도의 다음 액션이 뚜렷하게 보이지 않습니다.",
+};
+
+function normalizeMarkdownList(value) {
+    if (!Array.isArray(value)) {
+        return [];
+    }
+
+    return value
+        .map(item => String(item).replace(/\s+/g, " ").trim())
+        .filter(Boolean);
+}
+
+function createMarkdownList(items, fallback) {
+    const listItems = items.length === 0
+        ? [fallback]
+        : items;
+
+    return listItems
+        .map(item => `- ${item}`)
+        .join("\n");
+}
+
+function toYamlScalar(value) {
+    return JSON.stringify(value);
+}
+
+export function normalizeEvaluation(value, date) {
+    const level = String(value?.level ?? "").trim();
+    const summary = String(value?.summary ?? "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    if (!VALID_LEVELS.has(level)) {
+        throw new Error(`Invalid generated evaluation.level: ${level}`);
+    }
+
+    if (summary.length === 0 || summary.length > 90) {
+        throw new Error("Generated evaluation.summary must be 1-90 characters.");
+    }
+
+    return {
+        level,
+        summary,
+        reviewedAt: date,
+    };
+}
+
+export function createReviewMarkdown(date, review, evaluation) {
+    const overview = String(review?.overview ?? "")
+        .replace(/\s+/g, " ")
+        .trim();
+    const strengths = normalizeMarkdownList(review?.strengths);
+    const improvements = normalizeMarkdownList(review?.improvements);
+    const nextActions = normalizeMarkdownList(review?.nextActions);
+
+    return [
+        "---",
+        `level: ${toYamlScalar(evaluation.level)}`,
+        `summary: ${toYamlScalar(evaluation.summary)}`,
+        `reviewedAt: ${toYamlScalar(evaluation.reviewedAt)}`,
+        "---",
+        "",
+        `# AI 학습 점검 - ${date}`,
+        "",
+        "## 종합",
+        "",
+        overview || DEFAULT_REVIEW_TEXT.overview,
+        "",
+        "## 잘한 점",
+        "",
+        createMarkdownList(strengths, DEFAULT_REVIEW_TEXT.strengths),
+        "",
+        "## 보완할 점",
+        "",
+        createMarkdownList(improvements, DEFAULT_REVIEW_TEXT.improvements),
+        "",
+        "## 다음 액션",
+        "",
+        createMarkdownList(nextActions, DEFAULT_REVIEW_TEXT.nextActions),
+        "",
+    ].join("\n");
+}
