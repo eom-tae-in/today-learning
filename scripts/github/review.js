@@ -30,6 +30,10 @@ function toYamlScalar(value) {
     return JSON.stringify(value);
 }
 
+function formatDisplayDate(date) {
+    return date.replaceAll("-", ".");
+}
+
 export function normalizeEvaluation(value, date) {
     const level = String(value?.level ?? "").trim();
     const summary = String(value?.summary ?? "")
@@ -66,17 +70,21 @@ export function createReviewMarkdown(date, review, evaluation) {
         `reviewedAt: ${toYamlScalar(evaluation.reviewedAt)}`,
         "---",
         "",
-        `# AI 학습 점검 - ${date}`,
+        "# 🤖 AI 학습 정리",
+        "",
+        formatDisplayDate(date),
+        "",
+        "> 오늘의 TLP와 TIL을 바탕으로 오늘 학습을 한 번 정리해 봅니다.",
         "",
         "## 종합",
         "",
         overview || DEFAULT_REVIEW_TEXT.overview,
         "",
-        "## 잘한 점",
+        "## 잘 이어간 점",
         "",
         createMarkdownList(strengths, DEFAULT_REVIEW_TEXT.strengths),
         "",
-        "## 보완할 점",
+        "## 다음에 다듬을 점",
         "",
         createMarkdownList(improvements, DEFAULT_REVIEW_TEXT.improvements),
         "",
