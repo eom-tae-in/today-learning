@@ -1,0 +1,360 @@
+[
+  {
+    "date": "2026-07-21",
+    "title": "VS Code Markdown Snippet 템플릿",
+    "summary": "VS Code Markdown Snippet 기반 TIL 템플릿 삽입 자동화",
+    "paths": {
+      "til": "TIL/2026/07/2026-07-21.md"
+    },
+    "tags": [
+      "VS Code",
+      "Markdown",
+      "Snippet"
+    ]
+  },
+  {
+    "date": "2026-07-22",
+    "title": "Java JVM 실행과 Spring Boot JAR",
+    "summary": "Java 바이트코드 실행 흐름과 Spring Boot JAR·WAR 배포 구조",
+    "paths": {
+      "til": "TIL/2026/07/2026-07-22.md"
+    },
+    "tags": [
+      "Java",
+      "JVM",
+      "Spring Boot",
+      "JAR",
+      "WAR"
+    ]
+  },
+  {
+    "date": "2026-07-23",
+    "title": "TCP 연결 생명주기와 TIME_WAIT",
+    "summary": "accept(), Backlog Queue, Half-close, TIME_WAIT 역할 구분",
+    "paths": {
+      "til": "TIL/2026/07/2026-07-23.md"
+    },
+    "tags": [
+      "TCP",
+      "Socket",
+      "Backlog Queue",
+      "TIME_WAIT",
+      "Half-close"
+    ]
+  },
+  {
+    "date": "2026-07-24",
+    "title": "AI Agent와 Context Engineering",
+    "summary": "AI Agent 작업 맥락과 실행 환경 설계 관점",
+    "paths": {
+      "til": "TIL/2026/07/2026-07-24.md"
+    },
+    "tags": [
+      "AI Agent",
+      "Context Engineering",
+      "Harness Engineering"
+    ]
+  },
+  {
+    "date": "2026-07-25",
+    "title": "DFS 백트래킹 방향 관리",
+    "summary": "DFS 좌표 이동 방향 관리와 조건문 기반 코드 리팩토링",
+    "paths": {
+      "til": "TIL/2026/07/2026-07-25.md"
+    },
+    "tags": [
+      "DFS",
+      "Backtracking",
+      "Refactoring",
+      "Algorithm"
+    ]
+  },
+  {
+    "date": "2026-07-26",
+    "title": "코딩 테스트 문제 분석 전략",
+    "summary": "코딩 테스트 조건·엣지 케이스 분석과 풀이 전략 개선",
+    "paths": {
+      "til": "TIL/2026/07/2026-07-26.md"
+    },
+    "tags": [
+      "Coding Test",
+      "Algorithm",
+      "Problem Solving"
+    ]
+  },
+  {
+    "date": "2026-07-27",
+    "title": "인프라 교육과 TLP·TIL 기록",
+    "summary": "인프라 교육 이후 TLP와 TIL 기반 목표 설정·복습 기록 체계",
+    "paths": {
+      "til": "TIL/2026/07/2026-07-27.md"
+    },
+    "tags": [
+      "Infrastructure",
+      "TIL",
+      "TLP"
+    ]
+  },
+  {
+    "title": "JavaScript 이벤트와 SPA JSON 통신",
+    "summary": "HTML 구조와 JavaScript 이벤트, SPA JSON 통신 흐름",
+    "tags": [
+      "JavaScript",
+      "SPA",
+      "JSON",
+      "HTML",
+      "Bootstrap"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-07-28",
+    "paths": {
+      "til": "TIL/2026/07/2026-07-28.md"
+    }
+  },
+  {
+    "date": "2026-07-29",
+    "title": "SPA와 REST API 통신 흐름",
+    "summary": "Full Browsing과 SPA 차이, DOM 기반 화면 갱신 구조",
+    "tags": [
+      "SPA",
+      "REST API",
+      "JavaScript",
+      "DOM",
+      "CSS"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "paths": {
+      "tlp": "TLP/2026/07/2026-07-29.md",
+      "til": "TIL/2026/07/2026-07-29.md",
+      "review": "Reviews/2026/07/2026-07-29.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "계획 일부는 남았지만 SPA 통신 흐름을 TIL에 연결해 정리했다. 다음 실습 방향도 잡았다.",
+      "reviewedAt": "2026-07-29"
+    }
+  },
+  {
+    "title": "JavaScript DOM과 이벤트 처리",
+    "summary": "브라우저 렌더링 흐름과 DOM 이벤트 기반 JavaScript 문법 적용",
+    "tags": [
+      "JavaScript",
+      "DOM",
+      "Event",
+      "BOM",
+      "Bootstrap"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "paths": {
+      "tlp": "TLP/2026/07/2026-07-30.md",
+      "til": "TIL/2026/07/2026-07-30.md",
+      "review": "Reviews/2026/07/2026-07-30.md"
+    },
+    "date": "2026-07-30",
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "JS 문법과 알고리즘 실습 계획을 꾸준히 이어갔다. 이벤트와 렌더링 흐름은 예제로 다시 연결해 본다.",
+      "reviewedAt": "2026-07-30"
+    }
+  },
+  {
+    "title": "JavaScript DOM, 이벤트, 비동기",
+    "summary": "DOM 조작, 이벤트 처리, Promise 기반 HTTP 통신 흐름",
+    "tags": [
+      "JavaScript",
+      "DOM",
+      "Event",
+      "Promise",
+      "Fetch API"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-07-31",
+    "paths": {
+      "tlp": "TLP/2026/07/2026-07-31.md",
+      "til": "TIL/2026/07/2026-07-31.md",
+      "review": "Reviews/2026/07/2026-07-31.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "DOM 조작과 이벤트 처리는 TIL에서 확인된다. 실습 비중과 배열 메서드 기록은 부족하다.",
+      "reviewedAt": "2026-07-31"
+    }
+  },
+  {
+    "title": "JavaScript와 DOM 핵심 개념",
+    "summary": "JavaScript와 DOM 중심 프론트엔드 기초 개념 복습",
+    "tags": [
+      "JavaScript",
+      "DOM",
+      "Fetch API",
+      "Axios",
+      "Media Query"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-01",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-01.md",
+      "til": "TIL/2026/08/2026-08-01.md",
+      "review": "Reviews/2026/08/2026-08-01.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "JavaScript와 프론트엔드 개념 복습은 이어졌다. fetch/Axios와 반응형 실습 기록은 부족하다.",
+      "reviewedAt": "2026-08-01"
+    }
+  },
+  {
+    "title": "JavaScript 핵심 개념과 Stone Game",
+    "summary": "JavaScript 핵심 개념 복습과 LeetCode Stone Game 풀이 근거 확인",
+    "tags": [
+      "JavaScript",
+      "LeetCode",
+      "Algorithm",
+      "Java"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-02",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-02.md",
+      "til": "TIL/2026/08/2026-08-02.md",
+      "review": "Reviews/2026/08/2026-08-02.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "JavaScript 핵심 개념 복습과 주간 정리 실행이 확인된다. 일부 개념 재복습 필요도 드러났다.",
+      "reviewedAt": "2026-08-02"
+    }
+  },
+  {
+    "title": "React JSX와 컴포넌트 기초",
+    "summary": "React 컴포넌트 구조와 Props 기반 데이터 전달 원리",
+    "tags": [
+      "React",
+      "JSX",
+      "Props",
+      "Virtual DOM",
+      "ES6"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-03",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-03.md",
+      "til": "TIL/2026/08/2026-08-03.md",
+      "review": "Reviews/2026/08/2026-08-03.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "React 기초와 JSX·컴포넌트 정리는 확인되며, 실습 부족도 다음 과제로 연결됐다.",
+      "reviewedAt": "2026-08-03"
+    }
+  },
+  {
+    "title": "React Vite TypeScript 프로젝트 구조",
+    "summary": "React·Vite·TypeScript 역할과 프로젝트 실행 흐름",
+    "tags": [
+      "React",
+      "Vite",
+      "TypeScript",
+      "JSX",
+      "Component"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-04",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-04.md",
+      "til": "TIL/2026/08/2026-08-04.md",
+      "review": "Reviews/2026/08/2026-08-04.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "React 개발 환경과 프로젝트 구조는 확인되나 Props·이벤트·스타일 기록은 부족함.",
+      "reviewedAt": "2026-08-04"
+    }
+  },
+  {
+    "title": "React State와 로그인 이벤트 흐름",
+    "summary": "React State 변경과 이벤트·Form 처리 기반 로그인 흐름",
+    "tags": [
+      "React",
+      "React Hooks",
+      "Controlled Component",
+      "JWT",
+      "Axios"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-05",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-05.md",
+      "til": "TIL/2026/08/2026-08-05.md",
+      "review": "Reviews/2026/08/2026-08-05.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "상태 관리와 이벤트 처리 실습, 알고리즘 풀이가 이어졌다. useEffect와 사용자 정의 Hook은 다음 과제로 남았다.",
+      "reviewedAt": "2026-08-05"
+    }
+  },
+  {
+    "title": "React Router DOM과 json-server 블로그",
+    "summary": "React Router DOM 라우팅과 json-server 기반 블로그 CRUD",
+    "tags": [
+      "React Router DOM",
+      "json-server",
+      "Axios",
+      "Styled Components",
+      "React Hooks"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-06",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-06.md",
+      "til": "TIL/2026/08/2026-08-06.md",
+      "review": "Reviews/2026/08/2026-08-06.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "계획한 라우팅, 데이터 연동, UI, Hook 활용이 TIL에서 모두 이어졌다. 복습 지점도 구체적으로 남겼다.",
+      "reviewedAt": "2026-08-06"
+    }
+  }
+]

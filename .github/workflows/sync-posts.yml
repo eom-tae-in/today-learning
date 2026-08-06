@@ -19,12 +19,14 @@ permissions:
 
 jobs:
   update-posts:
+    if: github.event_name == 'workflow_dispatch' || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
         with:
+          ref: main
           path: main
           fetch-depth: 2
 
@@ -53,16 +55,42 @@ jobs:
           REVIEW_DATE: ${{ github.event.inputs.date || '' }}
         run: node scripts/github/main.js
 
+      - name: Commit generated records to main
+        working-directory: main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add posts.json
+          if [ -d Reviews ]; then
+            git add -A Reviews
+          fi
+
+          if git diff --cached --quiet; then
+            echo "No generated main changes"
+            exit 0
+          fi
+
+          git commit -m "chore: sync generated learning records"
+          git push origin main
+
       - name: Sync record files
         run: |
           mkdir -p prod/TLP
           mkdir -p prod/TIL
+          mkdir -p prod/Reviews
           if [ -d main/TLP ]; then
             rsync -a --delete main/TLP/ prod/TLP/
           else
             rm -rf prod/TLP/*
           fi
           rsync -a --delete main/TIL/ prod/TIL/
+          if [ -d main/Reviews ]; then
+            rsync -a --delete main/Reviews/ prod/Reviews/
+          else
+            rm -rf prod/Reviews/*
+          fi
+          cp main/posts.json prod/posts.json
 
       - name: Commit & Push
         working-directory: prod
@@ -73,9 +101,7 @@ jobs:
           git add posts.json
           git add TLP
           git add TIL
-          if [ -d Reviews ]; then
-            git add -A Reviews
-          fi
+          git add -A Reviews
 
           if git diff --cached --quiet; then
             echo "No changes"

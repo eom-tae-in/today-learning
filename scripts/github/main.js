@@ -14,7 +14,7 @@ import {
     normalizeEvaluation,
 } from "./review.js";
 
-const PROD_DIRECTORY = "../prod";
+const OUTPUT_DIRECTORY = process.env.OUTPUT_DIRECTORY ?? ".";
 const REVIEW_DIRECTORY = "Reviews";
 const DEFAULT_HASHTAGS = [
     "LG CNS 6기",
@@ -55,7 +55,7 @@ async function collectRecordPaths(date) {
         paths.til = tilPath;
     }
 
-    if (await pathExists(path.join(PROD_DIRECTORY, reviewPath))) {
+    if (await pathExists(path.join(OUTPUT_DIRECTORY, reviewPath))) {
         paths.review = reviewPath;
     }
 
@@ -64,7 +64,7 @@ async function collectRecordPaths(date) {
 
 async function saveReview(date, review, evaluation) {
     const reviewPath = createRecordPath(REVIEW_DIRECTORY, date);
-    const outputPath = path.join(PROD_DIRECTORY, reviewPath);
+    const outputPath = path.join(OUTPUT_DIRECTORY, reviewPath);
 
     await fs.mkdir(path.dirname(outputPath), {
         recursive: true,
@@ -82,7 +82,7 @@ async function removeReview(date) {
     const reviewPath = createRecordPath(REVIEW_DIRECTORY, date);
 
     try {
-        await fs.unlink(path.join(PROD_DIRECTORY, reviewPath));
+        await fs.unlink(path.join(OUTPUT_DIRECTORY, reviewPath));
     } catch (error) {
         if (error.code !== "ENOENT") {
             throw error;

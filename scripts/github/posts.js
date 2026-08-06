@@ -1,6 +1,8 @@
 import fs from "fs/promises";
+import path from "path";
 
-const POSTS_PATH = "../prod/posts.json";
+const OUTPUT_DIRECTORY = process.env.OUTPUT_DIRECTORY ?? ".";
+const POSTS_PATH = path.join(OUTPUT_DIRECTORY, "posts.json");
 
 export async function loadPosts() {
     try {
