@@ -1,5 +1,6 @@
 node_modules/
 .env
+.omo/
 DESIG.md
 DESIGN.md
 
