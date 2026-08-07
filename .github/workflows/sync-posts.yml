@@ -16,11 +16,21 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   update-posts:
     if: github.event_name == 'workflow_dispatch' || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout main
@@ -29,13 +39,6 @@ jobs:
           ref: main
           path: main
           fetch-depth: 2
-
-      - name: Checkout prod
-        uses: actions/checkout@v4
-        with:
-          ref: prod
-          path: prod
-          fetch-depth: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -74,39 +77,14 @@ jobs:
           git commit -m "chore: sync generated learning records"
           git push origin main
 
-      - name: Sync record files
-        run: |
-          mkdir -p prod/TLP
-          mkdir -p prod/TIL
-          mkdir -p prod/Reviews
-          if [ -d main/TLP ]; then
-            rsync -a --delete main/TLP/ prod/TLP/
-          else
-            rm -rf prod/TLP/*
-          fi
-          rsync -a --delete main/TIL/ prod/TIL/
-          if [ -d main/Reviews ]; then
-            rsync -a --delete main/Reviews/ prod/Reviews/
-          else
-            rm -rf prod/Reviews/*
-          fi
-          cp main/posts.json prod/posts.json
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
-      - name: Commit & Push
-        working-directory: prod
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: main
 
-          git add posts.json
-          git add TLP
-          git add TIL
-          git add -A Reviews
-
-          if git diff --cached --quiet; then
-            echo "No changes"
-            exit 0
-          fi
-
-          git commit -m "deploy: sync daily records"
-          git push origin prod
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
