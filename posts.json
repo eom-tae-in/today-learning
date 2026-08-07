@@ -358,9 +358,15 @@
     }
   },
   {
-    "title": "2026-08-07",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "React CRUD와 댓글 1:N 구조",
+    "summary": "json-server 기반 게시글 CRUD와 댓글 State 동기화",
+    "tags": [
+      "React",
+      "json-server",
+      "Axios",
+      "React Router",
+      "Styled Components"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -368,7 +374,14 @@
     ],
     "date": "2026-08-07",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-07.md"
+      "tlp": "TLP/2026/08/2026-08-07.md",
+      "til": "TIL/2026/08/2026-08-07.md",
+      "review": "Reviews/2026/08/2026-08-07.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "TLP의 CRUD, useEffect/useParams, 댓글 구조가 TIL에 구체적으로 이어졌다. Router 복습과 알고리즘 기록은 다음으로 남았다.",
+      "reviewedAt": "2026-08-07"
     }
   }
 ]
