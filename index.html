@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Today Learning은 매일의 계획, 학습, 회고를 기록하며 꾸준히 성장하는 개발자의 학습 시스템입니다."
+    >
+
+    <meta name="theme-color" content="#f6f8fc">
+
+    <title>Today Learning</title>
+
+    <link
+        rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235b63f6'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Arial,sans-serif' font-size='32' font-weight='900' fill='white'%3ET%3C/text%3E%3C/svg%3E"
+    >
+
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">
+        본문으로 바로가기
+    </a>
+
+    <div class="page-background" aria-hidden="true">
+        <div class="background-orb background-orb--one"></div>
+        <div class="background-orb background-orb--two"></div>
+        <div class="background-grid"></div>
+    </div>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a
+                class="brand"
+                href="./"
+                aria-label="Today Learning 홈으로 이동"
+            >
+                <span class="brand-symbol" aria-hidden="true">
+                    T
+                </span>
+
+                <span class="brand-text">
+                    <strong>Today Learning</strong>
+                    <small>Daily Growth System</small>
+                </span>
+            </a>
+
+            <nav class="header-actions" aria-label="주요 메뉴">
+                <a
+                    class="header-link"
+                    href="https://github.com/eom-tae-in/today-learning"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                    >
+                        <path
+                            fill="currentColor"
+                            d="M12 .7A11.3 11.3 0 0 0 8.4 22.8c.6.1.8-.2.8-.6v-2.4c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6A4.7 4.7 0 0 1 5.7 7.3a4.4 4.4 0 0 1 .1-3.4s1-.3 3.6 1.3a12.4 12.4 0 0 1 6.5 0c2.5-1.6 3.5-1.3 3.5-1.3a4.4 4.4 0 0 1 .1 3.4 4.7 4.7 0 0 1 1.2 3.3c0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.4c0 .4.2.7.8.6A11.3 11.3 0 0 0 12 .7Z"
+                        />
+                    </svg>
+
+                    <span>Repository</span>
+                </a>
+
+                <button
+                    id="theme-toggle"
+                    class="theme-toggle"
+                    type="button"
+                    aria-label="다크 모드로 변경"
+                    aria-pressed="false"
+                >
+                    <span class="theme-toggle-sky" aria-hidden="true"></span>
+
+                    <svg
+                        class="theme-icon theme-icon--sun"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        width="23"
+                        height="23"
+                    >
+                        <path
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2.25"
+                            d="M12 7.2a4.8 4.8 0 1 1 0 9.6 4.8 4.8 0 0 1 0-9.6ZM12 2.2v2.1m0 15.4v2.1M4.3 4.3l1.5 1.5m12.4 12.4 1.5 1.5M2.2 12h2.1m15.4 0h2.1M4.3 19.7l1.5-1.5M18.2 5.8l1.5-1.5"
+                        />
+                    </svg>
+
+                    <svg
+                        class="theme-icon theme-icon--moon"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        width="19"
+                        height="19"
+                    >
+                        <path
+                            fill="currentColor"
+                            d="M20.5 15.1A8.7 8.7 0 0 1 8.9 3.5 9.2 9.2 0 1 0 20.5 15Z"
+                        />
+                    </svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="hero">
+            <div class="hero-content">
+                <div class="eyebrow">
+                    <span class="eyebrow-dot" aria-hidden="true"></span>
+                    계획과 배움의 기록
+                </div>
+
+                <h1>
+                    계획하고,
+                    <span>학습하고,</span>
+                    성장한다.
+                </h1>
+
+                <p class="hero-description">
+                    Today Learning은 TLP로 하루를 계획하고,<br>
+                    학습 후 TIL로 회고를 남기며<br>
+                    꾸준히 성장하는 개인 학습 시스템입니다.
+                </p>
+
+                <div class="hero-actions">
+                    <a class="button button--primary" href="#posts">
+                        학습 기록 보기
+
+                        <svg
+                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            width="18"
+                            height="18"
+                        >
+                            <path
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m9 18 6-6-6-6"
+                            />
+                        </svg>
+                    </a>
+
+                    <a
+                        class="button button--secondary"
+                        href="https://github.com/eom-tae-in"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        GitHub 프로필
+                    </a>
+                </div>
+            </div>
+
+            <aside class="hero-note" aria-label="Today Learning 기록 원칙">
+                <div class="note-top">
+                    <span class="window-dot window-dot--red"></span>
+                    <span class="window-dot window-dot--yellow"></span>
+                    <span class="window-dot window-dot--green"></span>
+                </div>
+
+                <div class="note-content">
+                    <p class="note-path">
+                        ~/today-learning/daily.md
+                    </p>
+
+                    <div class="code-line">
+                        <span class="line-number">01</span>
+                        <span>
+                            <strong>TLP</strong>로 오늘의 목표를 세우고
+                        </span>
+                    </div>
+
+                    <div class="code-line">
+                        <span class="line-number">02</span>
+                        <span>
+                            <strong>TIL</strong>로 배운 점을 회고하고
+                        </span>
+                    </div>
+
+                    <div class="code-line">
+                        <span class="line-number">03</span>
+                        <span>
+                            <strong>AI</strong>와 함께 오늘 학습을 정리한다.
+                        </span>
+                    </div>
+
+                    <div class="note-cursor" aria-hidden="true"></div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="summary-section" aria-label="Today Learning 요약">
+            <div class="learning-graph">
+                <div class="learning-graph-header">
+                    <div>
+                        <p class="section-kicker">LEARNING LOG</p>
+                        <h2>학습의 기록</h2>
+                        <p>
+                            기록이 남은 날을 선택해 그날의 학습과 회고를 바로 확인합니다.
+                        </p>
+                    </div>
+
+                    <div class="learning-stats" aria-label="학습 기록 요약">
+                        <span>
+                            <strong id="total-post-count">-</strong>
+                            posts
+                        </span>
+
+                        <div
+                            class="year-menu year-menu--graph"
+                            data-menu="graph-year"
+                        >
+                            <button
+                                id="graph-year-button"
+                                class="year-menu-button"
+                                type="button"
+                                aria-haspopup="listbox"
+                                aria-expanded="false"
+                                aria-controls="graph-year-options"
+                            >
+                                <span>연도</span>
+                                <strong data-year-label>2026</strong>
+
+                                <svg
+                                    aria-hidden="true"
+                                    viewBox="0 0 24 24"
+                                    width="16"
+                                    height="16"
+                                >
+                                    <path
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="m6 9 6 6 6-6"
+                                    />
+                                </svg>
+                            </button>
+
+                            <div
+                                id="graph-year-options"
+                                class="year-menu-list"
+                                role="listbox"
+                                aria-labelledby="graph-year-button"
+                                hidden
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="learning-graph-body">
+                    <div class="grass-shell">
+                        <div
+                            id="grass-grid"
+                            class="grass-grid"
+                            aria-label="날짜별 Today Learning 기록 현황"
+                        ></div>
+
+                        <div class="grass-footer">
+                            <span id="grass-range">기록을 불러오는 중입니다.</span>
+
+                            <div class="grass-legend" aria-label="AI 평가 상태 범례">
+                                <span
+                                    class="grass-cell"
+                                    data-level="excellent"
+                                    style="--level-color: #22c55e"
+                                ></span>
+                                <span>매우 좋음</span>
+                                <span
+                                    class="grass-cell"
+                                    data-level="good"
+                                    style="--level-color: #5b8def"
+                                ></span>
+                                <span>좋음</span>
+                                <span
+                                    class="grass-cell"
+                                    data-level="needs-work"
+                                    style="--level-color: #f59e0b"
+                                ></span>
+                                <span>보완 필요</span>
+                                <span
+                                    class="grass-cell"
+                                    data-level="not-evaluated"
+                                    style="--level-color: #94a3b8"
+                                ></span>
+                                <span>평가 미진행</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside
+                        id="grass-preview"
+                        class="grass-preview"
+                        aria-live="polite"
+                        aria-label="선택한 날짜의 학습 기록"
+                    ></aside>
+                </div>
+            </div>
+        </section>
+
+        <section id="posts" class="posts-section">
+            <div class="section-heading">
+                <div>
+                    <p class="section-kicker">LEARNING SEARCH</p>
+                    <h2>학습 기록 검색</h2>
+                    <p>
+                        검색어와 연도로 Today Learning 기록을 빠르게 찾을 수 있습니다.
+                    </p>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <label class="search-box" for="post-search">
+                    <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        width="20"
+                        height="20"
+                    >
+                        <path
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-width="2"
+                            d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"
+                        />
+                    </svg>
+
+                    <span class="sr-only">학습 기록 검색어</span>
+
+                    <input
+                        id="post-search"
+                        type="search"
+                        placeholder="검색어를 입력하세요"
+                        autocomplete="off"
+                    >
+                </label>
+
+                <div
+                    class="year-menu year-menu--search"
+                    data-menu="search-year"
+                >
+                    <button
+                        id="year-button"
+                        class="year-menu-button"
+                        type="button"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-controls="year-options"
+                    >
+                        <span>연도</span>
+                        <strong data-year-label>전체</strong>
+
+                        <svg
+                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            width="16"
+                            height="16"
+                        >
+                            <path
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m6 9 6 6 6-6"
+                            />
+                        </svg>
+                    </button>
+
+                    <div
+                        id="year-options"
+                        class="year-menu-list"
+                        role="listbox"
+                        aria-labelledby="year-button"
+                        hidden
+                    ></div>
+                </div>
+            </div>
+
+            <div
+                id="status-message"
+                class="status-message"
+                role="status"
+                aria-live="polite"
+            >
+                <span class="loader" aria-hidden="true"></span>
+                학습 기록을 불러오는 중입니다.
+            </div>
+
+            <div id="post-grid" class="post-grid"></div>
+
+            <div id="empty-state" class="empty-state" hidden>
+                <div class="empty-icon" aria-hidden="true">
+                    <svg
+                        viewBox="0 0 24 24"
+                        width="28"
+                        height="28"
+                    >
+                        <path
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-width="2"
+                            d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"
+                        />
+                    </svg>
+                </div>
+
+                <h3>검색 결과가 없습니다.</h3>
+                <p>다른 날짜나 태그로 다시 검색해 보세요.</p>
+
+                <button id="reset-filter" type="button">
+                    검색 초기화
+                </button>
+            </div>
+        </section>
+
+        <section
+            id="post-reader"
+            class="reader-section"
+            aria-labelledby="reader-title"
+            hidden
+        >
+            <article class="reader-panel">
+                <div class="reader-topbar">
+                    <button
+                        id="reader-back"
+                        class="reader-back"
+                        type="button"
+                    >
+                        <svg
+                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            width="18"
+                            height="18"
+                        >
+                            <path
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m15 18-6-6 6-6"
+                            />
+                        </svg>
+
+                        학습 기록으로 돌아가기
+                    </button>
+
+                    <a
+                        id="reader-source-link"
+                        class="reader-source-link"
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        GitHub 원문
+                    </a>
+                </div>
+
+                <header class="reader-header">
+                    <p id="reader-date" class="reader-date"></p>
+                    <h2 id="reader-title"></h2>
+                    <p id="reader-summary" class="reader-summary"></p>
+                    <div id="reader-tags" class="reader-tags"></div>
+                </header>
+
+                <div
+                    id="reader-tabs"
+                    class="reader-tabs"
+                    aria-label="학습 기록 보기 방식"
+                ></div>
+
+                <div
+                    id="reader-status"
+                    class="reader-status"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+                <div id="reader-content" class="markdown-body"></div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <strong>Today Learning</strong>
+                <p>매일의 계획, 학습, 회고를 기록합니다.</p>
+            </div>
+
+            <p>
+                © <span id="current-year"></span> Today Learning
+            </p>
+        </div>
+    </footer>
+
+    <noscript>
+        <div class="noscript-message">
+            이 페이지의 학습 기록을 불러오려면 JavaScript가 필요합니다.
+        </div>
+    </noscript>
+</body>
+</html>
