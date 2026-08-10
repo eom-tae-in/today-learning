@@ -2351,10 +2351,12 @@ button.grass-cell[data-state="selected"]:hover {
 }
 
 .markdown-body pre code {
+    display: block;
     padding: 0;
 
     border: 0;
     background: transparent;
+    white-space: pre;
 }
 
 .markdown-body hr {
