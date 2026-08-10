@@ -1,4 +1,5 @@
 const VALID_LEVELS = new Set(["excellent", "good", "needs-work"]);
+const MAX_EVALUATION_SUMMARY_LENGTH = 90;
 const DEFAULT_REVIEW_TEXT = {
     overview: "TLP와 TIL을 바탕으로 오늘의 학습 흐름을 점검했습니다.",
     strengths: "오늘 기록에서는 뚜렷하게 강조할 잘한 점이 보이지 않습니다.",
@@ -34,7 +35,23 @@ function formatDisplayDate(date) {
     return date.replaceAll("-", ".");
 }
 
+function truncateEvaluationSummary(summary) {
+    if (summary.length <= MAX_EVALUATION_SUMMARY_LENGTH) {
+        return summary;
+    }
+
+    console.warn(
+        `evaluation.summary exceeded ${MAX_EVALUATION_SUMMARY_LENGTH} characters. Truncating.`
+    );
+
+    return `${summary.slice(0, MAX_EVALUATION_SUMMARY_LENGTH - 3).trimEnd()}...`;
+}
+
 export function normalizeEvaluation(value, date) {
+    if (value === null || typeof value !== "object" || Array.isArray(value)) {
+        throw new Error("Generated evaluation must be an object.");
+    }
+
     const level = String(value?.level ?? "").trim();
     const summary = String(value?.summary ?? "")
         .replace(/\s+/g, " ")
@@ -44,13 +61,13 @@ export function normalizeEvaluation(value, date) {
         throw new Error(`Invalid generated evaluation.level: ${level}`);
     }
 
-    if (summary.length === 0 || summary.length > 90) {
-        throw new Error("Generated evaluation.summary must be 1-90 characters.");
+    if (summary.length === 0) {
+        throw new Error("Generated evaluation.summary is empty.");
     }
 
     return {
         level,
-        summary,
+        summary: truncateEvaluationSummary(summary),
         reviewedAt: date,
     };
 }

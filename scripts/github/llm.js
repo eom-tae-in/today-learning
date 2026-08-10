@@ -40,5 +40,15 @@ export async function summarizeRecord(paths) {
         ],
     });
 
-    return JSON.parse(response.output_text);
+    return parseAnalysisResponse(response.output_text);
+}
+
+export function parseAnalysisResponse(outputText) {
+    try {
+        return JSON.parse(outputText);
+    } catch (error) {
+        throw new Error("Generated AI response must be valid JSON.", {
+            cause: error,
+        });
+    }
 }

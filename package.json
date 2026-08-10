@@ -5,7 +5,7 @@
   "description": "TLP로 하루를 계획하고, TIL로 학습과 회고를 기록하는 개인 학습 저장소입니다.",
   "main": "scripts/github/main.js",
   "scripts": {
-    "test": "node --check scripts/github/main.js && node --check scripts/github/git.js && node --check scripts/github/llm.js && node --check scripts/github/posts.js && node --check scripts/github/review.js"
+    "test": "node --check scripts/github/main.js && node --check scripts/github/git.js && node --check scripts/github/llm.js && node --check scripts/github/metadata.js && node --check scripts/github/posts.js && node --check scripts/github/review.js && node --test"
   },
   "repository": {
     "type": "git",

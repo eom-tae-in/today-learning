@@ -3,6 +3,7 @@ import path from "path";
 
 import { getChangedFiles } from "./git.js";
 import { summarizeRecord } from "./llm.js";
+import { normalizeMetadata } from "./metadata.js";
 import {
     loadPosts,
     savePosts,
@@ -99,16 +100,6 @@ function createFallbackMetadata(date, existingPost) {
     };
 }
 
-function pickMetadata(analysis, fallback) {
-    return {
-        title: String(analysis.title ?? fallback.title).trim() || fallback.title,
-        summary: String(analysis.summary ?? fallback.summary).trim() || fallback.summary,
-        tags: Array.isArray(analysis.tags)
-            ? analysis.tags.map(tag => String(tag).trim()).filter(Boolean)
-            : fallback.tags,
-    };
-}
-
 function shouldCreateMetadata(paths, shouldSummarize) {
     return paths.til !== undefined && shouldSummarize;
 }
@@ -136,7 +127,7 @@ async function createPost(date, existingPost, shouldSummarize) {
     if (shouldCreateMetadata(paths, shouldSummarize)) {
         const analysis = await summarizeRecord(paths);
 
-        metadata = pickMetadata(analysis, fallbackMetadata);
+        metadata = normalizeMetadata(analysis, fallbackMetadata);
 
         if (shouldCreateReview(paths)) {
             aiEvaluation = normalizeEvaluation(analysis.evaluation, date);
