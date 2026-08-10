@@ -386,12 +386,12 @@
   },
   {
     "title": "React Open API와 Re-rendering",
-    "summary": "Geolocation 기반 Kakao Map·Weather API 연동과 State UI 반영",
+    "summary": "Kakao Map·Weather API 연동과 State 기반 UI 갱신 흐름",
     "tags": [
       "React",
-      "Open API",
       "Kakao Map API",
-      "fetch API",
+      "Weather API",
+      "Fetch API",
       "Geolocation"
     ],
     "hashtags": [
@@ -407,7 +407,7 @@
     },
     "aiEvaluation": {
       "level": "excellent",
-      "summary": "계획한 React re-rendering, Kakao Map, Weather API 흐름이 TIL에 구체적으로 이어졌다.",
+      "summary": "계획한 re-rendering, Kakao Map, fetch, Weather API 흐름이 TIL 전반에서 구체적으로 이어졌다.",
       "reviewedAt": "2026-08-10"
     }
   }
