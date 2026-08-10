@@ -385,9 +385,15 @@
     }
   },
   {
-    "title": "2026-08-10",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "React Open API와 Re-rendering",
+    "summary": "Geolocation 기반 Kakao Map·Weather API 연동과 State UI 반영",
+    "tags": [
+      "React",
+      "Open API",
+      "Kakao Map API",
+      "fetch API",
+      "Geolocation"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -395,7 +401,14 @@
     ],
     "date": "2026-08-10",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-10.md"
+      "tlp": "TLP/2026/08/2026-08-10.md",
+      "til": "TIL/2026/08/2026-08-10.md",
+      "review": "Reviews/2026/08/2026-08-10.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "계획한 React re-rendering, Kakao Map, Weather API 흐름이 TIL에 구체적으로 이어졌다.",
+      "reviewedAt": "2026-08-10"
     }
   }
 ]
