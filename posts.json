@@ -410,5 +410,19 @@
       "summary": "React Open API 연동과 State 기반 UI 반영 흐름",
       "reviewedAt": "2026-08-10"
     }
+  },
+  {
+    "title": "2026-08-11",
+    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
+    "tags": [],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-11",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-11.md"
+    }
   }
 ]
