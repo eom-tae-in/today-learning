@@ -20,7 +20,7 @@ async function readOptionalMarkdown(label, markdownPath) {
 
 export async function summarizeRecord(paths) {
     const client = createClient();
-    const prompt = await fs.readFile("./prompts/summarize.md", "utf8");
+    const prompt = await fs.readFile("./prompts/github/summarize.md", "utf8");
     const markdown = [
         await readOptionalMarkdown("TLP", paths.tlp),
         await readOptionalMarkdown("TIL", paths.til),
