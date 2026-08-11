@@ -412,9 +412,15 @@
     }
   },
   {
-    "title": "2026-08-11",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "Java 개발 환경과 객체 생성",
+    "summary": "JDK 실행 구조와 Java 타입, 생성자 오버로딩 기반 객체 생성",
+    "tags": [
+      "Java",
+      "JDK",
+      "JVM",
+      "Type Casting",
+      "Constructor Overloading"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -422,7 +428,14 @@
     ],
     "date": "2026-08-11",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-11.md"
+      "tlp": "TLP/2026/08/2026-08-11.md",
+      "til": "TIL/2026/08/2026-08-11.md",
+      "review": "Reviews/2026/08/2026-08-11.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "Java 개발 환경부터 타입 캐스팅, 생성자 오버로딩까지 연결",
+      "reviewedAt": "2026-08-11"
     }
   }
 ]
