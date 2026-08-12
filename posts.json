@@ -440,7 +440,7 @@
   },
   {
     "title": "Java static과 흐름 제어",
-    "summary": "조건·반복문과 static 기반 GuessGame 실행 흐름",
+    "summary": "조건·반복문 기반 실행 흐름과 Stack·Heap 메모리 구조",
     "tags": [
       "Java",
       "static",
@@ -461,7 +461,7 @@
     },
     "aiEvaluation": {
       "level": "excellent",
-      "summary": "static, 조건·반복문, GuessGame 구현과 Java 메모리 구조",
+      "summary": "Java static, 흐름 제어, GuessGame 구현과 메모리 구조",
       "reviewedAt": "2026-08-12"
     }
   }
