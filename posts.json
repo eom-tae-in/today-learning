@@ -439,9 +439,15 @@
     }
   },
   {
-    "title": "2026-08-12",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "Java static과 흐름 제어",
+    "summary": "조건·반복문과 static 기반 GuessGame 실행 흐름",
+    "tags": [
+      "Java",
+      "static",
+      "Control Flow",
+      "JVM Memory",
+      "String Pool"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -449,7 +455,14 @@
     ],
     "date": "2026-08-12",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-12.md"
+      "tlp": "TLP/2026/08/2026-08-12.md",
+      "til": "TIL/2026/08/2026-08-12.md",
+      "review": "Reviews/2026/08/2026-08-12.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "static, 조건·반복문, GuessGame 구현과 Java 메모리 구조",
+      "reviewedAt": "2026-08-12"
     }
   }
 ]
