@@ -1,10 +1,9 @@
 const VALID_LEVELS = new Set(["excellent", "good", "needs-work"]);
 const MAX_EVALUATION_SUMMARY_LENGTH = 90;
 const DEFAULT_REVIEW_TEXT = {
-    overview: "TLP와 TIL을 바탕으로 오늘의 학습 흐름을 점검했습니다.",
-    strengths: "오늘 기록에서는 뚜렷하게 강조할 잘한 점이 보이지 않습니다.",
-    improvements: "오늘 기록에서는 뚜렷한 보완할 부분이 보이지 않습니다.",
-    nextActions: "오늘 기록에서는 별도의 다음 액션이 뚜렷하게 보이지 않습니다.",
+    overview: "TLP와 TIL을 바탕으로 오늘의 학습 흐름을 정리했다.",
+    summary: "오늘 기록에서 확인되는 핵심 학습 흐름을 간단히 요약했다.",
+    keyLearning: "오늘 기록에서 뚜렷한 주요 학습 항목이 보이지 않는다.",
 };
 
 function normalizeMarkdownList(value) {
@@ -25,6 +24,19 @@ function createMarkdownList(items, fallback) {
     return listItems
         .map(item => `- ${item}`)
         .join("\n");
+}
+
+function createOptionalSection(title, items) {
+    if (items.length === 0) {
+        return [];
+    }
+
+    return [
+        title,
+        "",
+        createMarkdownList(items),
+        "",
+    ];
 }
 
 function toYamlScalar(value) {
@@ -76,9 +88,12 @@ export function createReviewMarkdown(date, review, evaluation) {
     const overview = String(review?.overview ?? "")
         .replace(/\s+/g, " ")
         .trim();
+    const summary = String(review?.summary ?? "")
+        .replace(/\s+/g, " ")
+        .trim();
+    const keyLearnings = normalizeMarkdownList(review?.keyLearnings);
     const strengths = normalizeMarkdownList(review?.strengths);
     const improvements = normalizeMarkdownList(review?.improvements);
-    const nextActions = normalizeMarkdownList(review?.nextActions);
 
     return [
         "---",
@@ -87,27 +102,25 @@ export function createReviewMarkdown(date, review, evaluation) {
         `reviewedAt: ${toYamlScalar(evaluation.reviewedAt)}`,
         "---",
         "",
-        "# 🤖 AI 학습 정리",
+        "# 🤖 AI 학습 리포트",
         "",
         formatDisplayDate(date),
         "",
-        "> 오늘의 TLP와 TIL을 바탕으로 오늘 학습을 한 번 정리해 봅니다.",
+        "> 오늘의 TLP와 TIL을 바탕으로 학습 흐름을 간단히 리포트합니다.",
         "",
-        "## 종합",
+        "## 🧭 종합",
         "",
         overview || DEFAULT_REVIEW_TEXT.overview,
         "",
-        "## 잘 이어간 점",
+        "## 📝 요약",
         "",
-        createMarkdownList(strengths, DEFAULT_REVIEW_TEXT.strengths),
+        summary || DEFAULT_REVIEW_TEXT.summary,
         "",
-        "## 다음에 다듬을 점",
+        "## 📚 주요 학습",
         "",
-        createMarkdownList(improvements, DEFAULT_REVIEW_TEXT.improvements),
+        createMarkdownList(keyLearnings, DEFAULT_REVIEW_TEXT.keyLearning),
         "",
-        "## 다음 액션",
-        "",
-        createMarkdownList(nextActions, DEFAULT_REVIEW_TEXT.nextActions),
-        "",
+        ...createOptionalSection("## 👍 잘한 점", strengths),
+        ...createOptionalSection("## 🔧 보완할 점", improvements),
     ].join("\n");
 }
