@@ -437,5 +437,19 @@
       "summary": "Java 개발 환경부터 타입 캐스팅, 생성자 오버로딩까지 연결",
       "reviewedAt": "2026-08-11"
     }
+  },
+  {
+    "title": "2026-08-12",
+    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
+    "tags": [],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-12",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-12.md"
+    }
   }
 ]
