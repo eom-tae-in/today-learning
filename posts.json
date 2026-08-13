@@ -466,9 +466,15 @@
     }
   },
   {
-    "title": "2026-08-13",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "Java 배열과 상속·다형성",
+    "summary": "배열 순회와 상속 기반 다형성, final 확장 제한",
+    "tags": [
+      "Java",
+      "Array",
+      "Inheritance",
+      "Polymorphism",
+      "final"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -476,7 +482,14 @@
     ],
     "date": "2026-08-13",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-13.md"
+      "tlp": "TLP/2026/08/2026-08-13.md",
+      "til": "TIL/2026/08/2026-08-13.md",
+      "review": "Reviews/2026/08/2026-08-13.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "배열 순회, 상속, 다형성, final 제한을 계획과 맞춰 정리",
+      "reviewedAt": "2026-08-13"
     }
   }
 ]
