@@ -466,8 +466,8 @@
     }
   },
   {
-    "title": "Java 배열과 상속·다형성",
-    "summary": "배열 순회와 상속 기반 다형성, final 확장 제한",
+    "title": "Java 배열과 상속 다형성",
+    "summary": "배열 순회와 상속 기반 다형성 동작 원리",
     "tags": [
       "Java",
       "Array",
@@ -488,7 +488,7 @@
     },
     "aiEvaluation": {
       "level": "excellent",
-      "summary": "배열 순회, 상속, 다형성, final 제한을 계획과 맞춰 정리",
+      "summary": "배열 순회, 상속, 다형성, final 제한 구조 정리",
       "reviewedAt": "2026-08-13"
     }
   }
