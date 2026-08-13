@@ -2340,6 +2340,7 @@ button.grass-cell[data-state="selected"]:hover {
 }
 
 .markdown-body pre {
+    position: relative;
     overflow-x: auto;
     margin: 18px 0 24px;
     padding: 18px;
@@ -2350,6 +2351,24 @@ button.grass-cell[data-state="selected"]:hover {
     background: var(--surface-soft);
 }
 
+.markdown-body pre[data-language] {
+    padding-top: 44px;
+}
+
+.markdown-body pre[data-language]::before {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+
+    content: attr(data-language);
+
+    color: var(--text-muted);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
 .markdown-body pre code {
     display: block;
     padding: 0;
@@ -2357,6 +2376,54 @@ button.grass-cell[data-state="selected"]:hover {
     border: 0;
     background: transparent;
     white-space: pre;
+}
+
+.markdown-body .token.comment,
+.markdown-body .token.prolog,
+.markdown-body .token.doctype,
+.markdown-body .token.cdata {
+    color: var(--text-muted);
+}
+
+.markdown-body .token.punctuation,
+.markdown-body .token.operator {
+    color: var(--text-secondary);
+}
+
+.markdown-body .token.property,
+.markdown-body .token.tag,
+.markdown-body .token.boolean,
+.markdown-body .token.number,
+.markdown-body .token.constant,
+.markdown-body .token.symbol,
+.markdown-body .token.deleted {
+    color: var(--accent-strong);
+}
+
+.markdown-body .token.selector,
+.markdown-body .token.attr-name,
+.markdown-body .token.string,
+.markdown-body .token.char,
+.markdown-body .token.builtin,
+.markdown-body .token.inserted {
+    color: #0f8b5f;
+}
+
+.markdown-body .token.atrule,
+.markdown-body .token.attr-value,
+.markdown-body .token.keyword {
+    color: #7c3aed;
+}
+
+.markdown-body .token.function,
+.markdown-body .token.class-name {
+    color: #b45309;
+}
+
+.markdown-body .token.regex,
+.markdown-body .token.important,
+.markdown-body .token.variable {
+    color: #be123c;
 }
 
 .markdown-body hr {

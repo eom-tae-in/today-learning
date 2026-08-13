@@ -1420,6 +1420,7 @@ async function showMarkdownReaderTab(post, path, renderId, tabId) {
 
         updateReaderContentTone(post, tabId === "review");
         elements.readerContent.innerHTML = renderMarkdown(markdown);
+        highlightReaderCodeBlocks();
         elements.readerStatus.hidden = true;
     } catch (error) {
         if (
@@ -1507,6 +1508,7 @@ function renderMarkdown(markdown) {
     let codeLines = [];
     let tableRows = [];
     let inCodeBlock = false;
+    let codeLanguage = "";
 
     const flushParagraph = () => {
         if (paragraph.length === 0) {
@@ -1546,10 +1548,18 @@ function renderMarkdown(markdown) {
             return;
         }
 
+        const languageClass = getMarkdownCodeLanguageClass(codeLanguage);
+        const languageLabel = getMarkdownCodeLanguageLabel(codeLanguage);
+        const languageAttribute =
+            languageLabel === ""
+                ? ""
+                : ` data-language="${escapeHtml(languageLabel)}"`;
+
         html.push(
-            `<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`
+            `<pre class="code-block"${languageAttribute}><code class="${languageClass}">${escapeHtml(codeLines.join("\n"))}</code></pre>`
         );
         codeLines = [];
+        codeLanguage = "";
         inCodeBlock = false;
     };
 
@@ -1575,7 +1585,9 @@ function renderMarkdown(markdown) {
     };
 
     lines.forEach((line) => {
-        if (line.trim().startsWith("```")) {
+        const codeFenceMatch = line.trim().match(/^```([A-Za-z0-9_+.#-]*)\s*$/);
+
+        if (codeFenceMatch !== null) {
             if (inCodeBlock) {
                 flushCodeBlock();
             } else {
@@ -1584,6 +1596,7 @@ function renderMarkdown(markdown) {
                 flushQuote();
                 flushTable();
                 inCodeBlock = true;
+                codeLanguage = codeFenceMatch[1] ?? "";
                 codeLines = [];
             }
 
@@ -1684,6 +1697,73 @@ function renderMarkdown(markdown) {
     flushTable();
 
     return html.join("");
+}
+
+function highlightReaderCodeBlocks() {
+    if (window.Prism === undefined) {
+        return;
+    }
+
+    window.Prism.highlightAllUnder(elements.readerContent);
+}
+
+function getMarkdownCodeLanguageClass(language) {
+    const normalizedLanguage = normalizeMarkdownCodeLanguage(language);
+    return normalizedLanguage === ""
+        ? "language-plaintext"
+        : `language-${normalizedLanguage}`;
+}
+
+function getMarkdownCodeLanguageLabel(language) {
+    const normalizedLanguage = normalizeMarkdownCodeLanguage(language);
+
+    if (normalizedLanguage === "") {
+        return "";
+    }
+
+    const labels = {
+        bash: "Bash",
+        css: "CSS",
+        html: "HTML",
+        java: "Java",
+        javascript: "JavaScript",
+        json: "JSON",
+        jsx: "JSX",
+        markup: "HTML",
+        markdown: "Markdown",
+        plaintext: "Text",
+        shell: "Shell",
+        text: "Text",
+        tsx: "TSX",
+        typescript: "TypeScript",
+        xml: "XML",
+        yaml: "YAML"
+    };
+
+    return labels[normalizedLanguage] ?? normalizedLanguage.toUpperCase();
+}
+
+function normalizeMarkdownCodeLanguage(language) {
+    const normalizedLanguage = String(language)
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9+#.-]/g, "");
+
+    const aliases = {
+        cjs: "javascript",
+        html: "markup",
+        js: "javascript",
+        mjs: "javascript",
+        md: "markdown",
+        plaintext: "plaintext",
+        py: "python",
+        sh: "bash",
+        text: "plaintext",
+        ts: "typescript",
+        yml: "yaml"
+    };
+
+    return aliases[normalizedLanguage] ?? normalizedLanguage;
 }
 
 function getMarkdownListDepth(indent) {
