@@ -464,5 +464,19 @@
       "summary": "Java static, 흐름 제어, GuessGame 구현과 메모리 구조",
       "reviewedAt": "2026-08-12"
     }
+  },
+  {
+    "title": "2026-08-13",
+    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
+    "tags": [],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-13",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-13.md"
+    }
   }
 ]
