@@ -493,9 +493,15 @@
     }
   },
   {
-    "title": "2026-08-14",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "Java 추상화와 객체 생성 패턴",
+    "summary": "인터페이스 의존 설계와 Factory·Singleton·Enum 객체 생성 구조",
+    "tags": [
+      "Java",
+      "OOP",
+      "Interface",
+      "Factory Pattern",
+      "Singleton Pattern"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -503,7 +509,14 @@
     ],
     "date": "2026-08-14",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-14.md"
+      "tlp": "TLP/2026/08/2026-08-14.md",
+      "til": "TIL/2026/08/2026-08-14.md",
+      "review": "Reviews/2026/08/2026-08-14.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "추상화·은닉화·객체 생성 패턴을 계획과 맞춰 코드로 정리",
+      "reviewedAt": "2026-08-14"
     }
   }
 ]
