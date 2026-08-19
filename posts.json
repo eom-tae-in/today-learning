@@ -547,13 +547,13 @@
     }
   },
   {
-    "title": "Spring MVC 요청 처리 구조",
-    "summary": "DispatcherServlet 기반 요청 흐름과 계층형 아키텍처 구분",
+    "title": "Spring MVC 요청 처리와 계층 구조",
+    "summary": "Spring MVC 요청 흐름과 Java 웹 기반 개념 연결",
     "tags": [
       "Spring MVC",
       "DispatcherServlet",
       "Servlet",
-      "Java Exception",
+      "Exception Handling",
       "Java I/O"
     ],
     "hashtags": [
@@ -569,7 +569,7 @@
     },
     "aiEvaluation": {
       "level": "excellent",
-      "summary": "Spring MVC 요청 흐름과 Java 예외·I/O 기반 개념 정리",
+      "summary": "Spring MVC 요청 흐름과 예외·I/O·스레드 기반 개념 정리",
       "reviewedAt": "2026-08-19"
     }
   }
