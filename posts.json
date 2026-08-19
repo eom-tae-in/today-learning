@@ -547,9 +547,15 @@
     }
   },
   {
-    "title": "2026-08-19",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "Spring MVC 요청 처리 구조",
+    "summary": "DispatcherServlet 기반 요청 흐름과 계층형 아키텍처 구분",
+    "tags": [
+      "Spring MVC",
+      "DispatcherServlet",
+      "Servlet",
+      "Java Exception",
+      "Java I/O"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -557,7 +563,14 @@
     ],
     "date": "2026-08-19",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-19.md"
+      "tlp": "TLP/2026/08/2026-08-19.md",
+      "til": "TIL/2026/08/2026-08-19.md",
+      "review": "Reviews/2026/08/2026-08-19.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "Spring MVC 요청 흐름과 Java 예외·I/O 기반 개념 정리",
+      "reviewedAt": "2026-08-19"
     }
   }
 ]
