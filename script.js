@@ -1570,7 +1570,7 @@ function renderMarkdown(markdown) {
 
         const [header, ...bodyRows] = tableRows;
         html.push(
-            `<table><thead><tr>${header
+            `<div class="markdown-table-scroll"><table><thead><tr>${header
                 .map((cell) => `<th>${renderInlineMarkdown(cell)}</th>`)
                 .join("")}</tr></thead><tbody>${bodyRows
                 .map(
@@ -1579,7 +1579,7 @@ function renderMarkdown(markdown) {
                             .map((cell) => `<td>${renderInlineMarkdown(cell)}</td>`)
                             .join("")}</tr>`
                 )
-                .join("")}</tbody></table>`
+                .join("")}</tbody></table></div>`
         );
         tableRows = [];
     };
