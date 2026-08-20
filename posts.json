@@ -572,5 +572,19 @@
       "summary": "Spring MVC 요청 흐름과 예외·I/O·스레드 기반 개념 정리",
       "reviewedAt": "2026-08-19"
     }
+  },
+  {
+    "title": "2026-08-20",
+    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
+    "tags": [],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-08-20",
+    "paths": {
+      "tlp": "TLP/2026/08/2026-08-20.md"
+    }
   }
 ]
