@@ -601,9 +601,15 @@
     }
   },
   {
-    "title": "2026-08-21",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "Stream Post CRUD와 Java I/O",
+    "summary": "Stream 기반 Post CRUD와 ORM, Java I/O, 직렬화, 정규표현식 흐름",
+    "tags": [
+      "Stream API",
+      "ORM",
+      "Java I/O",
+      "Serializable",
+      "Regex"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -611,7 +617,14 @@
     ],
     "date": "2026-08-21",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-21.md"
+      "tlp": "TLP/2026/08/2026-08-21.md",
+      "til": "TIL/2026/08/2026-08-21.md",
+      "review": "Reviews/2026/08/2026-08-21.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "Stream CRUD, ORM, I/O, 직렬화, 정규표현식 실습 연결",
+      "reviewedAt": "2026-08-21"
     }
   }
 ]
