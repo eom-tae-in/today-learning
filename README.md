@@ -6,6 +6,22 @@ TLP로 하루를 계획하고, TIL로 학습과 회고를 기록하는 개인 �
 
 **[Today Learning 페이지 보러가기](https://eom-tae-in.github.io/today-learning/)**
 
+## Site
+
+The public site is built with Astro. Existing `TLP/`, `TIL/`, and `Reviews/`
+Markdown files remain the source of truth, while `posts.json` provides the
+generated index metadata used by the homepage and record pages.
+
+```bash
+npm run dev
+npm run build
+npm run preview
+```
+
+Markdown supports GitHub-flavored tables and task lists, local or remote images,
+GIFs, syntax-highlighted code blocks, and Mermaid diagrams via fenced
+`mermaid` code blocks.
+
 ## Goal
 
 - TLP로 하루의 학습 목표를 계획합니다.
