@@ -1,0 +1,78 @@
+---
+import "../styles/global.css";
+
+type Props = {
+    readonly title?: string;
+    readonly description?: string;
+};
+
+const {
+    title = "Today Learning",
+    description = "TLP로 하루를 계획하고, TIL로 학습과 회고를 기록하는 개인 학습 노트입니다.",
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const baseUrl = import.meta.env.BASE_URL.endsWith("/")
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
+---
+
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <meta name="theme-color" content="#f6f8fc" data-theme-color />
+        <link rel="canonical" href={canonicalUrl} />
+        <link rel="icon" href={`${baseUrl}favicon.svg`} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <title>{title}</title>
+    </head>
+    <body>
+        <a class="skip-link" href="#main-content">본문으로 바로가기</a>
+        <div class="page-background" aria-hidden="true"></div>
+        <header class="site-header">
+            <nav class="site-nav" aria-label="주요 메뉴">
+                <a class="brand" href={baseUrl}>
+                    <span class="brand-mark" aria-hidden="true">T</span>
+                    <span>
+                        <strong>Today Learning</strong>
+                        <small>Daily Growth Notes</small>
+                    </span>
+                </a>
+                <div class="nav-actions">
+                    <a href={`${baseUrl}#records`}>기록</a>
+                    <a href={`${baseUrl}#graph`}>흐름</a>
+                    <button
+                        class="theme-toggle"
+                        type="button"
+                        data-theme-toggle
+                        aria-label="테마 변경"
+                        aria-pressed="false"
+                    >
+                        <span data-theme-toggle-icon>◐</span>
+                    </button>
+                </div>
+            </nav>
+        </header>
+        <main id="main-content">
+            <slot />
+        </main>
+        <footer class="site-footer">
+            <div>
+                <strong>Today Learning</strong>
+                <p>매일의 계획, 학습, 회고를 오래 읽을 수 있는 노트로 남깁니다.</p>
+            </div>
+            <a href="https://github.com/eom-tae-in/today-learning" target="_blank" rel="noreferrer">
+                GitHub 원문
+            </a>
+        </footer>
+        <script>
+            import "../scripts/site.ts";
+        </script>
+    </body>
+</html>

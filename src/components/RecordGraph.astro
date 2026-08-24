@@ -1,0 +1,124 @@
+---
+import { getRecordHref, type LearningRecord } from "../lib/records";
+
+type Props = {
+    readonly records: readonly LearningRecord[];
+};
+
+const { records } = Astro.props;
+const newestYear = records[0]?.year ?? new Date().getFullYear().toString();
+const years = Array.from(new Set(records.map((record) => record.year))).toSorted(
+    (left, right) => right.localeCompare(left)
+);
+const recordsByYear = new Map(
+    years.map((year) => [
+        year,
+        new Map(records.filter((record) => record.year === year).map((record) => [record.date, record])),
+    ])
+);
+
+function formatDateKey(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+function getYearDays(year: string) {
+    const firstDate = new Date(Number(year), 0, 1);
+    const lastDate = new Date(Number(year), 11, 31);
+    const recordByDate = recordsByYear.get(year) ?? new Map();
+    const days = [];
+
+    for (
+        const date = new Date(firstDate);
+        date <= lastDate;
+        date.setDate(date.getDate() + 1)
+    ) {
+        const dateKey = formatDateKey(date);
+        const record = recordByDate.get(dateKey);
+
+        days.push({
+            date: dateKey,
+            day: date.getDay(),
+            record,
+        });
+    }
+
+    return days;
+}
+---
+
+<section id="graph" class="section graph-section" aria-labelledby="graph-title">
+    <div class="section-heading split">
+        <div>
+            <span class="eyebrow">Learning flow</span>
+            <h2 id="graph-title"><span data-graph-title-year>{newestYear}</span> 학습 흐름</h2>
+            <p>기록이 있는 날은 색으로 남기고, 선택하면 해당 날짜의 요약을 확인합니다.</p>
+        </div>
+        <label class="year-select">
+            <span class="sr-only">그래프 연도 선택</span>
+            <select data-graph-year-select>
+                {years.map((year) => <option value={year}>{year}</option>)}
+            </select>
+        </label>
+    </div>
+    <div class="graph-shell">
+        {
+            years.map((year) => (
+                <div
+                    class="graph-scroll"
+                    data-graph-year={year}
+                    hidden={year !== newestYear}
+                    aria-label={`${year}년 학습 기록 그래프`}
+                >
+                    <div class="graph-grid">
+                        {
+                            getYearDays(year).map(({ date, day, record }) => (
+                                record === undefined ? (
+                                    <span
+                                        class="graph-cell"
+                                        data-day={day}
+                                        title={`${date} 기록 없음`}
+                                        aria-label={`${date} 기록 없음`}
+                                    />
+                                ) : (
+                                    <a
+                                        class="graph-cell has-record"
+                                        role="button"
+                                        aria-pressed="false"
+                                        data-day={day}
+                                        data-graph-record
+                                        data-title={record.title}
+                                        data-date={record.displayDate}
+                                        data-summary={record.summary}
+                                        data-status={record.statusLabel}
+                                        href={getRecordHref(record.date)}
+                                        title={`${record.displayDate} ${record.title}`}
+                                        aria-label={`${record.displayDate} ${record.title}`}
+                                        style={`--level-color: ${record.completionColor}`}
+                                    />
+                                )
+                            ))
+                        }
+                    </div>
+                </div>
+            ))
+        }
+        <aside class="graph-preview" data-graph-preview>
+            <span data-graph-preview-date>기록 선택</span>
+            <strong data-graph-preview-title>학습 흐름을 확인하세요.</strong>
+            <p data-graph-preview-summary>그래프의 색이 있는 날짜에 마우스를 올리거나 키보드로 초점을 이동하면 요약이 표시됩니다.</p>
+            <small data-graph-preview-status></small>
+            <a class="graph-preview-link" data-graph-preview-link href={records[0] === undefined ? "#" : getRecordHref(records[0].date)}>
+                기록 열기
+            </a>
+        </aside>
+    </div>
+    <div class="graph-legend" aria-label="그래프 범례">
+        <span><i class="graph-cell" aria-hidden="true"></i>기록 없음</span>
+        <span><i class="graph-cell has-record" aria-hidden="true"></i>기록 있음</span>
+        <span><i class="graph-cell has-record is-selected" aria-hidden="true"></i>선택됨</span>
+    </div>
+</section>

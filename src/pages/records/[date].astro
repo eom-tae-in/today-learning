@@ -1,0 +1,149 @@
+---
+import { getCollection, getEntry } from "astro:content";
+
+import MarkdownSection from "../../components/MarkdownSection.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+    getLearningRecord,
+    getLearningRecords,
+    getRecordPathId,
+    getTagHref,
+} from "../../lib/records";
+
+export async function getStaticPaths() {
+    const records = await getLearningRecords();
+
+    return records.map((record) => ({
+        params: { date: record.date },
+    }));
+}
+
+const { date } = Astro.params;
+
+if (date === undefined) {
+    return Astro.redirect("/");
+}
+
+const record = await getLearningRecord(date);
+
+if (record === undefined) {
+    return Astro.redirect("/");
+}
+
+const recordEntries = await getCollection("record");
+const entryById = new Map(recordEntries.map((entry) => [entry.id, entry]));
+const getEntryFromPath = async (path: string | undefined) => {
+    if (path === undefined) {
+        return undefined;
+    }
+
+    const id = getRecordPathId(path);
+
+    return entryById.get(id) ?? await getEntry("record", id);
+};
+
+const tlpEntry = await getEntryFromPath(record.paths.tlp);
+const tilEntry = await getEntryFromPath(record.paths.til);
+const reviewEntry = await getEntryFromPath(record.paths.review);
+const title = `${record.title} | Today Learning`;
+const baseUrl = import.meta.env.BASE_URL.endsWith("/")
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
+const navItems = [
+    ["summary", "요약"],
+    ["tlp", "TLP"],
+    ["til", "TIL"],
+    ["review", "AI 정리"],
+] as const;
+---
+
+<BaseLayout title={title} description={record.summary}>
+    <article class="reader-page" style={`--level-color: ${record.completionColor}`}>
+        <a class="back-link" href={baseUrl}>기록 목록으로</a>
+        <header class="reader-hero">
+            <div>
+                <span class="record-date">{record.displayDate}</span>
+                <h1>{record.title}</h1>
+                <p>{record.summary}</p>
+                {
+                    record.tags.length > 0 && (
+                        <div class="tag-list">
+                            {record.tags.map((tag) => (
+                                <a href={getTagHref(tag)}>{tag}</a>
+                            ))}
+                        </div>
+                    )
+                }
+            </div>
+            <aside class="reader-status-card">
+                <span>{record.statusLabel}</span>
+                <strong>{record.completionLabel}</strong>
+                <p>{record.aiEvaluation?.summary ?? record.statusMessage}</p>
+            </aside>
+        </header>
+
+        <nav class="reader-nav" aria-label="기록 본문 탭">
+            {
+                navItems.map(([href, label], index) => (
+                    <a
+                        href={`#${href}`}
+                        role="button"
+                        data-reader-tab={href}
+                        aria-current={index === 0 ? "page" : undefined}
+                        aria-pressed={index === 0 ? "true" : "false"}
+                    >
+                        {label}
+                    </a>
+                ))
+            }
+        </nav>
+
+        <section
+            id="summary"
+            class="reader-block summary-block"
+            data-reader-panel="summary"
+            aria-labelledby="summary-title"
+        >
+            <header class="reader-block-header">
+                <span class="eyebrow">Overview</span>
+                <h2 id="summary-title">오늘의 흐름</h2>
+            </header>
+            <div class="summary-grid">
+                <div>
+                    <strong>계획</strong>
+                    <p>{record.paths.tlp === undefined ? "아직 연결된 TLP가 없습니다." : "오늘의 학습 목표와 완료 기준이 연결되어 있습니다."}</p>
+                </div>
+                <div>
+                    <strong>회고</strong>
+                    <p>{record.paths.til === undefined ? "아직 연결된 TIL이 없습니다." : "학습 결과와 회고가 연결되어 있습니다."}</p>
+                </div>
+                <div>
+                    <strong>AI 정리</strong>
+                    <p>{record.aiEvaluation?.summary ?? record.statusMessage}</p>
+                </div>
+            </div>
+        </section>
+
+        <MarkdownSection
+            id="tlp"
+            title="Today Learning Plan"
+            eyebrow="Plan"
+            entry={tlpEntry}
+            missing="이 날짜에는 TLP 파일이 없습니다."
+        />
+        <MarkdownSection
+            id="til"
+            title="Today I Learned"
+            eyebrow="Review"
+            entry={tilEntry}
+            missing="이 날짜에는 TIL 파일이 없습니다."
+        />
+        <MarkdownSection
+            id="review"
+            title="AI 학습 정리"
+            eyebrow="Check-in"
+            entry={reviewEntry}
+            missing="TLP와 TIL을 함께 정리한 AI 학습 리포트가 아직 없습니다."
+        />
+    </article>
+</BaseLayout>

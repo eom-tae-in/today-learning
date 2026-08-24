@@ -1,0 +1,39 @@
+---
+import {
+    getRecordHref,
+    getTagHref,
+    type LearningRecord,
+} from "../lib/records";
+
+type Props = {
+    readonly record: LearningRecord;
+};
+
+const { record } = Astro.props;
+---
+
+<article
+    class="record-card"
+    data-record-card
+    data-year={record.year}
+    data-search={`${record.title} ${record.summary} ${record.tags.join(" ")}`.toLowerCase()}
+>
+    <a href={getRecordHref(record.date)}>
+        <span class="record-date">{record.displayDate}</span>
+        <h3>{record.title}</h3>
+        <p>{record.summary}</p>
+        <span class="record-status" style={`--level-color: ${record.completionColor}`}>
+            <span aria-hidden="true"></span>
+            {record.statusLabel}
+        </span>
+    </a>
+    {
+        record.tags.length > 0 && (
+            <div class="tag-list" aria-label="태그">
+                {record.tags.map((tag) => (
+                    <a href={getTagHref(tag)}>{tag}</a>
+                ))}
+            </div>
+        )
+    }
+</article>

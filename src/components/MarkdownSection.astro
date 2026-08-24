@@ -1,0 +1,34 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+
+type Props = {
+    readonly id: string;
+    readonly title: string;
+    readonly eyebrow: string;
+    readonly entry: CollectionEntry<"record"> | undefined;
+    readonly missing: string;
+};
+
+const { id, title, eyebrow, entry, missing } = Astro.props;
+const rendered = entry === undefined ? undefined : await render(entry);
+const Content = rendered?.Content;
+---
+
+<section id={id} class="reader-block" data-reader-panel={id} aria-labelledby={`${id}-title`}>
+    <header class="reader-block-header">
+        <span class="eyebrow">{eyebrow}</span>
+        <h2 id={`${id}-title`}>{title}</h2>
+    </header>
+    {
+        Content === undefined ? (
+            <div class="empty-note">
+                <p>{missing}</p>
+            </div>
+        ) : (
+            <div class="markdown-body">
+                <Content />
+            </div>
+        )
+    }
+</section>
