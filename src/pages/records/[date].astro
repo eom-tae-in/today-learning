@@ -61,7 +61,7 @@ const navItems = [
     <article class="reader-page" style={`--level-color: ${record.completionColor}`}>
         <a class="back-link" href={baseUrl}>기록 목록으로</a>
         <header class="reader-hero">
-            <div>
+            <div class="reader-title-block">
                 <span class="record-date">{record.displayDate}</span>
                 <h1>{record.title}</h1>
                 <p>{record.summary}</p>
@@ -76,9 +76,10 @@ const navItems = [
                 }
             </div>
             <aside class="reader-status-card">
-                <span>{record.statusLabel}</span>
-                <strong>{record.completionLabel}</strong>
+                <span>AI 정리</span>
+                <strong>{record.status === "reviewed" ? "정리된 회고" : "아직 비어 있는 회고"}</strong>
                 <p>{record.aiEvaluation?.summary ?? record.statusMessage}</p>
+                <small>{record.completionLabel}</small>
             </aside>
         </header>
 
@@ -104,22 +105,17 @@ const navItems = [
             data-reader-panel="summary"
             aria-labelledby="summary-title"
         >
-            <header class="reader-block-header">
-                <span class="eyebrow">Overview</span>
-                <h2 id="summary-title">오늘의 흐름</h2>
-            </header>
-            <div class="summary-grid">
-                <div>
-                    <strong>계획</strong>
-                    <p>{record.paths.tlp === undefined ? "아직 연결된 TLP가 없습니다." : "오늘의 학습 목표와 완료 기준이 연결되어 있습니다."}</p>
+            <div class="summary-panel">
+                <div class="summary-panel-main">
+                    <span class="eyebrow">Summary</span>
+                    <h2 id="summary-title">한줄 요약</h2>
+                    <p>{record.summary}</p>
                 </div>
-                <div>
-                    <strong>회고</strong>
-                    <p>{record.paths.til === undefined ? "아직 연결된 TIL이 없습니다." : "학습 결과와 회고가 연결되어 있습니다."}</p>
-                </div>
-                <div>
-                    <strong>AI 정리</strong>
+                <div class="summary-evaluation">
+                    <span>AI 평가</span>
+                    <strong>{record.status === "reviewed" ? "정리된 회고" : "아직 비어 있는 회고"}</strong>
                     <p>{record.aiEvaluation?.summary ?? record.statusMessage}</p>
+                    <small>{record.completionLabel}</small>
                 </div>
             </div>
         </section>
@@ -128,22 +124,28 @@ const navItems = [
             id="tlp"
             title="Today Learning Plan"
             eyebrow="Plan"
+            description="하루를 시작할 때 정한 목표, 완료 기준, 학습 범위를 읽는 계획 노트입니다."
             entry={tlpEntry}
             missing="이 날짜에는 TLP 파일이 없습니다."
+            showHeader={false}
         />
         <MarkdownSection
             id="til"
             title="Today I Learned"
             eyebrow="Review"
+            description="학습 중 얻은 지식과 구현 흐름을 문서처럼 정리해 다시 읽는 본문입니다."
             entry={tilEntry}
             missing="이 날짜에는 TIL 파일이 없습니다."
+            showHeader={false}
         />
         <MarkdownSection
             id="review"
             title="AI 학습 정리"
             eyebrow="Check-in"
+            description="TLP의 의도와 TIL의 근거를 바탕으로 오늘의 학습 흐름을 다시 점검합니다."
             entry={reviewEntry}
             missing="TLP와 TIL을 함께 정리한 AI 학습 리포트가 아직 없습니다."
+            showHeader={false}
         />
     </article>
 </BaseLayout>

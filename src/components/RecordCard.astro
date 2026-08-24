@@ -7,16 +7,19 @@ import {
 
 type Props = {
     readonly record: LearningRecord;
+    readonly showTags?: boolean;
 };
 
-const { record } = Astro.props;
+const { record, showTags = true } = Astro.props;
 ---
 
 <article
-    class="record-card"
+    class={`record-card level-${record.completionLevel}`}
     data-record-card
     data-year={record.year}
+    data-level={record.completionLevel}
     data-search={`${record.title} ${record.summary} ${record.tags.join(" ")}`.toLowerCase()}
+    style={`--level-color: ${record.completionColor}`}
 >
     <a href={getRecordHref(record.date)}>
         <span class="record-date">{record.displayDate}</span>
@@ -28,10 +31,10 @@ const { record } = Astro.props;
         </span>
     </a>
     {
-        record.tags.length > 0 && (
-            <div class="tag-list" aria-label="태그">
+        showTags && record.tags.length > 0 && (
+            <div class="tag-list" aria-label="태그" data-card-tags hidden>
                 {record.tags.map((tag) => (
-                    <a href={getTagHref(tag)}>{tag}</a>
+                    <a href={getTagHref(tag)} data-card-tag-value={tag.toLowerCase()} hidden>{tag}</a>
                 ))}
             </div>
         )

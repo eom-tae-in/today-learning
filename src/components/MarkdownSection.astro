@@ -6,28 +6,59 @@ type Props = {
     readonly id: string;
     readonly title: string;
     readonly eyebrow: string;
+    readonly description: string;
     readonly entry: CollectionEntry<"record"> | undefined;
     readonly missing: string;
+    readonly showToc?: boolean;
+    readonly showHeader?: boolean;
 };
 
-const { id, title, eyebrow, entry, missing } = Astro.props;
+const { id, title, eyebrow, description, entry, missing, showToc = false, showHeader = true } = Astro.props;
 const rendered = entry === undefined ? undefined : await render(entry);
 const Content = rendered?.Content;
+const headings = rendered?.headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3) ?? [];
+const hasToc = showToc && headings.length > 2;
 ---
 
-<section id={id} class="reader-block" data-reader-panel={id} aria-labelledby={`${id}-title`}>
-    <header class="reader-block-header">
-        <span class="eyebrow">{eyebrow}</span>
-        <h2 id={`${id}-title`}>{title}</h2>
-    </header>
+<section
+    id={id}
+    class={`reader-block reader-block-${id}${hasToc ? " has-toc" : ""}`}
+    data-reader-panel={id}
+    aria-labelledby={`${id}-title`}
+>
+    {
+        showHeader && (
+            <header class="reader-block-header">
+                <span class="eyebrow">{eyebrow}</span>
+                <h2 id={`${id}-title`}>{title}</h2>
+                <p>{description}</p>
+            </header>
+        )
+    }
     {
         Content === undefined ? (
             <div class="empty-note">
                 <p>{missing}</p>
             </div>
         ) : (
-            <div class="markdown-body">
-                <Content />
+            <div class="reader-content-grid">
+                <div class="markdown-body">
+                    <Content />
+                </div>
+                {
+                    hasToc && (
+                        <aside class="markdown-toc" aria-label={`${title} 목차`}>
+                            <span>목차</span>
+                            <nav>
+                                {headings.map((heading) => (
+                                    <a href={`#${heading.slug}`} data-depth={heading.depth}>
+                                        {heading.text}
+                                    </a>
+                                ))}
+                            </nav>
+                        </aside>
+                    )
+                }
             </div>
         )
     }

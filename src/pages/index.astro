@@ -3,18 +3,12 @@ import RecordCard from "../components/RecordCard.astro";
 import RecordGraph from "../components/RecordGraph.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import {
-    getAllTags,
     getAvailableYears,
     getLearningRecords,
-    getRecordHref,
-    getTagHref,
 } from "../lib/records";
 
 const records = await getLearningRecords();
 const years = getAvailableYears(records);
-const tags = getAllTags(records);
-const latest = records[0];
-const reviewedCount = records.filter((record) => record.status === "reviewed").length;
 const title = "Today Learning";
 const description = "TLP, TIL, AI 학습 정리를 Markdown 기반 노트로 모아보는 개인 학습 블로그입니다.";
 ---
@@ -22,21 +16,50 @@ const description = "TLP, TIL, AI 학습 정리를 Markdown 기반 노트로 모
 <BaseLayout title={title} description={description}>
     <section class="hero">
         <div class="hero-copy">
-            <span class="eyebrow">Markdown learning notebook</span>
-            <h1>매일의 기록을 다시 읽기 좋은 노트로.</h1>
+            <span class="hero-badge"><i aria-hidden="true"></i>계획과 배움의 기록</span>
+            <h1>
+                계획하고,
+                <span>학습하고,</span>
+                성장한다.
+            </h1>
             <p>
-                TLP로 계획하고, TIL로 회고하고, AI 정리로 학습 흐름을 다시 확인합니다.
-                Markdown, 이미지, GIF, Mermaid 다이어그램까지 글 안에서 자연스럽게 다룹니다.
+                Today Learning은 TLP로 하루를 계획하고,
+                학습 후 TIL로 회고를 남기며
+                AI와 함께 학습 흐름을 다시 읽는 개인 학습 시스템입니다.
             </p>
             <div class="hero-actions">
-                <a class="button primary" href="#records">기록 보기</a>
-                {latest !== undefined && <a class="button secondary" href={getRecordHref(latest.date)}>최근 기록</a>}
+                <a class="button primary" href="#records">
+                    학습 기록 보기
+                    <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
+                        <path
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m9 18 6-6-6-6"
+                        />
+                    </svg>
+                </a>
             </div>
         </div>
-        <aside class="hero-panel" aria-label="학습 기록 요약">
-            <span>현재 노트</span>
-            <strong>{records.length}</strong>
-            <p>{reviewedCount}개의 AI 학습 정리가 연결되어 있습니다.</p>
+        <aside class="hero-note" aria-label="Today Learning 기록 원칙">
+            <div class="note-top">
+                <span class="window-dot red" aria-hidden="true"></span>
+                <span class="window-dot yellow" aria-hidden="true"></span>
+                <span class="window-dot green" aria-hidden="true"></span>
+            </div>
+            <div class="note-content">
+                <p class="note-path">~/today-learning/daily.md</p>
+                <p class="code-line"><span>01</span><span><strong>TLP</strong>로 오늘의 목표를 세우고</span></p>
+                <p class="code-line"><span>02</span><span><strong>TIL</strong>로 배운 점을 회고하고</span></p>
+                <p class="code-line"><span>03</span><span><strong>AI</strong>와 함께 오늘 학습을 정리한다.</span></p>
+                <div class="note-footer">
+                    <span>Plan</span>
+                    <span>Review</span>
+                    <span>Check-in</span>
+                </div>
+            </div>
         </aside>
     </section>
 
@@ -61,12 +84,14 @@ const description = "TLP, TIL, AI 학습 정리를 Markdown 기반 노트로 모
             </div>
         </div>
 
-        <div class="tag-cloud" aria-label="전체 태그">
-            {tags.map((tag) => <a href={getTagHref(tag)}>{tag}</a>)}
+        <div class="records-prompt" data-record-prompt>
+            <span>기록 탐색</span>
+            <strong>검색어나 연도를 선택해 주세요.</strong>
+            <p>처음 화면에서는 기록 목록을 접어두고, 필요한 날짜와 주제를 찾을 때만 노트를 펼칩니다.</p>
         </div>
 
         <div class="records-grid" data-record-list>
-            {records.map((record) => <RecordCard record={record} />)}
+            {records.map((record) => <RecordCard record={record} showTags={false} />)}
         </div>
         <p class="empty-results" data-empty-results hidden>조건에 맞는 기록이 없습니다.</p>
     </section>

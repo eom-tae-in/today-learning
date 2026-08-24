@@ -15,7 +15,7 @@ function getStoredTheme(): Theme | null {
 }
 
 function getPreferredTheme(): Theme {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return "light";
 }
 
 function applyTheme(theme: Theme): void {
@@ -28,8 +28,9 @@ function applyTheme(theme: Theme): void {
         "aria-pressed",
         theme === "dark" ? "true" : "false"
     );
-    document.querySelector("[data-theme-toggle-icon]")?.replaceChildren(
-        document.createTextNode(theme === "dark" ? "☾" : "☼")
+    document.querySelector<HTMLButtonElement>("[data-theme-toggle]")?.setAttribute(
+        "aria-label",
+        theme === "dark" ? "라이트 모드로 변경" : "다크 모드로 변경"
     );
 }
 
@@ -53,20 +54,38 @@ function initializeRecordFilters(): void {
     const year = document.querySelector<HTMLSelectElement>("[data-year-filter]");
     const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-record-card]"));
     const empty = document.querySelector<HTMLElement>("[data-empty-results]");
+    const prompt = document.querySelector<HTMLElement>("[data-record-prompt]");
+    const list = document.querySelector<HTMLElement>("[data-record-list]");
+    const cardTagLists = Array.from(document.querySelectorAll<HTMLElement>("[data-card-tags]"));
 
     if (cards.length === 0) {
         return;
     }
 
+    const revealElement = (element: HTMLElement): void => {
+        element.hidden = false;
+        element.classList.remove("is-visible");
+        window.requestAnimationFrame(() => {
+            element.classList.add("is-visible");
+        });
+    };
+
+    const concealElement = (element: HTMLElement): void => {
+        element.classList.remove("is-visible");
+        element.hidden = true;
+    };
+
     const update = (): void => {
         const query = search?.value.trim().toLowerCase() ?? "";
         const selectedYear = year?.value ?? "all";
+        const hasQuery = query.length > 0;
+        const isExploring = hasQuery || selectedYear !== "all";
         let visibleCount = 0;
 
         cards.forEach((card) => {
-            const matchesQuery = query.length === 0 || card.dataset["search"]?.includes(query) === true;
+            const matchesQuery = !hasQuery || card.dataset["search"]?.includes(query) === true;
             const matchesYear = selectedYear === "all" || card.dataset["year"] === selectedYear;
-            const isVisible = matchesQuery && matchesYear;
+            const isVisible = isExploring && matchesQuery && matchesYear;
 
             card.hidden = !isVisible;
 
@@ -76,24 +95,62 @@ function initializeRecordFilters(): void {
         });
 
         if (empty !== null) {
-            empty.hidden = visibleCount > 0;
+            empty.hidden = !isExploring || visibleCount > 0;
         }
+
+        if (prompt !== null) {
+            if (isExploring) {
+                concealElement(prompt);
+            } else {
+                revealElement(prompt);
+            }
+        }
+
+        if (list !== null) {
+            if (isExploring) {
+                revealElement(list);
+            } else {
+                concealElement(list);
+            }
+        }
+
+        cardTagLists.forEach((tagList) => {
+            const cardTags = Array.from(tagList.querySelectorAll<HTMLElement>("[data-card-tag-value]"));
+            let visibleCardTagCount = 0;
+
+            cardTags.forEach((tag) => {
+                const tagValue = tag.dataset["cardTagValue"] ?? "";
+                const isVisible = hasQuery && tagValue.includes(query);
+
+                tag.hidden = !isVisible;
+
+                if (isVisible) {
+                    visibleCardTagCount += 1;
+                }
+            });
+
+            tagList.hidden = visibleCardTagCount === 0;
+        });
     };
 
     search?.addEventListener("input", update);
     year?.addEventListener("change", update);
+    update();
 }
 
 function initializeGraph(): void {
     const select = document.querySelector<HTMLSelectElement>("[data-graph-year-select]");
-    const titleYear = document.querySelector<HTMLElement>("[data-graph-title-year]");
+    const currentYear = document.querySelector<HTMLElement>("[data-graph-current-year]");
     const graphs = Array.from(document.querySelectorAll<HTMLElement>("[data-graph-year]"));
     const previewDate = document.querySelector<HTMLElement>("[data-graph-preview-date]");
     const previewTitle = document.querySelector<HTMLElement>("[data-graph-preview-title]");
     const previewSummary = document.querySelector<HTMLElement>("[data-graph-preview-summary]");
     const previewStatus = document.querySelector<HTMLElement>("[data-graph-preview-status]");
+    const previewMeta = document.querySelector<HTMLElement>("[data-graph-preview-meta]");
     const previewLink = document.querySelector<HTMLAnchorElement>("[data-graph-preview-link]");
     const records = Array.from(document.querySelectorAll<HTMLElement>("[data-graph-record]"));
+    const yearButtons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-graph-year-option]"));
+    let selectedRecord: HTMLElement | null = null;
 
     if (select === null || graphs.length === 0) {
         return;
@@ -106,12 +163,24 @@ function initializeGraph(): void {
             graph.hidden = graph.dataset["graphYear"] !== selectedYear;
         });
 
-        if (titleYear !== null) {
-            titleYear.textContent = selectedYear;
+        if (currentYear !== null) {
+            currentYear.textContent = `${selectedYear}년`;
+        }
+
+        yearButtons.forEach((button) => {
+            button.setAttribute("aria-pressed", button.dataset["graphYearOption"] === selectedYear ? "true" : "false");
+        });
+
+        const isSelectedRecordVisible = selectedRecord?.dataset["recordYear"] === selectedYear;
+
+        if (!isSelectedRecordVisible) {
+            clearSelection();
         }
     };
 
     const selectRecord = (target: HTMLElement): void => {
+        selectedRecord = target;
+
         records.forEach((record) => {
             const isSelected = record === target;
 
@@ -132,7 +201,23 @@ function initializeGraph(): void {
         }
 
         if (previewStatus !== null) {
-            previewStatus.textContent = target.dataset["status"] ?? "";
+            previewStatus.textContent = target.dataset["level"] ?? target.dataset["status"] ?? "";
+        }
+
+        if (previewMeta !== null) {
+            previewMeta.hidden = false;
+        }
+
+        const preview = document.querySelector<HTMLElement>("[data-graph-preview]");
+
+        preview?.style.setProperty("--level-color", target.style.getPropertyValue("--level-color"));
+
+        if (preview !== null) {
+            preview.dataset["previewState"] = target.dataset["level"] ?? "selected";
+            preview.classList.remove("is-visible");
+            window.requestAnimationFrame(() => {
+                preview.classList.add("is-visible");
+            });
         }
 
         if (previewLink !== null) {
@@ -141,19 +226,74 @@ function initializeGraph(): void {
         }
     };
 
+    const clearSelection = (): void => {
+        selectedRecord = null;
+
+        records.forEach((record) => {
+            record.classList.remove("is-selected");
+            record.setAttribute("aria-pressed", "false");
+        });
+
+        if (previewDate !== null) {
+            previewDate.textContent = "기록 선택";
+        }
+
+        if (previewTitle !== null) {
+            previewTitle.textContent = "기록된 날짜를 선택해 주세요.";
+        }
+
+        if (previewSummary !== null) {
+            previewSummary.textContent = "잔디의 색이 있는 날짜를 선택하면 그날 작성한 학습 요약을 바로 확인할 수 있습니다.";
+        }
+
+        if (previewStatus !== null) {
+            previewStatus.textContent = "대기 중";
+        }
+
+        if (previewMeta !== null) {
+            previewMeta.hidden = true;
+        }
+
+        const preview = document.querySelector<HTMLElement>("[data-graph-preview]");
+
+        preview?.classList.remove("is-visible");
+        preview?.style.removeProperty("--level-color");
+        delete preview?.dataset["previewState"];
+
+        if (previewLink !== null) {
+            previewLink.hidden = true;
+        }
+    };
+
     select.addEventListener("change", showYear);
+    yearButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const year = button.dataset["graphYearOption"];
+
+            if (year === undefined) {
+                return;
+            }
+
+            select.value = year;
+            showYear();
+        });
+    });
     records.forEach((record) => {
-        record.addEventListener("mouseenter", () => selectRecord(record));
-        record.addEventListener("focus", () => selectRecord(record));
         record.addEventListener("click", (event) => {
             event.preventDefault();
             selectRecord(record);
         });
+        record.addEventListener("keydown", (event) => {
+            if (event.key !== "Escape") {
+                return;
+            }
+
+            clearSelection();
+            record.blur();
+        });
     });
 
-    if (records[0] !== undefined) {
-        selectRecord(records[0]);
-    }
+    clearSelection();
 }
 
 function initializeReaderTabs(): void {
@@ -178,7 +318,19 @@ function initializeReaderTabs(): void {
         });
 
         panels.forEach((panel) => {
-            panel.hidden = panel.dataset["readerPanel"] !== id;
+            const isCurrent = panel.dataset["readerPanel"] === id;
+
+            if (!isCurrent) {
+                panel.classList.remove("is-visible");
+                panel.hidden = true;
+                return;
+            }
+
+            panel.hidden = false;
+            panel.classList.remove("is-visible");
+            window.requestAnimationFrame(() => {
+                panel.classList.add("is-visible");
+            });
         });
     };
 
