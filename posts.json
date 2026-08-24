@@ -628,9 +628,14 @@
     }
   },
   {
-    "title": "2026-08-24",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "MariaDB SELECT와 인덱스",
+    "summary": "MariaDB 환경과 SQL 실행 순서, NULL·인덱스 조건 조회",
+    "tags": [
+      "MariaDB",
+      "SQL",
+      "Index",
+      "InnoDB"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -638,7 +643,14 @@
     ],
     "date": "2026-08-24",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-24.md"
+      "tlp": "TLP/2026/08/2026-08-24.md",
+      "til": "TIL/2026/08/2026-08-24.md",
+      "review": "Reviews/2026/08/2026-08-24.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "MariaDB 구조, SELECT 조건 조회, NULL과 인덱스 정리",
+      "reviewedAt": "2026-08-24"
     }
   }
 ]
