@@ -629,7 +629,7 @@
   },
   {
     "title": "MariaDB SELECT와 인덱스",
-    "summary": "MariaDB 환경과 SQL 실행 순서, NULL·인덱스 조건 조회",
+    "summary": "MariaDB 환경과 SQL 실행 순서, NULL·인덱스 조회 조건",
     "tags": [
       "MariaDB",
       "SQL",
@@ -649,7 +649,7 @@
     },
     "aiEvaluation": {
       "level": "good",
-      "summary": "MariaDB 구조, SELECT 조건 조회, NULL과 인덱스 정리",
+      "summary": "MariaDB 환경, SQL 실행 순서, 인덱스와 SELECT 조건 실습",
       "reviewedAt": "2026-08-24"
     }
   }
