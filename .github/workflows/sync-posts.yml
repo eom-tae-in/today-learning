@@ -77,13 +77,17 @@ jobs:
           git commit -m "chore: sync generated learning records"
           git push origin main
 
+      - name: Build site
+        working-directory: main
+        run: npm run build
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: main
+          path: main/dist
 
       - name: Deploy to GitHub Pages
         id: deployment
