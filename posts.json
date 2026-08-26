@@ -654,9 +654,15 @@
     }
   },
   {
-    "title": "2026-08-26",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "SQL GROUP BY와 JOIN 집계",
+    "summary": "집계 함수와 JOIN 기반 그룹별 통계 쿼리 구성",
+    "tags": [
+      "SQL",
+      "GROUP BY",
+      "JOIN",
+      "OUTER JOIN",
+      "HAVING"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -664,7 +670,14 @@
     ],
     "date": "2026-08-26",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-26.md"
+      "tlp": "TLP/2026/08/2026-08-26.md",
+      "til": "TIL/2026/08/2026-08-26.md",
+      "review": "Reviews/2026/08/2026-08-26.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "집계 함수, GROUP BY, JOIN, OUTER JOIN 차이 중심 기록",
+      "reviewedAt": "2026-08-26"
     }
   }
 ]
