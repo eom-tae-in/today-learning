@@ -3,6 +3,7 @@ node_modules/
 .astro/
 dist/
 test-results/
+design-reference/
 .omo/
 DESIG.md
 DESIGN.md
