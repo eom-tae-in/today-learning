@@ -25,6 +25,11 @@ const { record, showTags = true } = Astro.props;
         <span class="record-date">{record.displayDate}</span>
         <h3>{record.title}</h3>
         <p>{record.summary}</p>
+        <div class="record-badges">
+            <span class="record-badge tlp-badge">TLP</span>
+            <span class="record-badge til-badge">TIL</span>
+            {record.aiEvaluation && <span class="record-badge ai-badge">AI</span>}
+        </div>
         <span class="record-status" style={`--level-color: ${record.completionColor}`}>
             <span aria-hidden="true"></span>
             {record.statusLabel}

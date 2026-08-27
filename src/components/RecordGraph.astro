@@ -101,6 +101,10 @@ function getYearDays(year: string) {
                                                 data-summary={record.summary}
                                                 data-status={record.statusLabel}
                                                 data-level={record.completionLabel}
+                                                data-has-tlp="true"
+                                                data-has-til="true"
+                                                data-has-ai={record.aiEvaluation !== undefined ? "true" : "false"}
+                                                data-color={record.completionColor}
                                                 data-initial-record={record.date === records[0]?.date ? "true" : "false"}
                                                 href={getRecordHref(record.date)}
                                                 title={`${record.displayDate} ${record.title}`}
@@ -139,22 +143,27 @@ function getYearDays(year: string) {
             </nav>
         </div>
         <aside class="graph-preview" data-graph-preview>
-            <span>AI 평가</span>
-            <strong data-graph-preview-title>기록된 날짜를 선택해 주세요.</strong>
+            <div class="graph-preview-header">
+                <div>
+                    <div class="graph-preview-date" data-graph-preview-date>기록 선택</div>
+                    <strong data-graph-preview-title>기록된 날짜를 선택해 주세요.</strong>
+                </div>
+            </div>
             <p data-graph-preview-summary>잔디 칸을 선택하면 그날의 요약과 AI 평가를 이곳에서 확인합니다.</p>
-            <dl data-graph-preview-meta hidden>
-                <div>
-                    <dt>날짜</dt>
-                    <dd data-graph-preview-date>기록 선택</dd>
+            <div class="graph-preview-badges" data-graph-preview-badges hidden>
+                <span class="record-badge tlp-badge">TLP</span>
+                <span class="record-badge til-badge">TIL</span>
+                <span class="record-badge ai-badge" data-ai-badge hidden>AI</span>
+            </div>
+            <div class="graph-preview-footer">
+                <div class="graph-preview-status">
+                    <span class="status-label">평가</span>
+                    <span class="status-value" data-graph-preview-status>대기 중</span>
                 </div>
-                <div>
-                    <dt>AI 평가</dt>
-                    <dd data-graph-preview-status>대기 중</dd>
-                </div>
-            </dl>
-            <a class="graph-preview-link" data-graph-preview-link href={records[0] === undefined ? "#" : getRecordHref(records[0].date)}>
-                기록 열기
-            </a>
+                <a class="graph-preview-link" data-graph-preview-link href={records[0] === undefined ? "#" : getRecordHref(records[0].date)}>
+                    기록 열기
+                </a>
+            </div>
         </aside>
     </div>
 </section>

@@ -37,7 +37,7 @@ const baseUrl = import.meta.env.BASE_URL.endsWith("/")
             <h1>{tag}</h1>
             <p>{records.length}개의 기록이 연결되어 있습니다.</p>
         </div>
-        <div class="records-grid">
+        <div class="records-grid is-visible">
             {records.map((record) => <RecordCard record={record} />)}
         </div>
     </section>

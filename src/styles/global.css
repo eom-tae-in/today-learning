@@ -1,25 +1,31 @@
 :root {
     color-scheme: light;
 
-    --background: #f6f8fc;
+    --background: #f5f6fa;
     --background-elevated: rgba(255, 255, 255, 0.84);
     --surface: #ffffff;
     --surface-soft: #f2f5fa;
     --surface-hover: #f8faff;
-    --text-primary: #101828;
+    --text-primary: #1d2130;
     --text-secondary: #5f6b7c;
     --text-tertiary: #8993a4;
     --border: rgba(16, 24, 40, 0.09);
     --border-strong: rgba(16, 24, 40, 0.14);
-    --primary: #5b63f6;
-    --primary-hover: #4850dd;
-    --primary-soft: rgba(91, 99, 246, 0.1);
-    --accent: #7c5cff;
-    --success: #1b9a6c;
-    --level-excellent: #22c55e;
-    --level-good: #5b8def;
-    --level-needs-work: #f59e0b;
+    --primary: #4b4fd1;
+    --primary-hover: #3f42be;
+    --primary-soft: #eeeffe;
+    --accent: #8a5a18;
+    --success: #1e8a63;
+    --level-excellent: #1e8a63;
+    --level-good: #4b4fd1;
+    --level-needs-work: #d9a94e;
     --level-not-evaluated: #94a3b8;
+    --tlp-color: #4b4fd1;
+    --til-color: #8a5a18;
+    --ai-color: #1e8a63;
+    --tlp-bg: #eeeffe;
+    --til-bg: #f9f1e3;
+    --ai-bg: #eef0f5;
     --graph-level-strength: 46%;
     --graph-level-border-strength: 26%;
     --preview-button-bg: #ffffff;
@@ -68,15 +74,21 @@
     --text-tertiary: #737e90;
     --border: rgba(255, 255, 255, 0.08);
     --border-strong: rgba(255, 255, 255, 0.13);
-    --primary: #8b91ff;
-    --primary-hover: #a3a8ff;
-    --primary-soft: rgba(139, 145, 255, 0.13);
-    --accent: #a58bff;
-    --success: #50c997;
-    --level-excellent: #4ade80;
+    --primary: #6b6fd9;
+    --primary-hover: #7d81ea;
+    --primary-soft: rgba(107, 111, 217, 0.16);
+    --accent: #b8874d;
+    --success: #4ade80;
+    --level-excellent: #22c55e;
     --level-good: #7aa7ff;
     --level-needs-work: #fbbf24;
     --level-not-evaluated: #94a3b8;
+    --tlp-color: #6b6fd9;
+    --til-color: #b8874d;
+    --ai-color: #4ade80;
+    --tlp-bg: rgba(107, 111, 217, 0.16);
+    --til-bg: rgba(184, 135, 77, 0.16);
+    --ai-bg: rgba(74, 222, 128, 0.14);
     --graph-level-strength: 38%;
     --graph-level-border-strength: 24%;
     --preview-button-bg: #000000;
@@ -403,6 +415,7 @@ button {
     max-width: 780px;
     margin: var(--space-6) 0 var(--space-5);
     font-size: clamp(44px, 7vw, 74px);
+    font-weight: 700;
     line-height: 1.08;
     letter-spacing: 0;
     text-wrap: balance;
@@ -590,6 +603,7 @@ button {
 .not-found h1 {
     margin: var(--space-2) 0 var(--space-3);
     font-size: clamp(31px, 8vw, 58px);
+    font-weight: 700;
     line-height: 1.14;
     letter-spacing: 0;
 }
@@ -734,6 +748,7 @@ button {
 .record-card h3 {
     margin: var(--space-3) 0 var(--space-2);
     font-size: 21px;
+    font-weight: 600;
     line-height: 1.38;
 }
 
@@ -771,6 +786,45 @@ button {
     background: var(--level-color, var(--primary));
 }
 
+.record-badges {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.record-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 24px;
+    padding: 0 6px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: 0.06em;
+}
+
+.record-badge.tlp-badge {
+    background: var(--tlp-bg);
+    color: var(--tlp-color);
+    border: 1px solid color-mix(in srgb, var(--tlp-color) 28%, var(--border));
+}
+
+.record-badge.til-badge {
+    background: var(--til-bg);
+    color: var(--til-color);
+    border: 1px solid color-mix(in srgb, var(--til-color) 28%, var(--border));
+}
+
+.record-badge.ai-badge {
+    background: var(--ai-bg);
+    color: var(--ai-color);
+    border: 1px solid color-mix(in srgb, var(--ai-color) 28%, var(--border));
+}
+
 .learning-board {
     position: relative;
     padding: clamp(20px, 3vw, 32px);
@@ -794,6 +848,7 @@ button {
 .learning-board-header h2 {
     margin: var(--space-2) 0 var(--space-3);
     font-size: clamp(34px, 5vw, 48px);
+    font-weight: 700;
     line-height: 1.14;
     letter-spacing: 0;
 }
@@ -1212,6 +1267,7 @@ button {
 .markdown-body h4 {
     margin: 38px 0 14px;
     color: var(--text-primary);
+    font-weight: 700;
     line-height: 1.32;
     letter-spacing: 0;
     text-wrap: balance;
@@ -1701,19 +1757,94 @@ button {
 
 .graph-preview {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--space-4);
-    align-items: end;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    padding: var(--space-6);
+    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 20%, var(--border));
     border-radius: 14px;
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            color-mix(in srgb, var(--level-color, var(--primary)) 10%, transparent),
+            transparent 42%
+        ),
+        linear-gradient(
+            145deg,
+            color-mix(in srgb, var(--level-color, var(--primary)) 5%, var(--surface)),
+            var(--surface) 72%
+        );
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--level-color, var(--primary)) 6%, transparent);
+}
+
+.graph-preview-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.graph-preview-header strong {
+    margin-top: var(--space-2);
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.graph-preview-date {
+    color: var(--text-tertiary);
+    font-size: 13px;
+    font-weight: 900;
+    font-family: "JetBrains Mono", monospace;
+}
+
+.graph-preview-badges {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.graph-preview-badges .record-badge {
+    font-size: 10px;
+    min-width: 36px;
+    height: 28px;
 }
 
 .graph-preview p {
-    margin-bottom: 0;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.6;
 }
 
-.graph-preview dl {
-    grid-column: 1 / -1;
-    max-width: 520px;
+.graph-preview-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 12%, var(--border));
+}
+
+.graph-preview-status {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.status-label {
+    color: var(--text-tertiary);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.status-value {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--level-color, var(--primary)) 12%, var(--surface-soft));
+    width: fit-content;
 }
 
 .graph-preview [hidden] {
@@ -1721,22 +1852,19 @@ button {
 }
 
 .graph-preview-link {
-    align-self: end;
-    min-height: 42px;
-    padding-inline: var(--space-5);
+    min-height: 36px;
+    padding: 0 var(--space-4);
     border-radius: 8px;
-    border: 1px solid var(--preview-button-border);
-    background-color: var(--preview-button-bg);
-    background-image:
-        linear-gradient(180deg, color-mix(in srgb, var(--preview-button-bg) 92%, var(--level-color, var(--primary))), var(--preview-button-bg));
-    color: var(--preview-button-fg);
+    border: 0;
+    background: var(--level-color, var(--primary));
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14px;
+    transition: background var(--transition);
 }
 
 .graph-preview-link:hover {
-    background-color: var(--preview-button-bg);
-    background-image:
-        linear-gradient(180deg, color-mix(in srgb, var(--preview-button-bg) 84%, var(--level-color, var(--primary))), var(--preview-button-bg));
-    color: var(--preview-button-fg);
+    background: color-mix(in srgb, var(--level-color, var(--primary)) 80%, #000000);
 }
 
 .tag-cloud {
@@ -1853,7 +1981,9 @@ button {
 .reader-hero h1 {
     max-width: 760px;
     font-size: clamp(42px, 7vw, 70px);
+    font-weight: 700;
     line-height: 1.04;
+    letter-spacing: 0;
 }
 
 .reader-hero p {
@@ -1924,11 +2054,26 @@ button {
 .reader-block-header .eyebrow {
     grid-row: span 2;
     align-self: start;
+    color: var(--primary);
+}
+
+.reader-block-tlp .reader-block-header .eyebrow {
+    color: var(--tlp-color);
+}
+
+.reader-block-til .reader-block-header .eyebrow {
+    color: var(--til-color);
+}
+
+.reader-block-review .reader-block-header .eyebrow {
+    color: var(--ai-color);
 }
 
 .reader-block-header h2 {
     margin: 0;
     font-size: clamp(30px, 4vw, 46px);
+    font-weight: 700;
+    letter-spacing: 0;
 }
 
 .reader-block-header p {
@@ -1950,11 +2095,19 @@ button {
 }
 
 .summary-panel {
-    display: grid;
-    grid-template-columns: minmax(0, 0.92fr) minmax(320px, 1.08fr);
     overflow: hidden;
-    background:
-        linear-gradient(90deg, var(--surface) 0%, color-mix(in srgb, var(--level-color, var(--primary)) 5%, var(--surface)) 100%);
+}
+
+.summary-content {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(30px, 5vw, 50px);
+    align-items: center;
+    padding: clamp(22px, 3.5vw, 40px);
+}
+
+.summary-content > div:first-child {
+    min-width: 0;
 }
 
 .summary-panel-main {
@@ -1962,68 +2115,52 @@ button {
     border-right: 1px solid var(--border);
 }
 
-.summary-panel-main h2 {
+.summary-content > div:first-child h2 {
     margin: var(--space-3) 0 var(--space-4);
     color: var(--text-primary);
-    font-size: clamp(34px, 5vw, 58px);
-    line-height: 1.04;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.2;
 }
 
-.summary-panel-main p {
-    max-width: 620px;
+.summary-main {
+    max-width: 600px;
     margin: 0;
     color: var(--text-primary);
-    font-size: clamp(19px, 2.4vw, 28px);
-    font-weight: 850;
-    line-height: 1.45;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.6;
 }
 
-.summary-evaluation {
-    display: grid;
-    gap: var(--space-3);
-    align-content: center;
-    padding: clamp(22px, 3.5vw, 40px);
-    background:
-        radial-gradient(
-            circle at 100% 0%,
-            color-mix(in srgb, var(--level-color, var(--primary)) 18%, transparent),
-            transparent 42%
-        ),
-        linear-gradient(145deg, color-mix(in srgb, var(--level-color, var(--primary)) 10%, var(--surface)), var(--surface) 74%);
-    border-left: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 20%, transparent);
+.summary-stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    min-width: 140px;
 }
 
-.summary-evaluation span {
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--level-color, var(--primary)) 8%, var(--surface-soft));
+    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 18%, var(--border));
+}
+
+.stat-label {
     color: var(--text-tertiary);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 900;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
-.summary-evaluation strong {
+.stat-value {
     color: var(--text-primary);
-    font-size: clamp(28px, 4vw, 44px);
-    line-height: 1.12;
-}
-
-.summary-evaluation p {
-    max-width: 720px;
-    margin: 0;
-    color: var(--text-secondary);
-    font-size: 17px;
-    line-height: 1.72;
-}
-
-.summary-evaluation small {
-    width: fit-content;
-    padding: 7px 11px;
-    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 34%, var(--border));
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--level-color, var(--primary)) 10%, transparent);
-    color: color-mix(in srgb, var(--level-color, var(--primary)) 72%, var(--text-primary));
-    font-size: 12px;
-    font-weight: 900;
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .reader-content-grid {
@@ -2231,17 +2368,26 @@ button {
         min-width: 72px;
     }
 
+    .graph-preview-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     .markdown-toc {
         display: none;
     }
 
-    .summary-panel-main {
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
+    .summary-content {
+        grid-template-columns: 1fr;
     }
 
-    .summary-evaluation {
-        border-left: 0;
+    .summary-stats {
+        flex-direction: row;
+        gap: var(--space-3);
+    }
+
+    .stat-item {
+        flex: 1;
     }
 }
 

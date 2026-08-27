@@ -58,7 +58,7 @@ function initializeRecordFilters(): void {
     const list = document.querySelector<HTMLElement>("[data-record-list]");
     const cardTagLists = Array.from(document.querySelectorAll<HTMLElement>("[data-card-tags]"));
 
-    if (cards.length === 0) {
+    if (cards.length === 0 || (search === null && year === null)) {
         return;
     }
 
@@ -146,7 +146,6 @@ function initializeGraph(): void {
     const previewTitle = document.querySelector<HTMLElement>("[data-graph-preview-title]");
     const previewSummary = document.querySelector<HTMLElement>("[data-graph-preview-summary]");
     const previewStatus = document.querySelector<HTMLElement>("[data-graph-preview-status]");
-    const previewMeta = document.querySelector<HTMLElement>("[data-graph-preview-meta]");
     const previewLink = document.querySelector<HTMLAnchorElement>("[data-graph-preview-link]");
     const records = Array.from(document.querySelectorAll<HTMLElement>("[data-graph-record]"));
     const yearButtons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-graph-year-option]"));
@@ -204,13 +203,18 @@ function initializeGraph(): void {
             previewStatus.textContent = target.dataset["level"] ?? target.dataset["status"] ?? "";
         }
 
-        if (previewMeta !== null) {
-            previewMeta.hidden = false;
+        const preview = document.querySelector<HTMLElement>("[data-graph-preview]");
+        const badgesContainer = document.querySelector<HTMLElement>("[data-graph-preview-badges]");
+        const aiBadge = document.querySelector<HTMLElement>("[data-ai-badge]");
+
+        if (badgesContainer !== null) {
+            badgesContainer.hidden = false;
+            if (aiBadge !== null) {
+                aiBadge.hidden = target.dataset["hasAi"] !== "true";
+            }
         }
 
-        const preview = document.querySelector<HTMLElement>("[data-graph-preview]");
-
-        preview?.style.setProperty("--level-color", target.style.getPropertyValue("--level-color"));
+        preview?.style.setProperty("--level-color", target.dataset["color"] ?? target.style.getPropertyValue("--level-color"));
 
         if (preview !== null) {
             preview.dataset["previewState"] = target.dataset["level"] ?? "selected";
@@ -223,6 +227,7 @@ function initializeGraph(): void {
         if (previewLink !== null) {
             previewLink.href = target instanceof HTMLAnchorElement ? target.href : "#";
             previewLink.hidden = false;
+            previewLink.style.setProperty("--level-color", target.dataset["color"] ?? target.style.getPropertyValue("--level-color"));
         }
     };
 
@@ -250,8 +255,9 @@ function initializeGraph(): void {
             previewStatus.textContent = "대기 중";
         }
 
-        if (previewMeta !== null) {
-            previewMeta.hidden = true;
+        const badgesContainer = document.querySelector<HTMLElement>("[data-graph-preview-badges]");
+        if (badgesContainer !== null) {
+            badgesContainer.hidden = true;
         }
 
         const preview = document.querySelector<HTMLElement>("[data-graph-preview]");
@@ -281,7 +287,11 @@ function initializeGraph(): void {
     records.forEach((record) => {
         record.addEventListener("click", (event) => {
             event.preventDefault();
-            selectRecord(record);
+            if (selectedRecord === record) {
+                clearSelection();
+            } else {
+                selectRecord(record);
+            }
         });
         record.addEventListener("keydown", (event) => {
             if (event.key !== "Escape") {

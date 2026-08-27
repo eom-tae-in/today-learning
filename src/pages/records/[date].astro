@@ -106,16 +106,22 @@ const navItems = [
             aria-labelledby="summary-title"
         >
             <div class="summary-panel">
-                <div class="summary-panel-main">
-                    <span class="eyebrow">Summary</span>
-                    <h2 id="summary-title">한줄 요약</h2>
-                    <p>{record.summary}</p>
-                </div>
-                <div class="summary-evaluation">
-                    <span>AI 평가</span>
-                    <strong>{record.status === "reviewed" ? "정리된 회고" : "아직 비어 있는 회고"}</strong>
-                    <p>{record.aiEvaluation?.summary ?? record.statusMessage}</p>
-                    <small>{record.completionLabel}</small>
+                <div class="summary-content">
+                    <div>
+                        <span class="eyebrow">Summary</span>
+                        <h2 id="summary-title">오늘의 기록</h2>
+                        <p class="summary-main">{record.summary}</p>
+                    </div>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">AI 평가</span>
+                            <strong class="stat-value">{record.completionLabel}</strong>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">상태</span>
+                            <strong class="stat-value">{record.status === "reviewed" ? "정리 완료" : "진행 중"}</strong>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
