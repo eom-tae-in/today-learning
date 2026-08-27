@@ -681,9 +681,15 @@
     }
   },
   {
-    "title": "2026-08-27",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "SQL 서브쿼리와 DDL 제약조건",
+    "summary": "반환 행 수 기반 서브쿼리 연산자와 DDL 무결성 규칙",
+    "tags": [
+      "SQL",
+      "Subquery",
+      "DDL",
+      "Constraint",
+      "Window Function"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -691,7 +697,14 @@
     ],
     "date": "2026-08-27",
     "paths": {
-      "tlp": "TLP/2026/08/2026-08-27.md"
+      "tlp": "TLP/2026/08/2026-08-27.md",
+      "til": "TIL/2026/08/2026-08-27.md",
+      "review": "Reviews/2026/08/2026-08-27.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "서브쿼리 연산자와 DDL 제약조건 중심 SQL 흐름",
+      "reviewedAt": "2026-08-27"
     }
   }
 ]
