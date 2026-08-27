@@ -682,7 +682,7 @@
   },
   {
     "title": "SQL 서브쿼리와 DDL 제약조건",
-    "summary": "단일·다중행 서브쿼리 연산자와 테이블 무결성 설계",
+    "summary": "서브쿼리 연산자 선택과 DDL 기반 데이터 무결성 설계",
     "tags": [
       "SQL",
       "Subquery",
@@ -703,7 +703,7 @@
     },
     "aiEvaluation": {
       "level": "good",
-      "summary": "서브쿼리 연산자와 DDL 제약조건 중심 SQL 구조 이해",
+      "summary": "서브쿼리 연산자와 DDL·제약조건 중심 학습 기록",
       "reviewedAt": "2026-08-27"
     }
   }
