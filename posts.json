@@ -762,9 +762,15 @@
     }
   },
   {
-    "title": "2026-09-01",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "Spring Controller와 MyBatis 연동",
+    "summary": "Spring MVC 요청 바인딩과 MyBatis 데이터 접근, Swagger API 명세 구조",
+    "tags": [
+      "Spring Boot",
+      "Spring MVC",
+      "MyBatis",
+      "Swagger",
+      "REST API"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -772,7 +778,14 @@
     ],
     "date": "2026-09-01",
     "paths": {
-      "tlp": "TLP/2026/09/2026-09-01.md"
+      "tlp": "TLP/2026/09/2026-09-01.md",
+      "til": "TIL/2026/09/2026-09-01.md",
+      "review": "Reviews/2026/09/2026-09-01.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "Controller 요청 바인딩, MyBatis 흐름, Swagger 명세 정리",
+      "reviewedAt": "2026-09-01"
     }
   }
 ]
