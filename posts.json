@@ -789,9 +789,14 @@
     }
   },
   {
-    "title": "2026-09-02",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "Swagger API 연동과 CORS",
+    "summary": "Swagger 명세 기반 API 연동과 CORS 응답 접근 제어",
+    "tags": [
+      "Swagger",
+      "CORS",
+      "Spring MVC",
+      "MyBatis"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -799,7 +804,14 @@
     ],
     "date": "2026-09-02",
     "paths": {
-      "tlp": "TLP/2026/09/2026-09-02.md"
+      "tlp": "TLP/2026/09/2026-09-02.md",
+      "til": "TIL/2026/09/2026-09-02.md",
+      "review": "Reviews/2026/09/2026-09-02.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "Swagger API 연동과 CORS 문제 개선 흐름",
+      "reviewedAt": "2026-09-02"
     }
   }
 ]
