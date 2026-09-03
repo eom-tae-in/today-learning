@@ -815,9 +815,15 @@
     }
   },
   {
-    "title": "2026-09-03",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "MyBatis 1:N과 React CORS 연동",
+    "summary": "게시글·댓글 1:N 매핑과 DTO 변환, CORS 기반 React 연동 흐름",
+    "tags": [
+      "MyBatis",
+      "Spring Transaction",
+      "Jackson",
+      "CORS",
+      "React"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -825,7 +831,14 @@
     ],
     "date": "2026-09-03",
     "paths": {
-      "tlp": "TLP/2026/09/2026-09-03.md"
+      "tlp": "TLP/2026/09/2026-09-03.md",
+      "til": "TIL/2026/09/2026-09-03.md",
+      "review": "Reviews/2026/09/2026-09-03.md"
+    },
+    "aiEvaluation": {
+      "level": "good",
+      "summary": "MyBatis 1:N 매핑과 DTO·트랜잭션·CORS 연동 흐름",
+      "reviewedAt": "2026-09-03"
     }
   }
 ]
