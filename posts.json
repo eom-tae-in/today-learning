@@ -842,9 +842,15 @@
     }
   },
   {
-    "title": "2026-09-04",
-    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
-    "tags": [],
+    "title": "MyBatis 관계 매핑과 Spring AOP",
+    "summary": "게시글·댓글 매핑과 AOP·Filter·Interceptor 요청 처리 흐름",
+    "tags": [
+      "MyBatis",
+      "Spring AOP",
+      "Spring Transaction",
+      "Spring MVC",
+      "React"
+    ],
     "hashtags": [
       "LG CNS 6기",
       "개발자",
@@ -852,7 +858,14 @@
     ],
     "date": "2026-09-04",
     "paths": {
-      "tlp": "TLP/2026/09/2026-09-04.md"
+      "tlp": "TLP/2026/09/2026-09-04.md",
+      "til": "TIL/2026/09/2026-09-04.md",
+      "review": "Reviews/2026/09/2026-09-04.md"
+    },
+    "aiEvaluation": {
+      "level": "excellent",
+      "summary": "MyBatis 관계 매핑, AOP, 요청 흐름, React 연동 구분",
+      "reviewedAt": "2026-09-04"
     }
   }
 ]
