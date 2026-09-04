@@ -840,5 +840,19 @@
       "summary": "MyBatis 1:N 매핑과 DTO·트랜잭션·CORS 연동 흐름",
       "reviewedAt": "2026-09-03"
     }
+  },
+  {
+    "title": "2026-09-04",
+    "summary": "TIL이 작성되어 있지 않은 학습 계획 기록",
+    "tags": [],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-09-04",
+    "paths": {
+      "tlp": "TLP/2026/09/2026-09-04.md"
+    }
   }
 ]
