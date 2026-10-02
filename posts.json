@@ -994,5 +994,24 @@
     "paths": {
       "til": "TIL/2026/10/2026-10-01.md"
     }
+  },
+  {
+    "title": "Eureka Service Discovery",
+    "summary": "Eureka 기반 서비스 등록과 다중 인스턴스 확인 기준",
+    "tags": [
+      "Eureka",
+      "Service Discovery",
+      "Spring Cloud",
+      "LoadBalancer"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-10-02",
+    "paths": {
+      "til": "TIL/2026/10/2026-10-02.md"
+    }
   }
 ]
