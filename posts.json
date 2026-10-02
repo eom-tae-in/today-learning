@@ -974,5 +974,25 @@
       "summary": "Servlet Filter, JWT 인증, Redis TTL 인증 상태 관리",
       "reviewedAt": "2026-09-11"
     }
+  },
+  {
+    "title": "MSA와 Spring Cloud 요청 흐름",
+    "summary": "MSA 서비스 경계와 Spring Cloud 기반 요청·장애 흐름",
+    "tags": [
+      "MSA",
+      "Spring Cloud",
+      "REST API",
+      "CI/CD",
+      "Observability"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-10-01",
+    "paths": {
+      "til": "TIL/2026/10/2026-10-01.md"
+    }
   }
 ]
