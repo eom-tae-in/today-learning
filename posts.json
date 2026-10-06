@@ -1013,5 +1013,25 @@
     "paths": {
       "til": "TIL/2026/10/2026-10-02.md"
     }
+  },
+  {
+    "title": "Spring Cloud Gateway와 Eureka",
+    "summary": "WebFlux Gateway 라우팅과 Eureka 기반 인스턴스 선택",
+    "tags": [
+      "Spring Cloud Gateway",
+      "WebFlux",
+      "Eureka",
+      "Spring Cloud LoadBalancer",
+      "Filter"
+    ],
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ],
+    "date": "2026-10-06",
+    "paths": {
+      "til": "TIL/2026/10/2026-10-06.md"
+    }
   }
 ]
