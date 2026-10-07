@@ -1,73 +1,36 @@
 ---
 import { getEntry } from "astro:content";
 import MarkdownSection from "../../components/MarkdownSection.astro";
+import RecordNavigation from "../../components/RecordNavigation.astro";
+import ReadingControls from "../../components/ReadingControls.astro";
+import Icon from "../../components/Icon.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getLearningRecord, getLearningRecords, getRecordPathId, getTagHref } from "../../lib/records";
-
-export async function getStaticPaths() {
-    return (await getLearningRecords()).map((record) => ({
-        params: { date: record.date },
-    }));
-}
-
+export async function getStaticPaths() { return (await getLearningRecords()).map(record => ({ params: { date: record.date } })); }
 const record = await getLearningRecord(Astro.params.date ?? "");
-if (record === undefined) {
-    throw new Error("Record not found.");
-}
-
+if (record === undefined) throw new Error("Record not found.");
+const records = await getLearningRecords();
+const index = records.findIndex(item => item.date === record.date);
+const previous = records[index + 1];
+const next = index > 0 ? records[index - 1] : undefined;
 const tilEntry = await getEntry("record", getRecordPathId(record.paths.til));
-const baseUrl = import.meta.env.BASE_URL;
-const navItems = [["summary", "요약"], ["til", "TIL"]] as const;
+const weekday = new Date(record.date + "T00:00:00Z").toLocaleDateString("en-US", { weekday: "short", timeZone: "UTC" }).toUpperCase();
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
-
-<BaseLayout title={`${record.title} | Today Learning`} description={record.summary}>
-    <article class="reader-page">
-        <a class="back-link" href={baseUrl}>기록 목록으로</a>
+<BaseLayout title={record.title + " | Today Learning"} description={record.summary} glow>
+    <ReadingControls />
+    <article class="reader-page" data-reader-page>
         <header class="reader-hero">
-            <div class="reader-title-block">
-                <span class="record-date">{record.displayDate}</span>
-                <h1>{record.title}</h1>
-                <p>{record.summary}</p>
-                {record.tags.length > 0 && (
-                    <div class="tag-list">
-                        {record.tags.map((tag) => <a href={getTagHref(tag)}>{tag}</a>)}
-                    </div>
-                )}
-            </div>
+            <a class="back-link" href={base + "records/"}><Icon name="back" size={16} />기록 목록으로</a>
+            <span class="record-date">{record.displayDate} · {weekday}</span><h1>{record.title}</h1>
+            <div class="tag-list">{record.tags.map(tag => <a href={getTagHref(tag)}>{tag}</a>)}</div>
         </header>
-
-        <nav class="reader-nav" aria-label="기록 본문 탭">
-            {navItems.map(([id, label], index) => (
-                <a href={`#${id}`} data-reader-tab={id} aria-current={index === 0 ? "page" : undefined}>
-                    {label}
-                </a>
-            ))}
-        </nav>
-
+        <div class="reader-tabs-row" data-reader-tabs-row><nav class="reader-nav" aria-label="기록 본문 탭"><a href="#summary" data-reader-tab="summary" aria-current="page">요약</a><a href="#til" data-reader-tab="til">TIL 원문</a></nav><button type="button" class="collapse-all" data-collapse-all aria-expanded="true" hidden><Icon name="collapse" size={16} /><span>모두 접기</span></button></div>
         <section id="summary" class="reader-block summary-block" data-reader-panel="summary" aria-labelledby="summary-title">
-            <div class="summary-panel">
-                <div class="summary-content">
-                    <div>
-                        <span class="eyebrow">Summary</span>
-                        <h2 id="summary-title">한눈에 읽기</h2>
-                        <p class="summary-main">{record.readerSummary.overview}</p>
-                        <h3 class="summary-flow-title">내용의 흐름</h3>
-                        <ol class="summary-flow">
-                            {record.readerSummary.flow.map((paragraph) => <li>{paragraph}</li>)}
-                        </ol>
-                    </div>
-                </div>
-            </div>
+            <div class="summary-content"><span class="eyebrow">Summary</span><h2 id="summary-title">한눈에 읽기</h2><blockquote class="summary-main">{record.readerSummary.overview}</blockquote>
+            <h3>내용의 흐름</h3><ol class="summary-flow">{record.readerSummary.flow.map(paragraph => <li>{paragraph}</li>)}</ol></div>
+            <RecordNavigation previous={previous} next={next} />
         </section>
-
-        <MarkdownSection
-            id="til"
-            title="Today I Learned"
-            eyebrow="Note"
-            description="학습 내용과 구현 과정을 담은 원문입니다."
-            entry={tilEntry}
-            missing="이 날짜의 TIL 원문을 찾을 수 없습니다."
-            showHeader={false}
-        />
+        <MarkdownSection entry={tilEntry}><RecordNavigation previous={previous} next={next} /></MarkdownSection>
     </article>
 </BaseLayout>

@@ -1,0 +1,6 @@
+---
+type Props = { readonly name: string; readonly size?: number };
+const { name, size = 18 } = Astro.props;
+import { baseUrl as base } from "../lib/paths";
+---
+<span class="icon" aria-hidden="true" style={`--icon-url: url('${base}icons/${name}.svg'); --icon-size: ${size}px`}></span>

@@ -31,7 +31,7 @@ function getCodeChild(node) {
         return null;
     }
 
-    return hasMermaidClass(child) ? child : null;
+    return node.properties?.["data-language"] === "mermaid" || hasMermaidClass(child) ? child : null;
 }
 
 export function rehypeMermaid() {
@@ -47,6 +47,7 @@ export function rehypeMermaid() {
                 return;
             }
 
+            const source = node.properties?.["data-source"];
             node.tagName = "figure";
             node.properties = {
                 className: ["mermaid-figure"],
@@ -57,8 +58,9 @@ export function rehypeMermaid() {
                     tagName: "div",
                     properties: {
                         className: ["mermaid"],
+                        ...(source === undefined ? {} : { "data-source": source }),
                     },
-                    children: code.children ?? [],
+                    children: [{ type: "element", tagName: "pre", properties: { className: ["mermaid-source"], "data-reading-processed": "true" }, children: [{ type: "element", tagName: "code", properties: {}, children: source === undefined ? code.children ?? [] : [{ type: "text", value: source }] }] }],
                 },
             ];
         });

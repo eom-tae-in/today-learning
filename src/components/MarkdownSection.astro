@@ -1,66 +1,11 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
-
-type Props = {
-    readonly id: string;
-    readonly title: string;
-    readonly eyebrow: string;
-    readonly description: string;
-    readonly entry: CollectionEntry<"record"> | undefined;
-    readonly missing: string;
-    readonly showToc?: boolean;
-    readonly showHeader?: boolean;
-};
-
-const { id, title, eyebrow, description, entry, missing, showToc = false, showHeader = true } = Astro.props;
+type Props = { readonly entry: CollectionEntry<"record"> | undefined };
+const { entry } = Astro.props;
 const rendered = entry === undefined ? undefined : await render(entry);
 const Content = rendered?.Content;
-const headings = rendered?.headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3) ?? [];
-const hasToc = showToc && headings.length > 2;
 ---
-
-<section
-    id={id}
-    class={`reader-block reader-block-${id}${hasToc ? " has-toc" : ""}`}
-    data-reader-panel={id}
-    aria-label={showHeader ? undefined : title}
-    aria-labelledby={showHeader ? `${id}-title` : undefined}
->
-    {
-        showHeader && (
-            <header class="reader-block-header">
-                <span class="eyebrow">{eyebrow}</span>
-                <h2 id={`${id}-title`}>{title}</h2>
-                <p>{description}</p>
-            </header>
-        )
-    }
-    {
-        Content === undefined ? (
-            <div class="empty-note">
-                <p>{missing}</p>
-            </div>
-        ) : (
-            <div class="reader-content-grid">
-                <div class="markdown-body">
-                    <Content />
-                </div>
-                {
-                    hasToc && (
-                        <aside class="markdown-toc" aria-label={`${title} 목차`}>
-                            <span>목차</span>
-                            <nav>
-                                {headings.map((heading) => (
-                                    <a href={`#${heading.slug}`} data-depth={heading.depth}>
-                                        {heading.text}
-                                    </a>
-                                ))}
-                            </nav>
-                        </aside>
-                    )
-                }
-            </div>
-        )
-    }
+<section id="til" class="reader-block reader-block-til" data-reader-panel="til" aria-label="TIL 원문">
+    {Content ? <div class="reader-content-grid"><div class="original-column"><div class="markdown-body"><Content /></div><slot /></div><aside class="markdown-toc" id="reading-toc"><span>목차</span><nav data-desktop-toc aria-label="원문 목차"></nav></aside></div> : <p>이 날짜의 TIL 원문을 찾을 수 없습니다.</p>}
 </section>

@@ -6,6 +6,8 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 
 import { rehypeMermaid } from "./src/lib/rehype-mermaid.mjs";
+import { remarkReading, readingCodeTransformer } from "./src/lib/remark-reading.mjs";
+import { rehypeReading } from "./src/lib/rehype-reading.mjs";
 
 export default defineConfig({
     site: "https://eom-tae-in.github.io",
@@ -17,24 +19,28 @@ export default defineConfig({
     integrations: [mdx()],
     markdown: {
         processor: unified({
-            remarkPlugins: [remarkGfm],
+            remarkPlugins: [remarkGfm, remarkReading],
             rehypePlugins: [
                 rehypeSlug,
                 [
                     rehypeAutolinkHeadings,
                     {
-                        behavior: "wrap",
+                        behavior: "append",
                         properties: {
                             className: ["heading-anchor"],
+                            ariaLabel: "제목 주소 복사",
                         },
+                        content: { type: "element", tagName: "span", properties: { className: ["heading-link-icon"], ariaHidden: "true" }, children: [] },
                     },
                 ],
                 rehypeMermaid,
+                rehypeReading,
             ],
         }),
         shikiConfig: {
-            theme: "github-light",
-            wrap: true,
+            theme: "css-variables",
+            wrap: false,
+            transformers: [readingCodeTransformer],
         },
     },
 });

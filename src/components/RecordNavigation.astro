@@ -1,0 +1,9 @@
+---
+import { getRecordHref, type LearningRecord } from "../lib/records";
+type Props = { readonly previous: LearningRecord | undefined; readonly next: LearningRecord | undefined };
+const { previous, next } = Astro.props;
+---
+<nav class="record-navigation" aria-label="이전과 다음 기록">
+    {previous ? <a href={getRecordHref(previous.date)}><span>← 이전 기록 · {previous.displayDate}</span><strong>{previous.title}</strong></a> : <div class="disabled"><span>← 이전 기록</span><p>가장 처음 기록입니다</p></div>}
+    {next ? <a href={getRecordHref(next.date)}><span>다음 기록 · {next.displayDate} →</span><strong>{next.title}</strong></a> : <div class="disabled"><span>다음 기록 →</span><p>가장 최근 기록입니다</p></div>}
+</nav>

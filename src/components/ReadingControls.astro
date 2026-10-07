@@ -1,0 +1,14 @@
+---
+import Icon from "./Icon.astro";
+---
+<div class="reading-progress" data-reading-progress role="progressbar" aria-label="원문 읽기 진행" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><span></span></div>
+<div class="reading-toolbar" data-reading-toolbar hidden>
+    <span class="current-chapter" data-current-chapter></span>
+    <div class="reading-toolbar-actions"><div class="font-controls" role="group" aria-label="본문 글자 크기">
+        {(["작게", "기본", "크게"] as const).map((size, index) => <button type="button" data-font-size={index} aria-label={`${size} 읽기`} aria-pressed={index === 1 ? "true" : "false"}>가</button>)}
+    </div><button type="button" class="toc-button" data-open-toc aria-label="원문 목차 열기"><Icon name="toc" />목차</button></div>
+</div>
+<div class="mobile-reading-bar" data-mobile-reading-bar hidden><button type="button" class="toc-button" data-open-toc aria-label="원문 목차 열기"><Icon name="toc" />목차</button><span class="current-chapter" data-current-chapter></span><button type="button" class="icon-button" data-cycle-font aria-label="읽기 글자 크기 변경">가</button><button type="button" class="icon-button" data-reader-top aria-label="원문 맨 위로"><Icon name="top" /></button></div>
+<button type="button" class="desktop-back-top icon-button" data-reader-top aria-label="원문 맨 위로" hidden><Icon name="top" size={20} /></button>
+<dialog class="toc-sheet" data-toc-sheet aria-labelledby="toc-sheet-title"><div class="sheet-grabber" aria-hidden="true"></div><h2 id="toc-sheet-title">목차</h2><nav data-sheet-toc aria-label="원문 목차"></nav><div class="sheet-actions"><button type="button" class="button ghost" data-collapse-all aria-expanded="true">모두 접기</button><button type="button" class="button primary" data-close-toc>닫기</button></div></dialog>
+<dialog class="media-dialog" data-media-dialog aria-label="크게 보기"><button type="button" class="button ghost" data-close-media>닫기</button><div data-media-content></div></dialog>
