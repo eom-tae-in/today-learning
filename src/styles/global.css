@@ -1,4 +1,6 @@
 :root {
+    --graph-empty: #ebedf0;
+    --graph-record: #216e39;
     color-scheme: light;
 
     --background: #f5f6fa;
@@ -16,21 +18,8 @@
     --primary-soft: #eeeffe;
     --accent: #8a5a18;
     --success: #1e8a63;
-    --level-excellent: #1e8a63;
-    --level-good: #4b4fd1;
-    --level-needs-work: #d9a94e;
-    --level-not-evaluated: #94a3b8;
-    --tlp-color: #4b4fd1;
     --til-color: #8a5a18;
-    --ai-color: #1e8a63;
-    --tlp-bg: #eeeffe;
     --til-bg: #f9f1e3;
-    --ai-bg: #eef0f5;
-    --graph-level-strength: 46%;
-    --graph-level-border-strength: 26%;
-    --preview-button-bg: #ffffff;
-    --preview-button-fg: #000000;
-    --preview-button-border: #000000;
 
     --space-1: 4px;
     --space-2: 8px;
@@ -62,6 +51,8 @@
 }
 
 :root[data-theme="dark"] {
+    --graph-empty: #21262d;
+    --graph-record: #26a641;
     color-scheme: dark;
 
     --background: #0c1018;
@@ -79,21 +70,8 @@
     --primary-soft: rgba(107, 111, 217, 0.16);
     --accent: #b8874d;
     --success: #4ade80;
-    --level-excellent: #22c55e;
-    --level-good: #7aa7ff;
-    --level-needs-work: #fbbf24;
-    --level-not-evaluated: #94a3b8;
-    --tlp-color: #6b6fd9;
     --til-color: #b8874d;
-    --ai-color: #4ade80;
-    --tlp-bg: rgba(107, 111, 217, 0.16);
     --til-bg: rgba(184, 135, 77, 0.16);
-    --ai-bg: rgba(74, 222, 128, 0.14);
-    --graph-level-strength: 38%;
-    --graph-level-border-strength: 24%;
-    --preview-button-bg: #000000;
-    --preview-button-fg: #ffffff;
-    --preview-button-border: #ffffff;
     --shadow-sm: 0 16px 40px rgba(0, 0, 0, 0.26);
     --shadow-md: 0 24px 60px rgba(0, 0, 0, 0.34);
     --shadow-lg: 0 34px 90px rgba(0, 0, 0, 0.44);
@@ -699,17 +677,17 @@ button {
     flex-direction: column;
     justify-content: space-between;
     padding: var(--space-5);
-    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 18%, var(--border));
+    border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
     border-radius: var(--radius-md);
     background:
         radial-gradient(
             circle at 100% 0%,
-            color-mix(in srgb, var(--level-color, var(--primary)) 12%, transparent),
+            color-mix(in srgb, var(--primary) 12%, transparent),
             transparent 42%
         ),
         linear-gradient(
             145deg,
-            color-mix(in srgb, var(--level-color, var(--primary)) 5%, var(--surface)),
+            color-mix(in srgb, var(--primary) 5%, var(--surface)),
             var(--surface) 72%
         );
     box-shadow: var(--shadow-sm);
@@ -720,20 +698,12 @@ button {
         background var(--transition);
 }
 
-.record-card::before {
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 4px;
-    background: color-mix(in srgb, var(--level-color, var(--primary)) 72%, transparent);
-    content: "";
-    opacity: 0.76;
-}
 
 .record-card:hover {
     transform: translateY(-4px);
-    border-color: color-mix(in srgb, var(--level-color, var(--primary)) 34%, var(--border));
+    border-color: color-mix(in srgb, var(--primary) 34%, var(--border));
     box-shadow:
-        0 18px 42px color-mix(in srgb, var(--level-color, var(--primary)) 13%, transparent),
+        0 18px 42px color-mix(in srgb, var(--primary) 13%, transparent),
         var(--shadow-md);
 }
 
@@ -765,65 +735,6 @@ button {
     font-weight: 900;
 }
 
-.record-status {
-    width: fit-content;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: 6px 10px;
-    border-radius: 999px;
-    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 18%, var(--border));
-    background: color-mix(in srgb, var(--level-color, var(--primary)) 12%, var(--surface-soft));
-    color: var(--text-primary);
-    font-size: 12px;
-    font-weight: 900;
-}
-
-.record-status span {
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    background: var(--level-color, var(--primary));
-}
-
-.record-badges {
-    display: flex;
-    gap: var(--space-2);
-    margin-top: var(--space-3);
-    margin-bottom: var(--space-3);
-}
-
-.record-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 32px;
-    height: 24px;
-    padding: 0 6px;
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: 700;
-    font-family: "JetBrains Mono", monospace;
-    letter-spacing: 0.06em;
-}
-
-.record-badge.tlp-badge {
-    background: var(--tlp-bg);
-    color: var(--tlp-color);
-    border: 1px solid color-mix(in srgb, var(--tlp-color) 28%, var(--border));
-}
-
-.record-badge.til-badge {
-    background: var(--til-bg);
-    color: var(--til-color);
-    border: 1px solid color-mix(in srgb, var(--til-color) 28%, var(--border));
-}
-
-.record-badge.ai-badge {
-    background: var(--ai-bg);
-    color: var(--ai-color);
-    border: 1px solid color-mix(in srgb, var(--ai-color) 28%, var(--border));
-}
 
 .learning-board {
     position: relative;
@@ -932,41 +843,22 @@ button {
     grid-auto-columns: 12px;
     gap: 4px;
     width: max-content;
-    min-width: 100%;
+    min-width: 0;
 }
 
 .graph-cell {
     width: 12px;
     height: 12px;
     border: 1px solid var(--border);
-    border-radius: 4px;
-    background: var(--surface-soft);
+    border-radius: 3px;
+    background: var(--graph-empty);
 }
 
-.graph-cell.level-excellent,
-.graph-cell.level-good,
-.graph-cell.level-needs-work,
-.graph-cell.level-not-evaluated,
 .graph-cell.has-record {
-    border-color: color-mix(in srgb, var(--level-color, var(--primary)) var(--graph-level-border-strength), var(--border));
-    background: color-mix(in srgb, var(--level-color, var(--primary)) var(--graph-level-strength), var(--surface));
+    border-color: transparent;
+    background: var(--graph-record);
 }
 
-.graph-cell.level-excellent {
-    --level-color: var(--level-excellent);
-}
-
-.graph-cell.level-good {
-    --level-color: var(--level-good);
-}
-
-.graph-cell.level-needs-work {
-    --level-color: var(--level-needs-work);
-}
-
-.graph-cell.level-not-evaluated {
-    --level-color: var(--level-not-evaluated);
-}
 
 .graph-cell.has-record:hover,
 .graph-cell.has-record:focus-visible {
@@ -974,13 +866,6 @@ button {
     transform: scale(1.18);
 }
 
-.graph-cell.is-selected,
-.graph-cell[aria-pressed="true"] {
-    border-color: var(--text-primary);
-    box-shadow:
-        0 0 0 2px var(--surface),
-        0 0 0 4px color-mix(in srgb, var(--primary) 36%, transparent);
-}
 
 .graph-meta {
     margin-top: var(--space-6);
@@ -1017,107 +902,6 @@ button {
     flex: 0 0 auto;
 }
 
-.graph-preview {
-    margin-top: var(--space-6);
-    padding: var(--space-6);
-    border: 1px dashed color-mix(in srgb, var(--level-color, var(--primary)) 32%, var(--border));
-    border-radius: 22px;
-    background:
-        radial-gradient(
-            circle at 100% 0%,
-            color-mix(in srgb, var(--level-color, var(--primary)) 12%, transparent),
-            transparent 42%
-        ),
-        linear-gradient(
-            145deg,
-            color-mix(in srgb, var(--level-color, var(--primary)) 5%, var(--surface)),
-            var(--background-elevated) 76%
-        ),
-        var(--surface);
-    transition:
-        border-color var(--transition),
-        background var(--transition),
-        box-shadow var(--transition);
-}
-
-.graph-preview[data-preview-state] {
-    border-style: solid;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.64),
-        0 18px 44px color-mix(in srgb, var(--level-color, var(--primary)) 10%, transparent);
-}
-
-.graph-preview > span {
-    display: block;
-    color: var(--primary);
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-
-.graph-preview strong {
-    display: block;
-    margin: var(--space-3) 0 var(--space-2);
-    font-size: 22px;
-    line-height: 1.32;
-}
-
-.graph-preview p {
-    max-width: 680px;
-    margin: 0 0 var(--space-5);
-    color: var(--text-secondary);
-    font-size: 14px;
-    line-height: 1.72;
-}
-
-.graph-preview dl {
-    margin: 0 0 var(--space-5);
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3);
-}
-
-.graph-preview dt {
-    margin-bottom: var(--space-1);
-    color: var(--text-tertiary);
-    font-size: 12px;
-    font-weight: 900;
-}
-
-.graph-preview dd {
-    margin: 0;
-    color: var(--text-primary);
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.graph-preview-link {
-    min-height: 38px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 var(--space-4);
-    border-radius: var(--radius-sm);
-    background: var(--primary-soft);
-    color: var(--primary);
-    font-size: 13px;
-    font-weight: 900;
-    transition:
-        transform var(--transition),
-        background var(--transition),
-        color var(--transition);
-}
-
-.graph-preview-link:hover {
-    transform: translateY(-1px);
-    background: color-mix(in srgb, var(--level-color, var(--primary)) 14%, var(--primary-soft));
-    color: color-mix(in srgb, var(--level-color, var(--primary)) 74%, var(--primary));
-}
-
-.graph-preview-link[hidden] {
-    display: none;
-}
 
 .reader-page {
     padding: var(--space-12) 0 var(--space-16);
@@ -1129,7 +913,7 @@ button {
 
 .reader-hero {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-6);
     align-items: stretch;
     padding: var(--space-8);
@@ -1143,29 +927,6 @@ button {
     margin-top: var(--space-5);
 }
 
-.reader-status-card {
-    padding: var(--space-6);
-    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 30%, var(--border));
-    border-radius: var(--radius-md);
-    background: color-mix(in srgb, var(--level-color, var(--primary)) 9%, var(--surface-soft));
-}
-
-.reader-status-card span {
-    color: var(--text-tertiary);
-    font-size: 12px;
-    font-weight: 900;
-}
-
-.reader-status-card strong {
-    display: block;
-    margin: var(--space-2) 0;
-    font-size: 28px;
-    line-height: 1.2;
-}
-
-.reader-status-card p {
-    font-size: 14px;
-}
 
 .reader-nav {
     position: sticky;
@@ -1604,13 +1365,6 @@ button {
         justify-content: flex-start;
     }
 
-    .graph-preview {
-        padding: var(--space-5);
-    }
-
-    .graph-preview dl {
-        grid-template-columns: 1fr;
-    }
 
     .reader-hero,
     .reader-block,
@@ -1648,10 +1402,10 @@ button {
 .reader-block,
 .reader-hero,
 .learning-board,
-.record-card,
-.graph-preview {
+.record-card {
     box-shadow: none;
 }
+
 
 .button,
 .header-link,
@@ -1718,7 +1472,7 @@ button {
 }
 
 .graph-grid {
-    min-width: 760px;
+    min-width: 0;
 }
 
 .graph-year-rail {
@@ -1755,117 +1509,6 @@ button {
     color: var(--background);
 }
 
-.graph-preview {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-5);
-    padding: var(--space-6);
-    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 20%, var(--border));
-    border-radius: 14px;
-    background:
-        radial-gradient(
-            circle at 100% 0%,
-            color-mix(in srgb, var(--level-color, var(--primary)) 10%, transparent),
-            transparent 42%
-        ),
-        linear-gradient(
-            145deg,
-            color-mix(in srgb, var(--level-color, var(--primary)) 5%, var(--surface)),
-            var(--surface) 72%
-        );
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--level-color, var(--primary)) 6%, transparent);
-}
-
-.graph-preview-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-4);
-}
-
-.graph-preview-header strong {
-    margin-top: var(--space-2);
-    font-size: 20px;
-    line-height: 1.4;
-}
-
-.graph-preview-date {
-    color: var(--text-tertiary);
-    font-size: 13px;
-    font-weight: 900;
-    font-family: "JetBrains Mono", monospace;
-}
-
-.graph-preview-badges {
-    display: flex;
-    gap: var(--space-2);
-}
-
-.graph-preview-badges .record-badge {
-    font-size: 10px;
-    min-width: 36px;
-    height: 28px;
-}
-
-.graph-preview p {
-    margin: 0;
-    color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.6;
-}
-
-.graph-preview-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-4);
-    padding-top: var(--space-4);
-    border-top: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 12%, var(--border));
-}
-
-.graph-preview-status {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-}
-
-.status-label {
-    color: var(--text-tertiary);
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.status-value {
-    color: var(--text-primary);
-    font-size: 14px;
-    font-weight: 700;
-    padding: 4px 8px;
-    border-radius: 6px;
-    background: color-mix(in srgb, var(--level-color, var(--primary)) 12%, var(--surface-soft));
-    width: fit-content;
-}
-
-.graph-preview [hidden] {
-    display: none !important;
-}
-
-.graph-preview-link {
-    min-height: 36px;
-    padding: 0 var(--space-4);
-    border-radius: 8px;
-    border: 0;
-    background: var(--level-color, var(--primary));
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 14px;
-    transition: background var(--transition);
-}
-
-.graph-preview-link:hover {
-    background: color-mix(in srgb, var(--level-color, var(--primary)) 80%, #000000);
-}
 
 .tag-cloud {
     align-items: center;
@@ -1917,21 +1560,6 @@ button {
         transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.graph-preview.is-visible {
-    animation: preview-reveal 320ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes preview-reveal {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
 .records-prompt span {
     color: var(--primary);
@@ -1959,7 +1587,7 @@ button {
 }
 
 .record-card:hover {
-    box-shadow: 0 10px 28px color-mix(in srgb, var(--level-color, var(--primary)) 8%, transparent);
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--primary) 8%, transparent);
 }
 
 .reader-page {
@@ -1967,7 +1595,7 @@ button {
 }
 
 .reader-hero {
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    grid-template-columns: minmax(0, 1fr);
     padding: var(--space-12) 0 var(--space-8);
     border: 0;
     border-bottom: 1px solid var(--border);
@@ -1990,28 +1618,6 @@ button {
     max-width: 620px;
 }
 
-.reader-status-card {
-    align-self: end;
-    padding: var(--space-5);
-    border-radius: 12px;
-    background:
-        linear-gradient(145deg, color-mix(in srgb, var(--level-color, var(--primary)) 10%, var(--surface)), var(--surface));
-}
-
-.reader-status-card strong {
-    font-size: 22px;
-}
-
-.reader-status-card small {
-    display: inline-flex;
-    margin-top: var(--space-4);
-    padding: 5px 9px;
-    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 24%, var(--border));
-    border-radius: 999px;
-    color: var(--text-secondary);
-    font-size: 12px;
-    font-weight: 900;
-}
 
 .reader-nav {
     top: 72px;
@@ -2057,17 +1663,11 @@ button {
     color: var(--primary);
 }
 
-.reader-block-tlp .reader-block-header .eyebrow {
-    color: var(--tlp-color);
-}
 
 .reader-block-til .reader-block-header .eyebrow {
     color: var(--til-color);
 }
 
-.reader-block-review .reader-block-header .eyebrow {
-    color: var(--ai-color);
-}
 
 .reader-block-header h2 {
     margin: 0;
@@ -2100,7 +1700,7 @@ button {
 
 .summary-content {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr);
     gap: clamp(30px, 5vw, 50px);
     align-items: center;
     padding: clamp(22px, 3.5vw, 40px);
@@ -2132,36 +1732,6 @@ button {
     line-height: 1.6;
 }
 
-.summary-stats {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    min-width: 140px;
-}
-
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding: var(--space-4);
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--level-color, var(--primary)) 8%, var(--surface-soft));
-    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 18%, var(--border));
-}
-
-.stat-label {
-    color: var(--text-tertiary);
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.stat-value {
-    color: var(--text-primary);
-    font-size: 15px;
-    font-weight: 700;
-}
 
 .reader-content-grid {
     min-width: 0;
@@ -2189,13 +1759,6 @@ button {
     box-shadow: none;
 }
 
-.reader-block-tlp .markdown-body {
-    background:
-        linear-gradient(var(--surface) 31px, color-mix(in srgb, var(--level-good) 8%, transparent) 32px),
-        linear-gradient(90deg, transparent 0 34px, color-mix(in srgb, var(--level-good) 12%, transparent) 35px, transparent 36px),
-        var(--surface);
-    background-size: 100% 32px, 100% 100%, auto;
-}
 
 .reader-block-til .markdown-body {
     background:
@@ -2205,21 +1768,6 @@ button {
     background-size: 100% 32px, 100% 100%, auto;
 }
 
-.reader-block-review .markdown-body {
-    background:
-        radial-gradient(
-            circle at 100% 0%,
-            color-mix(in srgb, var(--level-color, var(--primary)) 15%, transparent),
-            transparent 38%
-        ),
-        linear-gradient(145deg, color-mix(in srgb, var(--level-color, var(--primary)) 9%, var(--surface)), var(--surface) 74%),
-        var(--surface);
-    border: 1px solid color-mix(in srgb, var(--level-color, var(--primary)) 28%, var(--border));
-    border-radius: 14px;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.72),
-        0 14px 36px color-mix(in srgb, var(--level-color, var(--primary)) 8%, transparent);
-}
 
 .markdown-body h1,
 .markdown-body h2,
@@ -2353,9 +1901,6 @@ button {
         grid-template-columns: 1fr;
     }
 
-    .reader-status-card {
-        width: 100%;
-    }
 
     .graph-year-rail {
         position: static;
@@ -2368,33 +1913,20 @@ button {
         min-width: 72px;
     }
 
-    .graph-preview-footer {
-        flex-direction: column;
-        align-items: flex-start;
-    }
 
     .markdown-toc {
         display: none;
     }
 
     .summary-content {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
-    .summary-stats {
-        flex-direction: row;
-        gap: var(--space-3);
-    }
 
-    .stat-item {
-        flex: 1;
-    }
 }
 
 @media (max-width: 680px) {
-    .graph-preview {
-        grid-template-columns: 1fr;
-    }
+
 
     .reader-hero {
         padding-top: var(--space-10);
@@ -2445,4 +1977,88 @@ button {
         transition-duration: 1ms !important;
         animation-duration: 1ms !important;
     }
+}
+
+.control-label {
+    display: block;
+    margin-bottom: var(--space-2);
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: 24px max-content;
+    grid-template-rows: 20px auto;
+    column-gap: var(--space-2);
+    width: max-content;
+}
+
+.graph-months {
+    grid-column: 2;
+    display: grid;
+    grid-auto-columns: 16px;
+    grid-auto-flow: column;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.graph-months span {
+    width: max-content;
+}
+
+.graph-weekdays {
+    grid-row: 2;
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    gap: 4px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.graph-weekdays span:nth-child(1) { grid-row: 2; }
+.graph-weekdays span:nth-child(2) { grid-row: 4; }
+.graph-weekdays span:nth-child(3) { grid-row: 6; }
+
+.graph-grid {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.graph-scroll {
+    min-height: 0;
+}
+
+.summary-main {
+    max-width: 70ch;
+    font-weight: 400;
+    line-height: 1.85;
+}
+
+.summary-flow-title {
+    margin: var(--space-8) 0 var(--space-4);
+    font-size: 21px;
+}
+
+.summary-flow {
+    max-width: 70ch;
+    margin: 0;
+    padding-left: var(--space-6);
+    color: var(--text-secondary);
+    font-size: 17px;
+    line-height: 1.85;
+}
+
+.summary-flow li {
+    padding-left: var(--space-2);
+}
+
+.summary-flow li + li {
+    margin-top: var(--space-5);
+}
+
+.summary-flow li::marker {
+    color: var(--text-primary);
+    font-weight: 600;
 }

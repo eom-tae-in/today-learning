@@ -1,9 +1,5 @@
 ---
-import {
-    getRecordHref,
-    getTagHref,
-    type LearningRecord,
-} from "../lib/records";
+import { getRecordHref, getTagHref, type LearningRecord } from "../lib/records";
 
 type Props = {
     readonly record: LearningRecord;
@@ -14,34 +10,19 @@ const { record, showTags = true } = Astro.props;
 ---
 
 <article
-    class={`record-card level-${record.completionLevel}`}
+    class="record-card"
     data-record-card
     data-year={record.year}
-    data-level={record.completionLevel}
     data-search={`${record.title} ${record.summary} ${record.tags.join(" ")}`.toLowerCase()}
-    style={`--level-color: ${record.completionColor}`}
 >
     <a href={getRecordHref(record.date)}>
         <span class="record-date">{record.displayDate}</span>
         <h3>{record.title}</h3>
         <p>{record.summary}</p>
-        <div class="record-badges">
-            <span class="record-badge tlp-badge">TLP</span>
-            <span class="record-badge til-badge">TIL</span>
-            {record.aiEvaluation && <span class="record-badge ai-badge">AI</span>}
-        </div>
-        <span class="record-status" style={`--level-color: ${record.completionColor}`}>
-            <span aria-hidden="true"></span>
-            {record.statusLabel}
-        </span>
     </a>
-    {
-        showTags && record.tags.length > 0 && (
-            <div class="tag-list" aria-label="태그" data-card-tags hidden>
-                {record.tags.map((tag) => (
-                    <a href={getTagHref(tag)} data-card-tag-value={tag.toLowerCase()} hidden>{tag}</a>
-                ))}
-            </div>
-        )
-    }
+    {showTags && record.tags.length > 0 && (
+        <div class="tag-list" aria-label="태그">
+            {record.tags.map((tag) => <a href={getTagHref(tag)}>{tag}</a>)}
+        </div>
+    )}
 </article>

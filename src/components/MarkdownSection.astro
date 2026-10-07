@@ -24,7 +24,8 @@ const hasToc = showToc && headings.length > 2;
     id={id}
     class={`reader-block reader-block-${id}${hasToc ? " has-toc" : ""}`}
     data-reader-panel={id}
-    aria-labelledby={`${id}-title`}
+    aria-label={showHeader ? undefined : title}
+    aria-labelledby={showHeader ? `${id}-title` : undefined}
 >
     {
         showHeader && (

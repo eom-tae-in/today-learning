@@ -8,7 +8,7 @@ type Props = {
 
 const {
     title = "Today Learning",
-    description = "TLP로 하루를 계획하고, TIL로 학습과 회고를 기록하는 개인 학습 노트입니다.",
+    description = "매일의 학습 내용을 TIL 원문과 쉬운 요약으로 읽는 개인 학습 노트입니다.",
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
@@ -91,7 +91,7 @@ const baseUrl = import.meta.env.BASE_URL.endsWith("/")
         <footer class="site-footer">
             <div>
                 <strong>Today Learning</strong>
-                <p>매일의 계획, 학습, 회고를 오래 읽을 수 있는 노트로 남깁니다.</p>
+                <p>매일의 배움을 기록하고, 흐름을 이해하고, 다시 읽습니다.</p>
             </div>
         </footer>
         <script>
