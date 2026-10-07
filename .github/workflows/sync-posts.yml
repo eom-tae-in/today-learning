@@ -1,4 +1,4 @@
-name: Update posts.json
+name: Summarize TIL and deploy
 
 on:
   workflow_dispatch:
@@ -11,8 +11,16 @@ on:
     branches:
       - main
     paths:
-      - "TLP/**/*.md"
       - "TIL/**/*.md"
+      - "src/**"
+      - "scripts/github/**"
+      - "prompts/github/**"
+      - "public/**"
+      - "posts.json"
+      - "astro.config.mjs"
+      - "package*.json"
+      - "tsconfig.json"
+      - ".github/workflows/sync-posts.yml"
 
 permissions:
   contents: write
@@ -38,7 +46,7 @@ jobs:
         with:
           ref: main
           path: main
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -55,7 +63,9 @@ jobs:
         working-directory: main
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          REVIEW_DATE: ${{ github.event.inputs.date || '' }}
+          SUMMARY_DATE: ${{ github.event.inputs.date || '' }}
+          DIFF_BASE: ${{ github.event.before }}
+          DIFF_HEAD: ${{ github.sha }}
         run: node scripts/github/main.js
 
       - name: Commit generated records to main
@@ -65,9 +75,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add posts.json
-          if [ -d Reviews ]; then
-            git add -A Reviews
-          fi
 
           if git diff --cached --quiet; then
             echo "No generated main changes"
@@ -76,6 +83,10 @@ jobs:
 
           git commit -m "chore: sync generated learning records"
           git push origin main
+
+      - name: Test summary generation
+        working-directory: main
+        run: npm test
 
       - name: Build site
         working-directory: main

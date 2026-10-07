@@ -1,6 +1,6 @@
 import { execFileSync } from "child_process";
 
-const RECORD_DIRECTORIES = ["TLP", "TIL"];
+const RECORD_DIRECTORIES = ["TIL"];
 
 function isRecordMarkdown(path) {
     return RECORD_DIRECTORIES.some(
@@ -16,8 +16,8 @@ export function getChangedFiles() {
             "--name-status",
             "--find-renames",
             "-z",
-            "HEAD~1",
-            "HEAD",
+            process.env.DIFF_BASE || "HEAD~1",
+            process.env.DIFF_HEAD || "HEAD",
             "--",
             ...RECORD_DIRECTORIES,
         ],

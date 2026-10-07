@@ -1,54 +1,29 @@
 import "dotenv/config";
-import fs from "fs/promises";
+import fs from "node:fs/promises";
 import OpenAI from "openai";
 
-function createClient() {
-    return new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY,
-    });
-}
-
-async function readOptionalMarkdown(label, markdownPath) {
-    if (markdownPath === undefined) {
-        return "";
-    }
-
-    const markdown = await fs.readFile(markdownPath, "utf8");
-
-    return `# ${label}\n\n${markdown}`;
-}
+import { analysisSchema } from "./schema.js";
 
 export async function summarizeRecord(paths) {
-    const client = createClient();
+    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const prompt = await fs.readFile("./prompts/github/summarize.md", "utf8");
-    const markdown = [
-        await readOptionalMarkdown("TLP", paths.tlp),
-        await readOptionalMarkdown("TIL", paths.til),
-    ].filter(Boolean).join("\n\n---\n\n");
-
+    const markdown = await fs.readFile(paths.til, "utf8");
     const response = await client.responses.create({
         model: "gpt-5.5",
         input: [
-            {
-                role: "system",
-                content: prompt,
-            },
-            {
-                role: "user",
-                content: markdown,
-            },
+            { role: "system", content: prompt },
+            { role: "user", content: markdown },
         ],
     });
-
     return parseAnalysisResponse(response.output_text);
 }
 
 export function parseAnalysisResponse(outputText) {
+    let analysis;
     try {
-        return JSON.parse(outputText);
+        analysis = JSON.parse(outputText);
     } catch (error) {
-        throw new Error("Generated AI response must be valid JSON.", {
-            cause: error,
-        });
+        throw new Error("Generated summary must be valid JSON.", { cause: error });
     }
+    return analysisSchema.parse(analysis);
 }

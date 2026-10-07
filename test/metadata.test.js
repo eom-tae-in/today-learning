@@ -3,6 +3,11 @@ import test from "node:test";
 
 import { normalizeMetadata } from "../scripts/github/metadata.js";
 
+const readerSummary = {
+    overview: "데이터를 저장하고 다시 읽는 과정을 설명합니다.",
+    flow: ["데이터를 보관합니다.", "필요한 값을 읽습니다."],
+};
+
 const fallback = {
     title: "2026-08-10",
     summary: "fallback summary",
@@ -11,12 +16,14 @@ const fallback = {
 
 test("normalizeMetadata keeps valid metadata unchanged", () => {
     const metadata = normalizeMetadata({
+        readerSummary,
         title: "Redis Cache Aside",
         summary: "Redis Cache Aside 전략과 TTL 기반 캐시 관리",
         tags: ["Redis", "TTL"],
     }, fallback);
 
     assert.deepEqual(metadata, {
+        readerSummary,
         title: "Redis Cache Aside",
         summary: "Redis Cache Aside 전략과 TTL 기반 캐시 관리",
         tags: ["Redis", "TTL"],
@@ -25,6 +32,7 @@ test("normalizeMetadata keeps valid metadata unchanged", () => {
 
 test("normalizeMetadata truncates long title and summary", () => {
     const metadata = normalizeMetadata({
+        readerSummary,
         title: "A".repeat(60),
         summary: "B".repeat(100),
         tags: [],
@@ -38,6 +46,7 @@ test("normalizeMetadata truncates long title and summary", () => {
 
 test("normalizeMetadata deduplicates tags and keeps at most five", () => {
     const metadata = normalizeMetadata({
+        readerSummary,
         title: "Docker",
         summary: "Docker Volume과 Bind Mount 차이",
         tags: [
@@ -63,6 +72,7 @@ test("normalizeMetadata deduplicates tags and keeps at most five", () => {
 test("normalizeMetadata fails when title and fallback title are empty", () => {
     assert.throws(
         () => normalizeMetadata({
+            readerSummary,
             title: "",
             summary: "valid summary",
             tags: [],

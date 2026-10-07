@@ -1,3 +1,5 @@
+import { readerSummarySchema } from "./schema.js";
+
 const MAX_TITLE_LENGTH = 50;
 const MAX_SUMMARY_LENGTH = 90;
 const MAX_TAG_COUNT = 5;
@@ -81,5 +83,6 @@ export function normalizeMetadata(analysis, fallback) {
             MAX_SUMMARY_LENGTH
         ),
         tags: normalizeTags(analysis.tags, fallback.tags),
+        readerSummary: readerSummarySchema.parse(analysis.readerSummary),
     };
 }
