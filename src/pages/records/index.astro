@@ -1,0 +1,7 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RecordsList from "../../components/RecordsList.astro";
+import { getLearningRecords } from "../../lib/records";
+const records = await getLearningRecords();
+---
+<BaseLayout title="학습 기록 | Today Learning"><RecordsList records={records} /></BaseLayout>

@@ -1,0 +1,29 @@
+---
+import RecordCard from "./RecordCard.astro";
+import RecordFilters from "./RecordFilters.astro";
+import Icon from "./Icon.astro";
+import { baseUrl as base } from "../lib/paths";
+import { getAvailableYears, getPopularTags, type LearningRecord } from "../lib/records";
+type Props = { readonly records: readonly LearningRecord[]; readonly selectedTag?: string };
+const { records, selectedTag = "" } = Astro.props;
+const shown = selectedTag ? records.filter(record => record.tags.includes(selectedTag)) : records;
+const months = [...new Set(shown.map(record => record.date.slice(0, 7)))];
+---
+<section class="section records-page" data-record-browser="full" data-initial-tag={selectedTag} data-records-href={`${base}records/`} aria-labelledby="records-title">
+    <header class="records-page-heading">
+        <a class="back-link" href={base}><Icon name="back" size={16} />홈으로</a>
+        <span class="eyebrow">Records</span><h1 id="records-title">학습 기록</h1>
+        <p>검색어와 연도, 태그로 원하는 학습 기록을 찾아보세요.</p>
+    </header>
+    <RecordFilters years={getAvailableYears(records)} tags={getPopularTags(records)} selectedTag={selectedTag} />
+    <h2 class="results-title" data-results-title hidden={!selectedTag}>{selectedTag} 태그</h2>
+    <div class:list={["record-results", { "is-filtered": Boolean(selectedTag) }]} data-record-list>
+        {selectedTag ? shown.map(record => <RecordCard record={record} />) : months.map(month => <section class="month-group" data-record-month={month}>
+            <h2 class="month-heading">{Number(month.slice(0, 4))}년 {Number(month.slice(5))}월</h2>
+            <div class="records-grid">{shown.filter(record => record.date.startsWith(month)).map(record => <RecordCard record={record} />)}</div>
+        </section>)}
+    </div>
+    {selectedTag && <template data-other-records>{records.filter(record => !record.tags.includes(selectedTag)).map(record => <RecordCard record={record} />)}</template>}
+    <div class="empty-results" data-empty-results hidden><h2>조건에 맞는 기록이 없어요</h2><p>검색어를 바꾸거나 필터를 초기화해 보세요.</p><a class="button ghost" href={`${base}records/`} data-filter-reset>필터 초기화</a></div>
+    <div class="records-more"><button type="button" class="button secondary" data-load-records hidden>이전 기록 더 불러오기</button></div>
+</section>

@@ -1,98 +1,37 @@
 ---
 import RecordCard from "../components/RecordCard.astro";
+import RecordFilters from "../components/RecordFilters.astro";
 import RecordGraph from "../components/RecordGraph.astro";
+import Icon from "../components/Icon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import {
-    getAvailableYears,
-    getLearningRecords,
-} from "../lib/records";
-
+import { getAvailableYears, getLearningRecords, getPopularTags } from "../lib/records";
 const records = await getLearningRecords();
-const years = getAvailableYears(records);
-const title = "Today Learning";
-const description = "매일의 TIL과 쉬운 요약을 모아 읽는 개인 학습 블로그입니다.";
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
-
-<BaseLayout title={title} description={description}>
+<BaseLayout glow>
     <section class="hero">
         <div class="hero-copy">
             <span class="hero-badge"><i aria-hidden="true"></i>매일의 배움을 기록하다</span>
-            <h1>
-                배우고,
-                <span>기록하고,</span>
-                연결한다.
-            </h1>
-            <p>
-                매일 배운 내용을 TIL로 남깁니다.
-                쉬운 요약으로 전체 흐름을 먼저 읽고,
-                원문에서 개념과 구현 과정을 자세히 살펴보세요.
-            </p>
-            <div class="hero-actions">
-                <a class="button primary" href="#records">
-                    학습 기록 보기
-                    <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
-                        <path
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m9 18 6-6-6-6"
-                        />
-                    </svg>
-                </a>
-            </div>
+            <h1>배우고,<span>기록하고,</span>연결한다.</h1>
+            <p>매일 배운 내용을 TIL로 남깁니다. 쉬운 요약으로 전체 흐름을 먼저 읽고, 원문에서 개념과 구현 과정을 자세히 살펴보세요.</p>
+            <div class="hero-actions"><a class="button primary" href="#records">학습 기록 보기<Icon name="chevron" /></a><a class="button ghost" href="#graph">학습 로그 보기</a></div>
         </div>
         <aside class="hero-note" aria-label="Today Learning 기록 원칙">
-            <div class="note-top">
-                <span class="window-dot red" aria-hidden="true"></span>
-                <span class="window-dot yellow" aria-hidden="true"></span>
-                <span class="window-dot green" aria-hidden="true"></span>
-            </div>
-            <div class="note-content">
-                <p class="note-path">~/today-learning/daily.md</p>
-                <p class="code-line"><span>01</span><span><strong>Learn</strong> 오늘의 배움을 발견하고</span></p>
-                <p class="code-line"><span>02</span><span><strong>TIL</strong> 배운 내용을 기록하고</span></p>
-                <p class="code-line"><span>03</span><span><strong>Read</strong> 요약과 원문으로 다시 읽는다.</span></p>
-                <div class="note-footer">
-                    <span>Learn</span>
-                    <span>Write</span>
-                    <span>Read</span>
-                </div>
+            <div class="note-top"><i class="window-dot red"></i><i class="window-dot yellow"></i><i class="window-dot green"></i><span>daily.md</span></div>
+            <div class="note-content"><p class="note-path">~/today-learning/daily.md</p>
+                <p class="code-line"><span>01</span><strong>Learn</strong><span>오늘의 배움을 발견하고</span></p>
+                <p class="code-line highlighted"><span>02</span><strong>TIL</strong><span>배운 내용을 기록하고</span></p>
+                <p class="code-line"><span>03</span><strong>Read</strong><span>요약과 원문으로 다시 읽는다.</span></p>
+                <div class="note-footer"><span>LEARN</span><span>WRITE</span><span>READ</span></div>
             </div>
         </aside>
     </section>
-
     <RecordGraph records={records} />
-
-    <section id="records" class="section records-section" aria-labelledby="records-title">
-        <div class="section-heading split">
-            <div>
-                <span class="eyebrow">Records</span>
-                <h2 id="records-title">학습 기록</h2>
-                <p>검색어와 연도로 원하는 학습 기록을 찾아보세요.</p>
-            </div>
-            <div class="record-controls" data-record-controls>
-                <label>
-                    <span class="control-label">기록 검색</span>
-                    <input type="search" data-record-search placeholder="제목, 요약, 태그 검색" />
-                </label>
-                <label><span class="control-label">연도</span><select data-year-filter aria-label="연도 필터">
-                    <option value="all">전체 연도</option>
-                    {years.map((year) => <option value={year}>{year}</option>)}
-                </select></label>
-            </div>
-        </div>
-
-        <div class="records-prompt" data-record-prompt>
-            <span>기록 탐색</span>
-            <strong>검색어나 연도를 선택해 주세요.</strong>
-            <p>처음 화면에서는 기록 목록을 접어두고, 필요한 날짜와 주제를 찾을 때만 노트를 펼칩니다.</p>
-        </div>
-
-        <div class="records-grid" data-record-list>
-            {records.map((record) => <RecordCard record={record} showTags={false} />)}
-        </div>
-        <p class="empty-results" data-empty-results hidden>조건에 맞는 기록이 없습니다.</p>
+    <section id="records" class="section records-section" data-record-browser="home" data-records-href={base + "records/"} aria-labelledby="records-title">
+        <div class="section-heading"><span class="eyebrow">Records</span><h2 id="records-title">학습 기록</h2><p>검색어와 연도로 원하는 학습 기록을 찾아보세요.</p></div>
+        <RecordFilters years={getAvailableYears(records)} tags={getPopularTags(records)} home />
+        <div class="records-grid" data-record-list>{records.slice(0, 6).map(record => <RecordCard record={record} />)}</div>
+        <div class="empty-results" data-empty-results hidden><h2>조건에 맞는 기록이 없어요</h2><p>검색어를 바꾸거나 필터를 초기화해 보세요.</p><a class="button ghost" href="#records" data-filter-reset>필터 초기화</a></div>
+        <div class="records-more"><a class="button secondary" href={base + "records/"} data-record-more>더보기<Icon name="chevron" /></a></div>
     </section>
 </BaseLayout>

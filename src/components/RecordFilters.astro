@@ -1,0 +1,19 @@
+---
+import Icon from "./Icon.astro";
+import { baseUrl } from "../lib/paths";
+type Props = { readonly years: readonly string[]; readonly tags: readonly string[]; readonly selectedTag?: string; readonly home?: boolean };
+const { years, tags, selectedTag = "", home = false } = Astro.props;
+const shownTags = selectedTag && !tags.includes(selectedTag) ? [selectedTag, ...tags] : tags;
+---
+<div class="record-controls">
+    <label class="search-control"><span class="control-label">기록 검색</span>
+        <span class="search-field"><Icon name="search" /><input type="search" data-record-search placeholder="제목, 요약, 태그 검색" /><kbd aria-hidden="true">/</kbd></span>
+    </label>
+    <label class="year-control"><span class="control-label">연도</span><select data-year-filter><option value="">전체 연도</option>{years.map(year => <option value={year}>{year}</option>)}</select></label>
+</div>
+<div class="quick-filters">
+    <span class="filter-label">{home ? "자주 쓴 태그" : "태그"}</span>
+    <button type="button" class="filter-chip" data-tag-filter="" aria-pressed={selectedTag === "" ? "true" : "false"}>전체</button>
+    {shownTags.map(tag => <button type="button" class="filter-chip" data-tag-filter={tag} aria-pressed={selectedTag === tag ? "true" : "false"}>{tag}<span class="filter-clear" aria-hidden="true">×</span></button>)}
+    <a class="filter-reset" href={home ? "#records" : baseUrl + "records/"} data-filter-reset hidden={!selectedTag}>필터 초기화</a>
+</div>

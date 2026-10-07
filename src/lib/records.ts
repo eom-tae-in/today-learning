@@ -44,7 +44,19 @@ export function getTagSlug(tag: string): string {
 }
 
 export function getTagHref(tag: string): string {
-    return `${baseUrl}tags/${getTagSlug(tag)}/`;
+    return `${baseUrl}records/?tag=${encodeURIComponent(tag)}`;
+}
+
+export function getPopularTags(records: readonly LearningRecord[]): readonly string[] {
+    const usage = new Map<string, { count: number; latest: string }>();
+    for (const record of records) {
+        for (const tag of new Set(record.tags)) {
+            const previous = usage.get(tag);
+            usage.set(tag, { count: (previous?.count ?? 0) + 1, latest: previous?.latest ?? record.date });
+        }
+    }
+    return [...usage].toSorted((a, b) => b[1].count - a[1].count || b[1].latest.localeCompare(a[1].latest))
+        .slice(0, 5).map(([tag]) => tag);
 }
 
 export function getAvailableYears(records: readonly LearningRecord[]): readonly string[] {

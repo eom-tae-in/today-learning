@@ -1,5 +1,6 @@
 ---
 import { getRecordHref, getTagHref, type LearningRecord } from "../lib/records";
+import Icon from "./Icon.astro";
 
 type Props = {
     readonly record: LearningRecord;
@@ -13,9 +14,11 @@ const { record, showTags = true } = Astro.props;
     class="record-card"
     data-record-card
     data-year={record.year}
+    data-date={record.date}
+    data-tags={JSON.stringify(record.tags)}
     data-search={`${record.title} ${record.summary} ${record.tags.join(" ")}`.toLowerCase()}
 >
-    <a href={getRecordHref(record.date)}>
+    <a class="record-link" href={getRecordHref(record.date)}>
         <span class="record-date">{record.displayDate}</span>
         <h3>{record.title}</h3>
         <p>{record.summary}</p>
@@ -25,4 +28,5 @@ const { record, showTags = true } = Astro.props;
             {record.tags.map((tag) => <a href={getTagHref(tag)}>{tag}</a>)}
         </div>
     )}
+    <div class="record-card-footer" aria-hidden="true"><span>요약 · 원문 보기</span><Icon name="forward" /></div>
 </article>

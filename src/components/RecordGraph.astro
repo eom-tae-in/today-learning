@@ -3,6 +3,7 @@ import { getRecordHref, type LearningRecord } from "../lib/records";
 
 type Props = { readonly records: readonly LearningRecord[] };
 const { records } = Astro.props;
+const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
 const years = Array.from(new Set(records.map((record) => record.year))).toSorted(
     (left, right) => right.localeCompare(left)
 );
@@ -52,10 +53,11 @@ function getYearCalendar(year: string) {
                                 <div class="graph-grid">
                                     {Array.from({ length: calendar.offset }, () => <span class="graph-spacer" aria-hidden="true" />)}
                                     {calendar.days.map(({ date, record }) => record === undefined ? (
-                                        <span class="graph-cell" title={`${date} · TIL 없음`} aria-label={`${date} · TIL 없음`} />
+                                        <span class:list={["graph-cell", { "is-today": date === today }]} data-calendar-date={date} title={`${date} · TIL 없음`} aria-label={`${date} · TIL 없음`} />
                                     ) : (
                                         <a
-                                            class="graph-cell has-record"
+                                            class:list={["graph-cell has-record", { "is-today": date === today }]}
+                                            data-calendar-date={date}
                                             data-record-date={date}
                                             href={getRecordHref(date)}
                                             title={`${date} · ${record.title}`}
@@ -67,18 +69,18 @@ function getYearCalendar(year: string) {
                         </div>
                     );
                 })}
+                <p class="graph-hint">← 좌우로 밀어 1년 전체 보기</p>
                 <div class="graph-meta">
-                    <span data-graph-current-year>{newestYear}년 · {records.filter((record) => record.year === newestYear).length}일의 기록</span>
                     <div class="graph-legend" aria-label="기록 범례">
                         <span><i class="graph-cell" aria-hidden="true"></i>TIL 없음</span>
                         <span><i class="graph-cell has-record" aria-hidden="true"></i>TIL 있음</span>
+                        <span><i class="graph-cell is-today" aria-hidden="true"></i>오늘</span>
                     </div>
                 </div>
             </div>
             <nav class="graph-year-rail" aria-label="기록 연도">
                 {displayYears.map((year) => (
                     <button type="button" data-graph-year-option={year}
-                        data-record-count={records.filter((record) => record.year === year).length}
                         aria-pressed={year === newestYear ? "true" : "false"}>{year}</button>
                 ))}
             </nav>
