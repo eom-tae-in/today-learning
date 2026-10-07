@@ -5,8 +5,8 @@
   "description": "TIL 원문과 쉬운 요약으로 매일의 학습 내용을 기록하는 개인 학습 저장소입니다.",
   "main": "scripts/github/main.js",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro check && astro build",
+    "dev": "astro dev --force",
+    "build": "astro check && astro build --force",
     "preview": "astro preview",
     "test": "node --check scripts/github/main.js && node --check scripts/github/git.js && node --check scripts/github/llm.js && node --check scripts/github/metadata.js && node --check scripts/github/posts.js && node --check scripts/github/schema.js && node --test"
   },

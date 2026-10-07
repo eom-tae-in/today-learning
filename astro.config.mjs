@@ -10,6 +10,10 @@ import { rehypeMermaid } from "./src/lib/rehype-mermaid.mjs";
 export default defineConfig({
     site: "https://eom-tae-in.github.io",
     base: "/today-learning",
+    vite: {
+        cacheDir: `node_modules/.vite/${process.env.NODE_ENV ?? "development"}`,
+        optimizeDeps: { include: ["mermaid"] },
+    },
     integrations: [mdx()],
     markdown: {
         processor: unified({
