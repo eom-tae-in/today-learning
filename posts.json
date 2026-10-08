@@ -1189,5 +1189,35 @@
       "개발자",
       "LGNSINSPIRECMAP"
     ]
+  },
+  {
+    "title": "로그인부터 JWT 검증과 설정 갱신까지",
+    "summary": "사용자 로그인, JWT 발급·검증, 중앙 설정 관리와 갱신 흐름을 정리한 글이다.",
+    "tags": [
+      "Spring Security",
+      "JWT",
+      "API Gateway",
+      "Spring Cloud Config",
+      "Spring Boot Actuator"
+    ],
+    "readerSummary": {
+      "overview": "이 글은 Users Microservice에서 로그인 요청을 인증하고, 성공한 사용자에게 JWT라는 인증용 토큰을 발급하는 흐름을 설명한다. 이어 API Gateway에서 토큰을 검사하고, 여러 서비스의 설정을 Config Server와 Actuator로 관리·갱신하는 과정까지 연결한다.",
+      "flow": [
+        "먼저 로그인 요청이 들어오면 Spring Security의 인증 필터가 이메일과 비밀번호를 읽는다. 이후 인증 관리자가 사용자 정보를 찾고, 저장된 비밀번호 해시와 입력값이 맞는지 확인한다.",
+        "인증에 성공하면 서비스는 JWT를 만든다. JWT는 사용자 식별자와 만료 시각을 담고 서명한 문자열이며, 이후 요청에서 로그인 사실을 증명하는 데 사용된다.",
+        "다음 단계에서는 API Gateway가 공개 경로와 보호 경로를 나눈다. 회원가입과 로그인은 토큰 없이 허용하고, 보호된 조회 요청은 Authorization 헤더의 Bearer 토큰을 검사한 뒤 통과 여부를 결정한다.",
+        "그 뒤 JWT 비밀키나 만료 시간 같은 설정을 각 서비스에 따로 두지 않고 Spring Cloud Config로 외부에서 관리한다. Config Server는 Git 저장소의 설정을 제공하고, Config Client는 이를 서비스의 Environment에 가져온다.",
+        "마지막으로 Spring Boot Actuator의 refresh를 사용해 실행 중인 서비스가 변경된 설정을 다시 읽는 과정을 다룬다. 다만 설정 저장소 변경, 서비스의 재조회, 실제 객체의 갱신은 서로 다른 단계로 구분한다."
+      ]
+    },
+    "date": "2026-10-08",
+    "paths": {
+      "til": "TIL/2026/10/2026-10-08.md"
+    },
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ]
   }
 ]
