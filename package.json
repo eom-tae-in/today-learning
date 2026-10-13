@@ -8,6 +8,7 @@
     "dev": "astro dev --force",
     "build": "astro check && astro build --force",
     "preview": "astro preview",
+    "og:image": "node scripts/og/render.mjs",
     "test": "node --check scripts/github/main.js && node --check scripts/github/git.js && node --check scripts/github/llm.js && node --check scripts/github/metadata.js && node --check scripts/github/posts.js && node --check scripts/github/schema.js && node --test"
   },
   "repository": {
