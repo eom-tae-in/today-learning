@@ -25,7 +25,8 @@ npm run preview
 ```
 
 Astro가 정적 페이지를 생성합니다. GitHub Pages의 기본 경로는 `/today-learning/`입니다.
-Markdown은 표, 체크리스트, 이미지, 코드 하이라이트와 Mermaid를 지원합니다.
+TIL은 GitHub Flavored Markdown으로 작성하며 표, 이미지, 코드 하이라이트와 Mermaid를 지원합니다.
+코드 블록의 `title="파일명"`과 `{줄 범위}` 강조, `↓`로 시작하는 줄이 있는 `text` 흐름도, `> [!NOTE]`·`> [!TIP]`·`> [!WARNING]` 알림은 전용 화면 요소로 표시됩니다.
 
 ## 요약 갱신
 
@@ -47,5 +48,6 @@ TIL 삭제는 해당 날짜의 인덱스를 제거하고, 이름 변경은 이�
 ## 배포
 
 main의 TIL, 사이트 코드, 요약 프롬프트 또는 설정 변경에 GitHub Actions가 실행됩니다.
-요약 갱신, 테스트, 정적 빌드 후 GitHub Pages에 배포합니다.
+요약 갱신 → 테스트 → 정적 빌드가 모두 성공하면 `posts.json` 변경을 main에 커밋한 뒤 GitHub Pages에 배포합니다.
+실행은 취소되지 않고 순서대로 처리되며, TIL은 있지만 `posts.json`에 없는 날짜는 다음 실행에서 자동으로 요약됩니다.
 워크플로 수동 실행에서는 갱신할 날짜를 지정할 수 있습니다.
