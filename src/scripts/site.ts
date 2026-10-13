@@ -1,6 +1,7 @@
 import { initializeMarkdown, renderMermaid } from "./markdown";
 import { initializeRecordFilters } from "./record-filters";
 import { initializeReading } from "./reading";
+import { initializeRecordsReturn } from "./records-return";
 import { initializeSummaryCard } from "./summary-card";
 import { readPreference, savePreference } from "./storage";
 
@@ -72,5 +73,5 @@ function scrollToHashTarget(): void {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    initializeTheme(); initializeRecordFilters(); initializeGraph(); initializeMarkdown(); initializeSummaryCard(); initializeReading(); scrollToHashTarget(); void renderMermaid();
+    initializeTheme(); initializeRecordFilters(); initializeRecordsReturn(); initializeGraph(); initializeMarkdown(); initializeSummaryCard(); initializeReading(); scrollToHashTarget(); void renderMermaid();
 });
