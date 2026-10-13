@@ -40,7 +40,7 @@ export function initializeReading(): void {
         if (clone instanceof HTMLElement) { clone.querySelectorAll("a,button,.heading-number").forEach(item => item.remove()); title = (clone.textContent ?? "").trim().replace(/^[\p{Extended_Pictographic}\p{Emoji_Presentation}\uFE0F\s]+/u, ""); }
         if (depth === 3) chapter = element.id; if (depth === 2) chapter = "";
         return { element, depth, title, number, chapter };
-    }).filter((heading, index, items) => !(heading.depth === 2 && items[index + 1]?.depth === 3));
+    });
     const toc = [...document.querySelectorAll<HTMLElement>("[data-desktop-toc],[data-sheet-toc]")];
     let activeId = "";
     const drawToc = (current: Heading | undefined): void => {

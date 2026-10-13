@@ -7,6 +7,37 @@ function visit(node, handler) {
     node.children?.forEach(child => visit(child, handler));
 }
 
+function flowSteps(source) {
+    const steps = [];
+    let branches = [];
+    for (const line of source.split("\n")) {
+        const content = line.trim();
+        if (!content) continue;
+        if (content.startsWith("↓")) {
+            steps.at(-1)?.children.push(element("p", { className: ["flow-reason"] }, [literal(content.replace(/^↓\s*/, ""))]));
+            branches = [];
+            continue;
+        }
+        const branch = /^[├└│]/.test(content) ? content.replace(/^[├└│─\s]+/, "") : undefined;
+        if (branch === "") continue;
+        if (branch === undefined || !steps.length) {
+            steps.push(element("li", {}, [element("p", { className: ["flow-step"] }, [literal(branch ?? content)])]));
+            branches = [];
+            continue;
+        }
+        const symbolColumn = line.search(/[├└]/);
+        const column = symbolColumn < 0 ? line.search(/[^\s│]/) : symbolColumn;
+        while (branches.length && branches.at(-1).column >= column) branches.pop();
+        const parent = branches.at(-1)?.item ?? steps.at(-1);
+        let list = parent.children.find(child => child.tagName === "ul");
+        if (!list) parent.children.push(list = element("ul", { className: ["flow-branches"] }, []));
+        const item = element("li", {}, [literal(branch)]);
+        list.children.push(item);
+        branches.push({ column, item });
+    }
+    return steps;
+}
+
 function transformCode(node) {
     if (node.tagName !== "pre") return;
     if (node.properties?.["data-reading-processed"]) return;
@@ -16,20 +47,10 @@ function transformCode(node) {
     const source = node.properties?.["data-source"] ?? text(code);
     const language = node.properties?.["data-language"] ?? "text";
     const meta = node.properties?.["data-meta"] ?? "";
-    if (language === "text" && source.split("\n").some(line => /^\s*↓/.test(line))) {
-        const steps = [];
-        for (const line of source.split("\n")) {
-            if (!line.trim()) continue;
-            if (/^\s*↓/.test(line)) {
-                const step = steps.at(-1);
-                if (step) step.children.push(element("p", { className: ["flow-reason"] }, [literal(line.trim().replace(/^↓\s*/, ""))]));
-            } else {
-                steps.push(element("li", {}, [element("p", { className: ["flow-step"] }, [literal(line.trim())])]));
-            }
-        }
+    if (language === "text" && source.split("\n").some(line => /^\s*↓/.test(line)) && !/[┌┐┘┤┬┴┼]/.test(source)) {
         node.tagName = "ol";
         node.properties = { className: ["text-flow"] };
-        node.children = steps;
+        node.children = flowSteps(source);
         return;
     }
     if (language === "mermaid") return;
@@ -59,8 +80,8 @@ export function rehypeReading() {
             transformCode(node);
             if (node.tagName === "h3" || node.tagName === "h4") {
                 const first = node.children?.[0];
-                const match = first?.type === "text" ? first.value.match(/^(\d+(?:\.\d+)*)\.?\s+(.+)/s) : null;
-                if (match) {
+                const match = first?.type === "text" ? first.value.match(/^(\d+(?:\.\d+)*)\.?\s+(.*)/s) : null;
+                if (match && (match[2] || node.children.length > 1)) {
                     node.properties["data-heading-number"] = match[1];
                     node.properties.className = [node.tagName === "h3" ? "chapter-heading" : "section-heading-original"];
                     first.value = match[2];
