@@ -39,7 +39,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
                 <RecordNavigation previous={previous} next={next} />
             </div>
             {tilEntry && <aside class="markdown-toc" id="reading-toc" aria-label="목차">
-                <div class="toc-head"><span class="toc-title">목차</span><div class="toc-actions"><button type="button" class="toc-head-button" data-collapse-all aria-expanded="true">모두 접기</button><button type="button" class="toc-head-button" data-toc-collapse aria-expanded="true" aria-controls="reading-toc-list"><span class="visually-hidden">목차 </span>접기</button></div></div>
+                <div class="toc-head"><span class="toc-title">목차</span><div class="toc-actions"><button type="button" class="tool-button" data-collapse-all aria-expanded="true">모두 접기</button><button type="button" class="tool-button" data-toc-collapse aria-expanded="true" aria-controls="reading-toc-list"><span class="visually-hidden">목차 </span>접기</button></div></div>
                 <nav class="toc-list" id="reading-toc-list" data-desktop-toc aria-label="원문 목차"></nav>
                 <button type="button" class="toc-expand" data-toc-expand aria-expanded="false" aria-controls="reading-toc-list">목차 펼치기</button>
             </aside>}

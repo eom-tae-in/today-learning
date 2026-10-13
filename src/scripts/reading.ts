@@ -73,17 +73,19 @@ export function initializeReading(): void {
     const relations = findTocParents(headings);
     const updateToc = initializeTableOfContents(headings, relations, reveal);
     const hero = document.querySelector<HTMLElement>("[data-reader-hero]"); const summary = document.querySelector<HTMLElement>("[data-summary-card]");
+    const toolbar = document.querySelector<HTMLElement>("[data-reading-toolbar]"); const mobile = document.querySelector<HTMLElement>("[data-mobile-reading-bar]");
+    const backToTop = document.querySelector<HTMLElement>(".desktop-back-top"); const progress = document.querySelector<HTMLElement>("[data-reading-progress]");
     const title = document.querySelector("h1")?.textContent?.trim() ?? "";
     document.querySelectorAll<HTMLElement>("[data-reader-top]").forEach(button => button.addEventListener("click", () => hero?.scrollIntoView()));
-    let previousScroll = window.scrollY; let scheduled = false; let activeIndex: number | null = null; let labelKey = "";
+    const readHeaderHeight = (): number => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-height")) || 0;
+    let headerHeight = readHeaderHeight(); let previousScroll = window.scrollY; let scheduled = false; let activeIndex: number | null = null; let labelKey = "";
     const update = (): void => {
         scheduled = false;
-        const toolbar = document.querySelector<HTMLElement>("[data-reading-toolbar]"); const mobile = document.querySelector<HTMLElement>("[data-mobile-reading-bar]");
-        const scrolled = (hero?.getBoundingClientRect().bottom ?? 0) <= (matchMedia("(min-width: 920px)").matches ? 72 : 64);
-        if (toolbar) toolbar.hidden = !scrolled; if (mobile) { mobile.hidden = false; if (Math.abs(window.scrollY - previousScroll) > 2) mobile.classList.toggle("is-scrolling-down", window.scrollY > previousScroll && scrolled); }
-        document.querySelectorAll<HTMLElement>(".desktop-back-top").forEach(button => { button.hidden = !scrolled; });
-        const progress = document.querySelector<HTMLElement>("[data-reading-progress]");
-        if (progress) { progress.hidden = false; const rect = body.getBoundingClientRect(); const value = Math.max(0, Math.min(100, (150 - rect.top) / Math.max(1, rect.height - innerHeight + 150) * 100)); progress.setAttribute("aria-valuenow", String(Math.round(value))); progress.style.setProperty("--reading-progress", `${value}%`); }
+        const scrolled = (hero?.getBoundingClientRect().bottom ?? 0) <= headerHeight;
+        toolbar?.classList.toggle("is-visible", scrolled);
+        if (mobile) { mobile.hidden = false; if (Math.abs(window.scrollY - previousScroll) > 2) mobile.classList.toggle("is-scrolling-down", window.scrollY > previousScroll && scrolled); }
+        if (backToTop) backToTop.hidden = !scrolled;
+        if (progress) { progress.hidden = !scrolled; const rect = body.getBoundingClientRect(); const value = Math.max(0, Math.min(100, (150 - rect.top) / Math.max(1, rect.height - innerHeight + 150) * 100)); progress.setAttribute("aria-valuenow", String(Math.round(value))); progress.style.setProperty("--reading-progress", `${value}%`); }
         const currentIndex = headings.findLastIndex(heading => heading.element.getBoundingClientRect().top < 170);
         if (currentIndex !== activeIndex) { activeIndex = currentIndex; updateToc(currentIndex); }
         const inSummary = currentIndex < 0 && (summary?.getBoundingClientRect().bottom ?? 0) > 170;
@@ -96,7 +98,7 @@ export function initializeReading(): void {
         previousScroll = window.scrollY;
     };
     const schedule = (): void => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } };
-    window.addEventListener("scroll", schedule, { passive: true }); window.addEventListener("resize", schedule);
+    window.addEventListener("scroll", schedule, { passive: true }); window.addEventListener("resize", () => { headerHeight = readHeaderHeight(); schedule(); });
     new ResizeObserver(schedule).observe(body);
     const initial = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (initial) reveal(initial);
     update();

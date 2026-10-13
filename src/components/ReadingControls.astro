@@ -2,9 +2,9 @@
 import Icon from "./Icon.astro";
 ---
 <div class="reading-progress" data-reading-progress role="progressbar" aria-label="원문 읽기 진행" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><span></span></div>
-<div class="reading-toolbar" data-reading-toolbar hidden>
+<div class="reading-toolbar" data-reading-toolbar>
     <span class="current-chapter" data-current-chapter></span>
-    <div class="reading-toolbar-actions"><div class="font-controls" role="group" aria-label="본문 글자 크기">
+    <div class="reading-toolbar-actions"><button type="button" class="tool-button" data-collapse-all aria-expanded="true">모두 접기</button><div class="font-controls" role="group" aria-label="본문 글자 크기">
         {(["작게", "기본", "크게"] as const).map((size, index) => <button type="button" data-font-size={index} aria-label={`${size} 읽기`} aria-pressed={index === 1 ? "true" : "false"}>가</button>)}
     </div><button type="button" class="toc-button" data-open-toc aria-label="원문 목차 열기"><Icon name="toc" />목차</button></div>
 </div>
