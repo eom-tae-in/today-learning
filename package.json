@@ -24,7 +24,6 @@
   "dependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-remark": "^7.2.4",
-    "@astrojs/mdx": "^7.0.7",
     "astro": "^7.2.4",
     "dotenv": "^17.4.2",
     "mermaid": "^11.17.0",

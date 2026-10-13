@@ -1,4 +1,3 @@
-import mdx from "@astrojs/mdx";
 import { unified } from "@astrojs/markdown-remark";
 import { defineConfig } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -16,7 +15,6 @@ export default defineConfig({
         cacheDir: `node_modules/.vite/${process.env.NODE_ENV ?? "development"}`,
         optimizeDeps: { include: ["mermaid"] },
     },
-    integrations: [mdx()],
     markdown: {
         processor: unified({
             remarkPlugins: [remarkGfm, remarkReading],
