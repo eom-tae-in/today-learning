@@ -10,6 +10,7 @@ function initializeTheme(): void {
     const system = matchMedia("(prefers-color-scheme: dark)");
     const stored = readPreference("today-learning-theme");
     let explicit = stored === "light" || stored === "dark" || stored === "green";
+    let transitionTimer = 0;
     const apply = (theme: Theme): void => {
         document.documentElement.dataset["theme"] = theme;
         document.querySelector("[data-theme-color]")?.setAttribute("content", backgrounds[theme]);
@@ -18,13 +19,22 @@ function initializeTheme(): void {
             button.setAttribute("aria-checked", String(selected)); button.tabIndex = selected ? 0 : -1;
         });
     };
+    const change = (theme: Theme): void => {
+        const root = document.documentElement;
+        const token = getComputedStyle(root).getPropertyValue("--duration-normal").trim();
+        const duration = (parseFloat(token) || 0) * (token.endsWith("ms") ? 1 : 1000);
+        window.clearTimeout(transitionTimer);
+        if (duration < 1) { delete root.dataset["themeTransition"]; apply(theme); void renderMermaid(); return; }
+        root.dataset["themeTransition"] = ""; apply(theme);
+        transitionTimer = window.setTimeout(() => { delete root.dataset["themeTransition"]; void renderMermaid(); }, duration + 50);
+    };
     apply(explicit && (stored === "light" || stored === "dark" || stored === "green") ? stored : system.matches ? "dark" : "light");
     const options = [...document.querySelectorAll<HTMLButtonElement>("[data-theme-option]")];
     options.forEach((button, index) => {
         button.addEventListener("click", () => {
             const value = button.dataset["themeOption"];
             if (value !== "light" && value !== "dark" && value !== "green") return;
-            explicit = true; savePreference("today-learning-theme", value); apply(value); void renderMermaid();
+            explicit = true; savePreference("today-learning-theme", value); change(value);
         });
         button.addEventListener("keydown", event => {
             if (!["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
@@ -33,7 +43,7 @@ function initializeTheme(): void {
             options[target]?.focus(); options[target]?.click();
         });
     });
-    system.addEventListener("change", () => { if (!explicit) { apply(system.matches ? "dark" : "light"); void renderMermaid(); } });
+    system.addEventListener("change", () => { if (!explicit) change(system.matches ? "dark" : "light"); });
 }
 
 function initializeGraph(): void {
