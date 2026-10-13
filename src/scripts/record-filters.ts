@@ -7,8 +7,6 @@ export function initializeRecordFilters(): void {
         const list = root.querySelector<HTMLElement>("[data-record-list]");
         if (!search || !year || !list) return;
         const full = root.dataset["recordBrowser"] === "full";
-        const template = root.querySelector<HTMLTemplateElement>("[data-other-records]");
-        if (template) list.append(template.content);
         const cards: readonly Card[] = [...root.querySelectorAll<HTMLElement>("[data-record-card]")].map(element => {
             const tags: unknown = JSON.parse(element.dataset["tags"] ?? "[]");
             return { element, tags: Array.isArray(tags) ? tags.filter((tag): tag is string => typeof tag === "string") : [], date: element.dataset["date"] ?? "" };
@@ -16,7 +14,7 @@ export function initializeRecordFilters(): void {
         const query = new URLSearchParams(location.search);
         search.value = query.get("q") ?? "";
         year.value = query.get("year") ?? "";
-        let tag = query.get("tag") ?? root.dataset["initialTag"] ?? "";
+        let tag = query.get("tag") ?? "";
         let limit = 12;
         const chips = root.querySelector<HTMLElement>(".quick-filters");
         const ensureTag = (): void => {
@@ -56,7 +54,6 @@ export function initializeRecordFilters(): void {
             if (heading) { heading.hidden = !active || matches.length === 0; heading.textContent = [tag ? `${tag} 태그` : "", q ? `'${search.value.trim()}' 검색 결과` : "", year.value ? `${year.value}년` : ""].filter(Boolean).join(" · "); }
             const load = root.querySelector<HTMLElement>("[data-load-records]"); if (load) load.hidden = matches.length <= limit;
             const params = new URLSearchParams(); if (search.value.trim()) params.set("q", search.value.trim()); if (year.value) params.set("year", year.value); if (tag) params.set("tag", tag);
-            if (!tag && root.dataset["initialTag"]) params.set("tag", "");
             const href = root.dataset["recordsHref"] ?? location.pathname;
             const more = root.querySelector<HTMLAnchorElement>("[data-record-more]"); if (more) more.href = href + (params.size ? `?${params}` : "");
             if (full && writeUrl) history.replaceState(null, "", location.pathname + (params.size ? `?${params}` : ""));

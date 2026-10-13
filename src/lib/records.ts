@@ -39,10 +39,6 @@ export function getRecordHref(date: string): string {
     return `${baseUrl}records/${date}/`;
 }
 
-export function getTagSlug(tag: string): string {
-    return encodeURIComponent(tag).replaceAll("%", "~");
-}
-
 export function getTagHref(tag: string): string {
     return `${baseUrl}records/?tag=${encodeURIComponent(tag)}`;
 }
@@ -62,11 +58,5 @@ export function getPopularTags(records: readonly LearningRecord[]): readonly str
 export function getAvailableYears(records: readonly LearningRecord[]): readonly string[] {
     return Array.from(new Set(records.map((record) => record.year))).toSorted(
         (left, right) => right.localeCompare(left)
-    );
-}
-
-export function getAllTags(records: readonly LearningRecord[]): readonly string[] {
-    return Array.from(new Set(records.flatMap((record) => record.tags))).toSorted(
-        (left, right) => left.localeCompare(right, "ko")
     );
 }
