@@ -60,7 +60,11 @@ export function initializeTableOfContents(headings: readonly ReadingHeading[], r
             if (range) { group.label.textContent = range.label; group.range.title = range.title; group.range.setAttribute("aria-expanded", String(expanded.has(parent))); }
         });
     });
-    const select = (heading: ReadingHeading): void => { reveal(heading.element); sheet?.close(); };
+    const select = (heading: ReadingHeading): void => {
+        reveal(heading.element);
+        if (!sheet?.open) return;
+        opener = null; sheet.close(); heading.element.tabIndex = -1; heading.element.focus({ preventScroll: true });
+    };
     const toggleRange = (parent: number): void => { if (expanded.has(parent)) expanded.delete(parent); else expanded.add(parent); render(); };
     const lists = [...document.querySelectorAll<HTMLElement>("[data-desktop-toc],[data-sheet-toc]")].map(nav => buildList(nav, headings, relations, select, toggleRange));
     const desktop = lists.find(list => list.nav.hasAttribute("data-desktop-toc"));
