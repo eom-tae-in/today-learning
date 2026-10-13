@@ -13,7 +13,24 @@ function createRecordPath(date) {
     return `TIL/${year}/${month}/${date}.md`;
 }
 
-async function collectDates() {
+async function listRecordDates() {
+    let files;
+    try {
+        files = await fs.readdir("TIL", { recursive: true });
+    } catch (error) {
+        if (error.code !== "ENOENT") {
+            throw error;
+        }
+        return [];
+    }
+
+    return files.flatMap((file) => {
+        const date = file.match(/\d{4}-\d{2}-\d{2}/)?.[0];
+        return date !== undefined && `TIL/${file}` === createRecordPath(date) ? [date] : [];
+    });
+}
+
+async function collectRequestedDates(listChangedFiles) {
     if (process.env.SUMMARY_DATE) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(process.env.SUMMARY_DATE)) {
             throw new Error("SUMMARY_DATE must use YYYY-MM-DD.");
@@ -22,16 +39,29 @@ async function collectDates() {
     }
 
     if (process.argv.includes("--all")) {
-        const files = await fs.readdir("TIL", { recursive: true });
-        return files.filter((file) => file.endsWith(".md"))
-            .map((file) => file.match(/\d{4}-\d{2}-\d{2}/)?.[0])
-            .filter((date) => date !== undefined);
+        return listRecordDates();
     }
 
-    return getChangedFiles().flatMap((file) => (
+    return listChangedFiles().flatMap((file) => (
         file.status === "R" ? [file.oldPath, file.newPath] : [file.path]
     )).filter((file) => file.startsWith("TIL/") && file.endsWith(".md"))
         .flatMap((file) => file.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? []);
+}
+
+async function findUnsummarizedDates() {
+    const summarizedDates = new Set((await loadPosts()).map((post) => post.date));
+    return (await listRecordDates()).filter((date) => !summarizedDates.has(date));
+}
+
+export async function collectDates({ listChangedFiles = getChangedFiles } = {}) {
+    const requestedDates = await collectRequestedDates(listChangedFiles);
+    const unsummarizedDates = await findUnsummarizedDates();
+
+    if (unsummarizedDates.length > 0) {
+        console.log(`posts.json에 없는 TIL을 함께 처리합니다: ${unsummarizedDates.join(", ")}`);
+    }
+
+    return [...new Set([...requestedDates, ...unsummarizedDates])];
 }
 
 export async function syncRecords(dates, summarize = summarizeRecord) {
@@ -70,14 +100,17 @@ export async function syncRecords(dates, summarize = summarizeRecord) {
     await savePosts(posts.toSorted((left, right) => left.date.localeCompare(right.date)));
 }
 
+export async function runSync({ listChangedFiles = getChangedFiles, summarize = summarizeRecord } = {}) {
+    const dates = await collectDates({ listChangedFiles });
+    if (dates.length === 0) {
+        console.log("변경된 TIL Markdown 파일이 없습니다.");
+        return;
+    }
+    await syncRecords(dates, summarize);
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-    collectDates().then(async (dates) => {
-        if (dates.length === 0) {
-            console.log("변경된 TIL Markdown 파일이 없습니다.");
-            return;
-        }
-        await syncRecords(dates);
-    }).catch((error) => {
+    runSync().catch((error) => {
         console.error("학습 기록 요약 갱신 중 오류가 발생했습니다.", error);
         process.exitCode = 1;
     });

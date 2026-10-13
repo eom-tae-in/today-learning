@@ -29,7 +29,8 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   update-posts:
@@ -68,6 +69,14 @@ jobs:
           DIFF_HEAD: ${{ github.sha }}
         run: node scripts/github/main.js
 
+      - name: Test summary generation
+        working-directory: main
+        run: npm test
+
+      - name: Build site
+        working-directory: main
+        run: npm run build
+
       - name: Commit generated records to main
         working-directory: main
         run: |
@@ -82,15 +91,8 @@ jobs:
           fi
 
           git commit -m "chore: sync generated learning records"
+          git pull --rebase origin main
           git push origin main
-
-      - name: Test summary generation
-        working-directory: main
-        run: npm test
-
-      - name: Build site
-        working-directory: main
-        run: npm run build
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
