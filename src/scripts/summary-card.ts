@@ -1,3 +1,4 @@
+import { decodeHash } from "../lib/hash.mjs";
 import { readPreference, savePreference } from "./storage";
 
 const collapsedKey = "today-learning-summary-collapsed";
@@ -11,7 +12,7 @@ export function initializeSummaryCard(): void {
         card.classList.toggle("is-collapsed", collapsed); toggle.setAttribute("aria-expanded", String(!collapsed));
         if (label) label.textContent = collapsed ? "펼치기" : "접기";
     };
-    const isSummaryHash = (): boolean => decodeURIComponent(location.hash.slice(1)) === "summary";
+    const isSummaryHash = (): boolean => decodeHash(location.hash) === "summary";
     apply(readPreference(collapsedKey) === "true" && !isSummaryHash());
     toggle.addEventListener("click", () => { const collapsed = !card.classList.contains("is-collapsed"); apply(collapsed); savePreference(collapsedKey, String(collapsed)); });
     window.addEventListener("hashchange", () => { if (isSummaryHash()) apply(false); });

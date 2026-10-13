@@ -1,3 +1,4 @@
+import { decodeHash } from "../lib/hash.mjs";
 import { initializeMarkdown, renderMermaid } from "./markdown";
 import { initializeRecordFilters } from "./record-filters";
 import { initializeReading } from "./reading";
@@ -68,7 +69,7 @@ function initializeGraph(): void {
 
 function scrollToHashTarget(): void {
     if (!document.querySelector("[data-reader-page]")) return;
-    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    const target = document.getElementById(decodeHash(location.hash));
     if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "instant" }));
 }
 

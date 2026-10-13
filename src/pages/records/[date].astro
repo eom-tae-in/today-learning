@@ -48,7 +48,8 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     <script is:inline>
         (() => {
             const read = key => { try { return localStorage.getItem(key); } catch (error) { if (error instanceof DOMException) return null; throw error; } };
-            if (read("today-learning-summary-collapsed") === "true" && decodeURIComponent(location.hash.slice(1)) !== "summary") document.querySelector("[data-summary-card]")?.classList.add("is-collapsed");
+            const hash = (() => { try { return decodeURIComponent(location.hash.slice(1)); } catch (error) { if (error instanceof URIError) return location.hash.slice(1); throw error; } })();
+            if (read("today-learning-summary-collapsed") === "true" && hash !== "summary") document.querySelector("[data-summary-card]")?.classList.add("is-collapsed");
             if (read("today-learning-toc-collapsed") === "true") document.querySelector("[data-reader-layout]")?.classList.add("is-toc-collapsed");
         })();
     </script>

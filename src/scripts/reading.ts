@@ -1,6 +1,7 @@
 import { action, icon } from "./dom";
 import { readPreference, savePreference } from "./storage";
 import { initializeTableOfContents, type ReadingHeading } from "./toc";
+import { decodeHash } from "../lib/hash.mjs";
 import { findTocParents } from "../lib/toc.mjs";
 
 function readHeadings(body: HTMLElement): readonly ReadingHeading[] {
@@ -68,7 +69,7 @@ export function initializeReading(): void {
     if (!body) return;
     const reveal = initializeSections(body);
     initializeHeadingAnchors(body); initializeFontSize(body);
-    body.querySelectorAll<HTMLAnchorElement>('a[href^="#"]:not(.heading-anchor)').forEach(anchor => anchor.addEventListener("click", () => { const target = document.getElementById(decodeURIComponent(anchor.hash.slice(1))); if (target) reveal(target); }));
+    body.querySelectorAll<HTMLAnchorElement>('a[href^="#"]:not(.heading-anchor)').forEach(anchor => anchor.addEventListener("click", () => { const target = document.getElementById(decodeHash(anchor.hash)); if (target) reveal(target); }));
     const headings = readHeadings(body);
     const relations = findTocParents(headings);
     const updateToc = initializeTableOfContents(headings, relations, reveal);
@@ -100,6 +101,6 @@ export function initializeReading(): void {
     const schedule = (): void => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } };
     window.addEventListener("scroll", schedule, { passive: true }); window.addEventListener("resize", () => { headerHeight = readHeaderHeight(); schedule(); });
     new ResizeObserver(schedule).observe(body);
-    const initial = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (initial) reveal(initial);
+    const initial = document.getElementById(decodeHash(location.hash)); if (initial) reveal(initial);
     update();
 }
