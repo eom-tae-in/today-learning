@@ -1,3 +1,5 @@
+import { repairStrong } from "./remark-strong.mjs";
+
 function text(node) {
     return node.value ?? node.children?.map(text).join("") ?? "";
 }
@@ -41,7 +43,8 @@ function hideReview(nodes) {
 }
 
 export function remarkReading() {
-    return tree => {
+    return (tree, file) => {
+        repairStrong(tree, file?.value);
         const nodes = hideReview(tree.children.slice(headerLength(tree.children)));
         normalizeHeadings(nodes);
         tree.children = nodes;
