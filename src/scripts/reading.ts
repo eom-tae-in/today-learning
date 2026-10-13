@@ -87,30 +87,27 @@ export function initializeReading(): void {
     let previousScroll = window.scrollY; let scheduled = false;
     const update = (): void => {
         scheduled = false;
-        const reading = document.body.dataset["readerTab"] === "til";
-        const toolbar = document.querySelector<HTMLElement>("[data-reading-toolbar]"); const mobile = document.querySelector<HTMLElement>("[data-mobile-reading-bar]"); const tabs = document.querySelector("[data-reader-tabs-row]");
-        const scrolled = matchMedia("(max-width: 679px)").matches ? body.getBoundingClientRect().top <= 132 : (tabs?.getBoundingClientRect().bottom ?? 0) <= (matchMedia("(min-width: 920px)").matches ? 72 : 64);
-        if (toolbar) toolbar.hidden = !reading || !scrolled; if (mobile) { mobile.hidden = !reading; if (Math.abs(window.scrollY - previousScroll) > 2) mobile.classList.toggle("is-scrolling-down", window.scrollY > previousScroll && scrolled); }
-        document.querySelectorAll<HTMLElement>(".desktop-back-top").forEach(button => { button.hidden = !reading || !scrolled; });
+        const toolbar = document.querySelector<HTMLElement>("[data-reading-toolbar]"); const mobile = document.querySelector<HTMLElement>("[data-mobile-reading-bar]"); const hero = document.querySelector("[data-reader-hero]");
+        const scrolled = (hero?.getBoundingClientRect().bottom ?? 0) <= (matchMedia("(min-width: 920px)").matches ? 72 : 64);
+        if (toolbar) toolbar.hidden = !scrolled; if (mobile) { mobile.hidden = false; if (Math.abs(window.scrollY - previousScroll) > 2) mobile.classList.toggle("is-scrolling-down", window.scrollY > previousScroll && scrolled); }
+        document.querySelectorAll<HTMLElement>(".desktop-back-top").forEach(button => { button.hidden = !scrolled; });
         const progress = document.querySelector<HTMLElement>("[data-reading-progress]");
-        if (progress) { progress.hidden = !reading; const rect = body.getBoundingClientRect(); const value = Math.max(0, Math.min(100, (150 - rect.top) / Math.max(1, rect.height - innerHeight + 150) * 100)); progress.setAttribute("aria-valuenow", String(Math.round(value))); progress.style.setProperty("--reading-progress", `${value}%`); }
-        if (reading) {
-            const current = headings.filter(heading => heading.element.getBoundingClientRect().top < 170).at(-1) ?? headings[0];
-            if (current?.element.id !== activeId) { activeId = current?.element.id ?? ""; drawToc(current); }
-            const currentChapter = headings.find(heading => heading.element.id === current?.chapter) ?? current;
-            document.querySelectorAll<HTMLElement>("[data-current-chapter]").forEach(label => {
-                label.replaceChildren();
-                if (!currentChapter) return;
-                if (currentChapter.number) {
-                    const number = document.createElement("span"); number.className = "current-chapter-number"; number.textContent = currentChapter.number; label.append(number);
-                }
-                label.append(currentChapter.title);
-            });
-        }
+        if (progress) { progress.hidden = false; const rect = body.getBoundingClientRect(); const value = Math.max(0, Math.min(100, (150 - rect.top) / Math.max(1, rect.height - innerHeight + 150) * 100)); progress.setAttribute("aria-valuenow", String(Math.round(value))); progress.style.setProperty("--reading-progress", `${value}%`); }
+        const current = headings.filter(heading => heading.element.getBoundingClientRect().top < 170).at(-1) ?? headings[0];
+        if (current?.element.id !== activeId) { activeId = current?.element.id ?? ""; drawToc(current); }
+        const currentChapter = headings.find(heading => heading.element.id === current?.chapter) ?? current;
+        document.querySelectorAll<HTMLElement>("[data-current-chapter]").forEach(label => {
+            label.replaceChildren();
+            if (!currentChapter) return;
+            if (currentChapter.number) {
+                const number = document.createElement("span"); number.className = "current-chapter-number"; number.textContent = currentChapter.number; label.append(number);
+            }
+            label.append(currentChapter.title);
+        });
         previousScroll = window.scrollY;
     };
     const schedule = (): void => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } };
-    window.addEventListener("scroll", schedule, { passive: true }); window.addEventListener("resize", schedule); window.addEventListener("reader-tab-change", schedule);
+    window.addEventListener("scroll", schedule, { passive: true }); window.addEventListener("resize", schedule);
     new ResizeObserver(schedule).observe(body); drawToc(headings[0]);
     const initial = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (initial) reveal(initial);
     update();

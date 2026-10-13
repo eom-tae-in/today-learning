@@ -1,6 +1,7 @@
 import { initializeMarkdown, renderMermaid } from "./markdown";
 import { initializeRecordFilters } from "./record-filters";
 import { initializeReading } from "./reading";
+import { initializeSummaryCard } from "./summary-card";
 import { readPreference, savePreference } from "./storage";
 
 type Theme = "light" | "dark" | "green";
@@ -64,26 +65,12 @@ function initializeGraph(): void {
     graphs.forEach(graph => { if (!graph.hidden) position(graph); });
 }
 
-function initializeReaderTabs(): void {
-    const tabs = [...document.querySelectorAll<HTMLAnchorElement>("[data-reader-tab]")];
-    const panels = [...document.querySelectorAll<HTMLElement>("[data-reader-panel]")];
-    if (!tabs.length) return;
-    const show = (id: string): void => {
-        const current = id === "til" || document.getElementById(id)?.closest("#til") ? "til" : "summary";
-        document.body.dataset["readerTab"] = current;
-        tabs.forEach(tab => { if (tab.dataset["readerTab"] === current) tab.setAttribute("aria-current", "page"); else tab.removeAttribute("aria-current"); });
-        panels.forEach(panel => { panel.hidden = panel.dataset["readerPanel"] !== current; });
-        document.querySelectorAll<HTMLElement>("[data-collapse-all]").forEach(button => { if (!button.closest("dialog")) button.hidden = current !== "til"; });
-        document.querySelector<HTMLElement>(".page-background")?.classList.toggle("reader-glow-hidden", current === "til");
-        window.dispatchEvent(new Event("reader-tab-change"));
-    };
-    tabs.forEach(tab => tab.addEventListener("click", event => { event.preventDefault(); const id = tab.dataset["readerTab"] ?? "summary"; show(id); history.replaceState(null, "", "#" + id); }));
-    window.addEventListener("hashchange", () => show(decodeURIComponent(location.hash.slice(1))));
-    show(decodeURIComponent(location.hash.slice(1)));
+function scrollToHashTarget(): void {
+    if (!document.querySelector("[data-reader-page]")) return;
     const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if (target && target.id !== "til" && target.id !== "summary") requestAnimationFrame(() => target.scrollIntoView());
+    if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "instant" }));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    initializeTheme(); initializeRecordFilters(); initializeGraph(); initializeMarkdown(); initializeReading(); initializeReaderTabs(); void renderMermaid();
+    initializeTheme(); initializeRecordFilters(); initializeGraph(); initializeMarkdown(); initializeSummaryCard(); initializeReading(); scrollToHashTarget(); void renderMermaid();
 });

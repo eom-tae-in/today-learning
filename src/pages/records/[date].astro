@@ -6,6 +6,7 @@ import ReadingControls from "../../components/ReadingControls.astro";
 import Icon from "../../components/Icon.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getLearningRecord, getLearningRecords, getRecordPathId, getTagHref } from "../../lib/records";
+import { getReadingMinutes } from "../../lib/reading-time.mjs";
 export async function getStaticPaths() { return (await getLearningRecords()).map(record => ({ params: { date: record.date } })); }
 const record = await getLearningRecord(Astro.params.date ?? "");
 if (record === undefined) throw new Error("Record not found.");
@@ -14,23 +15,36 @@ const index = records.findIndex(item => item.date === record.date);
 const previous = records[index + 1];
 const next = index > 0 ? records[index - 1] : undefined;
 const tilEntry = await getEntry("record", getRecordPathId(record.paths.til));
+const readingMinutes = tilEntry?.body === undefined ? undefined : getReadingMinutes(tilEntry.body);
 const weekday = new Date(record.date + "T00:00:00Z").toLocaleDateString("en-US", { weekday: "short", timeZone: "UTC" }).toUpperCase();
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
-<BaseLayout title={record.title + " | Today Learning"} description={record.summary} glow>
+<BaseLayout title={record.title + " | Today Learning"} description={record.summary}>
     <ReadingControls />
     <article class="reader-page" data-reader-page>
-        <header class="reader-hero">
-            <a class="back-link" href={base + "records/"}><Icon name="back" size={16} />기록 목록으로</a>
+        <header class="reader-hero" data-reader-hero>
+            <a class="back-link" href={base + "records/"} data-records-back><Icon name="back" size={16} />기록 목록으로</a>
             <span class="record-date">{record.displayDate} · {weekday}</span><h1>{record.title}</h1>
             <div class="tag-list">{record.tags.map(tag => <a href={getTagHref(tag)}>{tag}</a>)}</div>
+            {readingMinutes !== undefined && <p class="reading-time">약 {readingMinutes}분 분량</p>}
         </header>
-        <div class="reader-tabs-row" data-reader-tabs-row><nav class="reader-nav" aria-label="기록 본문 탭"><a href="#summary" data-reader-tab="summary" aria-current="page">요약</a><a href="#til" data-reader-tab="til">TIL 원문</a></nav><button type="button" class="collapse-all" data-collapse-all aria-expanded="true" hidden><Icon name="collapse" size={16} /><span>모두 접기</span></button></div>
-        <section id="summary" class="reader-block summary-block" data-reader-panel="summary" aria-labelledby="summary-title">
-            <div class="summary-content"><span class="eyebrow">Summary</span><h2 id="summary-title">한눈에 읽기</h2><blockquote class="summary-main">{record.readerSummary.overview}</blockquote>
-            <h3>내용의 흐름</h3><ol class="summary-flow">{record.readerSummary.flow.map(paragraph => <li>{paragraph}</li>)}</ol></div>
-            <RecordNavigation previous={previous} next={next} />
-        </section>
-        <MarkdownSection entry={tilEntry}><RecordNavigation previous={previous} next={next} /></MarkdownSection>
+        <div class="reader-layout" data-reader-layout>
+            <div class="reader-main">
+                <section id="summary" class="summary-card" data-summary-card aria-labelledby="summary-title">
+                    <div class="summary-head"><div class="summary-title"><h2 id="summary-title">한눈에 보기</h2><p>처음 읽는 분을 위한 쉬운 요약</p></div><button type="button" class="summary-toggle" data-summary-toggle aria-expanded="true" aria-controls="summary-content"><span class="visually-hidden">한눈에 보기 </span><span data-summary-toggle-label>접기</span><Icon name="chevron" size={16} /></button></div>
+                    <div id="summary-content"><p class="summary-overview">{record.readerSummary.overview}</p>
+                    <div class="summary-flow-area"><div><h3>내용의 흐름</h3><ol class="summary-flow">{record.readerSummary.flow.map(paragraph => <li>{paragraph}</li>)}</ol></div></div></div>
+                </section>
+                <MarkdownSection entry={tilEntry} />
+                <RecordNavigation previous={previous} next={next} />
+            </div>
+            {tilEntry && <aside class="markdown-toc" id="reading-toc" aria-label="목차"><span>목차</span><nav data-desktop-toc aria-label="원문 목차"></nav></aside>}
+        </div>
     </article>
+    <script is:inline>
+        (() => {
+            const read = key => { try { return localStorage.getItem(key); } catch (error) { if (error instanceof DOMException) return null; throw error; } };
+            if (read("today-learning-summary-collapsed") === "true" && decodeURIComponent(location.hash.slice(1)) !== "summary") document.querySelector("[data-summary-card]")?.classList.add("is-collapsed");
+        })();
+    </script>
 </BaseLayout>

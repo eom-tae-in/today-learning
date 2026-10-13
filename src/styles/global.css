@@ -260,8 +260,6 @@ input,select { min-width: 0; }
 .page-background::before,.page-background::after { content: ""; position: absolute; border-radius: 50%; opacity: var(--glow-opacity); }
 .page-background::before { width: 1008px; height: 728px; left: -264px; top: -264px; background: radial-gradient(ellipse closest-side, color-mix(in srgb,var(--accent) 22%, transparent), transparent 100%); }
 .page-background::after { width: 728px; height: 588px; right: -224px; top: -44px; background: radial-gradient(ellipse closest-side, color-mix(in srgb,var(--accent) 14%, transparent), transparent 100%); }
-body:has(.reader-page) .page-background::before { width: 1064px; height: 588px; left: -312px; top: -224px; }
-body:has(.reader-page) .page-background::after { display: none; }
 .records-page .control-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .skip-link { position: fixed; top: -80px; left: 20px; z-index: 100; padding: var(--spacing-12) var(--spacing-20); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); }
 .skip-link:focus { top: 8px; }
@@ -348,7 +346,6 @@ body:has(.reader-page) .page-background::after { display: none; }
 }
 @media (max-width: 679px) {
   .page-background::before { width: 588px; height: 504px; left: -204px; top: -152px; }.page-background::after { display: none; }
-  body:has(.reader-page) .page-background::before { width: 560px; height: 420px; left: -200px; top: -160px; }
   .site-nav,.footer-content,.section,.hero,.reader-page { width: calc(100% - 40px); }.brand { gap: var(--spacing-10); }.brand small { font-size: var(--font-size-10); }.brand strong { font-size: var(--font-size-13); }.site-nav { gap: var(--spacing-8); }
   .brand { flex-shrink: 1; min-width: 0; }.brand-mark { flex-shrink: 0; }.brand > span:last-child { min-width: 0; }.brand strong,.brand small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .theme-switch { width: auto; height: auto; padding: var(--spacing-2); }.theme-switch button { flex-basis: 44px; width: 44px; height: 44px; }.back-link { min-height: 44px; }.footer-content nav a { justify-content: center; min-width: 44px; min-height: 44px; }
