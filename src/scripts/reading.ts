@@ -36,12 +36,37 @@ function initializeSections(body: HTMLElement): (target: HTMLElement) => void {
     return target => { const section = target.closest<HTMLElement>("[data-subsection]"); if (section) { setSection(section, true); syncAll(); } };
 }
 
+function createAnnouncer(): (message: string) => void {
+    const region = document.querySelector<HTMLElement>("[data-reading-announcer]"); let timer = 0;
+    return message => { if (!region) return; window.clearTimeout(timer); region.textContent = ""; timer = window.setTimeout(() => { region.textContent = message; }, 100); };
+}
+
+function placeCopyBubble(anchor: HTMLElement, bubble: HTMLElement): void {
+    const viewportMargin = 8;
+    bubble.classList.remove("is-right", "is-above");
+    const anchorBox = anchor.getBoundingClientRect(); const iconBox = anchor.querySelector(".heading-link-icon")?.getBoundingClientRect() ?? anchorBox;
+    const width = bubble.offsetWidth; const left = anchorBox.left + bubble.offsetLeft; const gap = iconBox.left - left - width;
+    if (left >= viewportMargin) return;
+    bubble.classList.add(iconBox.right + gap + width <= document.documentElement.clientWidth - viewportMargin ? "is-right" : "is-above");
+}
+
 function initializeHeadingAnchors(body: HTMLElement): void {
-    body.querySelectorAll<HTMLAnchorElement>(".heading-anchor").forEach(anchor => anchor.addEventListener("click", async event => {
-        event.preventDefault();
-        try { await navigator.clipboard.writeText(anchor.href); anchor.setAttribute("aria-label", "주소 복사됨"); window.setTimeout(() => anchor.setAttribute("aria-label", "제목 주소 복사"), 1200); }
-        catch (error) { if (!(error instanceof DOMException)) throw error; anchor.setAttribute("aria-label", "주소 복사 실패"); }
-    }));
+    const announce = createAnnouncer();
+    body.querySelectorAll<HTMLAnchorElement>(".heading-anchor").forEach(anchor => {
+        let hideTimer = 0;
+        const showResult = (copied: boolean): void => {
+            let bubble = anchor.querySelector<HTMLElement>(".heading-copy-bubble");
+            if (!bubble) { bubble = document.createElement("span"); bubble.className = "heading-copy-bubble"; bubble.setAttribute("aria-hidden", "true"); anchor.append(bubble); }
+            bubble.textContent = copied ? "복사됨" : "복사 실패"; placeCopyBubble(anchor, bubble); void getComputedStyle(bubble).opacity; anchor.classList.add("is-copied"); anchor.classList.toggle("is-copy-failed", !copied);
+            announce(copied ? "제목 주소를 복사했어요" : "주소를 복사하지 못했어요");
+            window.clearTimeout(hideTimer); hideTimer = window.setTimeout(() => anchor.classList.remove("is-copied"), 1200);
+        };
+        anchor.addEventListener("click", async event => {
+            event.preventDefault();
+            try { await navigator.clipboard.writeText(anchor.href); showResult(true); }
+            catch (error) { if (!(error instanceof DOMException)) throw error; showResult(false); }
+        });
+    });
 }
 
 function initializeFontSize(body: HTMLElement): void {
