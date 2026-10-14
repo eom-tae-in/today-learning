@@ -3,9 +3,7 @@ node_modules/
 .astro/
 dist/
 test-results/
-design-reference/
 .omo/
-DESIGN.md
 
 .codegraph/
 
@@ -14,4 +12,3 @@ templates/obsidian/
 scripts/obsidian/
 
 prompts/obsidian/
-prompts/개선 prompt.md
