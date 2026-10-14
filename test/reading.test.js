@@ -52,7 +52,7 @@ test("old TIL with H1 sections is normalized to section, chapter and subsection 
 });
 
 test("old TIL with numbered H1 chapters keeps H2 inside chapters as subsections and outside as sections", async () => {
-    const { code } = await processor.render('> 프로젝트 소개\n\n---\n\n## 오늘의 핵심 요약\n\n요약 문장\n\n# 1. 전체 구조\n\n구조 문장\n\n# 2. 화면 구성\n\n## 소주제\n\n소주제 문장\n\n### 핵심\n\n핵심 문장\n\n# 3. `fetch()` 요청\n\n요청 문장\n\n# 오늘의 정리\n\n정리 문장\n\n# 복습할 부분\n\n숨기는 문장\n\n## ➡️ 내일 할 일\n\n숨기는 내일 문장\n\n# 한 줄 회고\n\n회고 문장');
+    const { code } = await processor.render('> 프로젝트 소개\n\n---\n\n## 오늘의 핵심 요약\n\n요약 문장\n\n# 1. 전체 구조\n\n구조 문장\n\n# 2. 화면 구성\n\n## 소주제\n\n소주제 문장\n\n### 핵심\n\n핵심 문장\n\n# 3. `fetch()` 요청\n\n요청 문장\n\n# 오늘의 정리\n\n정리 문장\n\n# 복습할 부분\n\n숨기는 문장\n\n## ➡\uFE0F 내일 할 일\n\n숨기는 내일 문장\n\n# 한 줄 회고\n\n회고 문장');
     assert.doesNotMatch(code, /<h1|숨기는|내일 할 일/); assert.match(code, /프로젝트 소개/);
     assert.match(code, /<h2 id="오늘의-핵심-요약">/); assert.match(code, /<h2 id="오늘의-정리">/); assert.match(code, /<h2 id="한-줄-회고">/); assert.match(code, /회고 문장/);
     assert.equal((code.match(/class="chapter-heading"/g) ?? []).length, 3); assert.match(code, /<span class="heading-number">3<\/span><code>fetch\(\)<\/code> 요청/);
