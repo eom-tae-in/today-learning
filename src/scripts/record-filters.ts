@@ -84,7 +84,12 @@ export function initializeRecordFilters(): void {
             const chip = event.target.closest<HTMLElement>("[data-tag-filter]"); if (!chip) return;
             tag = isSelected(chip) ? "" : chip.dataset["tagFilter"] ?? ""; resetLimit();
         });
-        root.querySelectorAll<HTMLAnchorElement>("[data-filter-reset]").forEach(reset => reset.addEventListener("click", event => { event.preventDefault(); search.value = ""; year.value = ""; tag = ""; resetLimit(); }));
+        const focusSearch = (): void => {
+            search.focus({ preventScroll: true });
+            const headerBottom = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0; const field = search.getBoundingClientRect();
+            if (field.top < headerBottom || field.bottom > innerHeight) search.scrollIntoView({ block: "nearest" });
+        };
+        root.querySelectorAll<HTMLAnchorElement>("[data-filter-reset]").forEach(reset => reset.addEventListener("click", event => { event.preventDefault(); search.value = ""; year.value = ""; tag = ""; resetLimit(); if (event.detail === 0) focusSearch(); }));
         root.querySelector("[data-load-records]")?.addEventListener("click", () => { limit += 12; update(); });
         document.addEventListener("keydown", event => {
             if (event.key === "/" && !(event.target instanceof HTMLInputElement) && !(event.target instanceof HTMLTextAreaElement) && !(event.target instanceof HTMLElement && event.target.isContentEditable)) { event.preventDefault(); search.focus(); }
