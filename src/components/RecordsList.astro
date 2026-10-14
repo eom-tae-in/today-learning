@@ -23,5 +23,5 @@ const months = [...new Set(records.map(record => record.date.slice(0, 7)))];
         </section>)}
     </div>
     <div class="empty-results" data-empty-results hidden><h2>조건에 맞는 기록이 없어요</h2><p>검색어를 바꾸거나 필터를 초기화해 보세요.</p><a class="button ghost" href={`${base}records/`} data-filter-reset>필터 초기화</a></div>
-    <div class="records-more"><button type="button" class="button secondary" data-load-records hidden>이전 기록 더 불러오기</button></div>
+    <div class="records-more"><button type="button" class="button secondary" data-load-records hidden>이전 기록 더 보기</button></div>
 </section>

@@ -69,7 +69,7 @@ export function initializeRecordFilters(): void {
                 grid.append(card.element);
             });
             root.querySelectorAll<HTMLElement>("[data-tag-filter]").forEach(chip => chip.setAttribute("aria-pressed", String(isSelected(chip))));
-            root.querySelectorAll<HTMLElement>("[data-filter-reset]").forEach(reset => { if (!reset.closest("[data-empty-results]")) reset.hidden = !active; });
+            root.querySelectorAll<HTMLElement>("[data-filter-reset]").forEach(reset => { if (!reset.closest("[data-empty-results]")) reset.hidden = !active || matches.length === 0; });
             const empty = root.querySelector<HTMLElement>("[data-empty-results]"); if (empty) empty.hidden = matches.length > 0;
             const heading = root.querySelector<HTMLElement>("[data-results-title]");
             if (heading) { heading.hidden = !active || matches.length === 0; heading.textContent = [tag ? `${tag} 태그` : "", q ? `'${search.value.trim()}' 검색 결과` : "", year.value ? `${year.value}년` : ""].filter(Boolean).join(" · "); }
