@@ -45,7 +45,7 @@ function getYearCalendar(year: string) {
                         <div class="graph-scroll" data-graph-year={year} hidden={year !== newestYear}>
                             <div class="calendar" role="group" aria-label={`${year}년 TIL 기록 달력`} aria-describedby="graph-keyboard-hint">
                                 <div class="graph-months" aria-hidden="true">
-                                    {calendar.months.map(({ label, column }) => <span style={`grid-column: ${column}`}>{label}</span>)}
+                                    {calendar.months.map(({ label, column }, index) => <span style={`grid-column: ${column} / ${calendar.months[index + 1]?.column ?? -1}`}><span>{label}</span></span>)}
                                 </div>
                                 <div class="graph-weekdays" aria-hidden="true">
                                     <span>월</span><span>수</span><span>금</span>
