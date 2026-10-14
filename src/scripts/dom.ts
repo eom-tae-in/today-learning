@@ -2,7 +2,6 @@ import { baseUrl } from "../lib/paths";
 import { longestTransition, toMilliseconds } from "../lib/motion.mjs";
 
 export const copyFeedbackDuration = 1200;
-const scrollKeys = new Set(["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "]);
 let stopKeepingInView = (): void => {};
 
 export function icon(name: string, size = 18): HTMLSpanElement {
@@ -39,24 +38,21 @@ export function releaseView(): void {
 }
 
 export function keepInView(target: HTMLElement, startTop: number, endTop: number, isSettled: () => boolean): void {
-    const settleLimit = 500; const stableFramesNeeded = 2; const userInputs = ["wheel", "touchstart", "pointerdown"] as const;
+    const settleLimit = 500; const stableFramesNeeded = 2;
     releaseView();
     const root = document.documentElement; const style = getComputedStyle(root); const coveredTop = parseFloat(style.scrollPaddingTop) || parseFloat(style.getPropertyValue("--header-height")) || 0;
     if (endTop >= coveredTop) return;
-    const giveUpAt = performance.now() + motionDuration("--duration-normal") + settleLimit; let stableFrames = 0; let frame = 0; let expectedScroll = window.scrollY;
-    const stopOnScrollKey = (event: KeyboardEvent): void => { if (scrollKeys.has(event.key)) release(); };
-    const release = (): void => {
-        cancelAnimationFrame(frame); root.style.removeProperty("overflow-anchor");
-        userInputs.forEach(type => window.removeEventListener(type, release)); window.removeEventListener("keydown", stopOnScrollKey); stopKeepingInView = () => {};
-    };
+    const savedAnchor = root.style.getPropertyValue("overflow-anchor"); const savedPriority = root.style.getPropertyPriority("overflow-anchor");
+    const giveUpAt = performance.now() + motionDuration("--duration-normal") + settleLimit; let targetTop = startTop; let expectedScroll = window.scrollY; let stableFrames = 0; let frame = 0;
+    const release = (): void => { cancelAnimationFrame(frame); root.style.setProperty("overflow-anchor", savedAnchor, savedPriority); stopKeepingInView = () => {}; };
     const step = (): void => {
-        if (Math.abs(window.scrollY - expectedScroll) >= 1) { release(); return; }
-        const shift = target.getBoundingClientRect().top - startTop;
-        if (Math.abs(shift) >= .5) { window.scrollBy({ top: shift, behavior: "instant" }); expectedScroll = window.scrollY; stableFrames = 0; } else stableFrames++;
+        targetTop -= window.scrollY - expectedScroll;
+        const shift = target.getBoundingClientRect().top - targetTop;
+        if (Math.abs(shift) >= .5) { window.scrollBy({ top: shift, behavior: "instant" }); stableFrames = 0; } else stableFrames++;
+        expectedScroll = window.scrollY;
         if (performance.now() <= giveUpAt && !(isSettled() && stableFrames >= stableFramesNeeded)) frame = requestAnimationFrame(step); else release();
     };
-    root.style.setProperty("overflow-anchor", "none"); userInputs.forEach(type => window.addEventListener(type, release, { passive: true })); window.addEventListener("keydown", stopOnScrollKey, { passive: true });
-    stopKeepingInView = release; frame = requestAnimationFrame(step);
+    root.style.setProperty("overflow-anchor", "none"); stopKeepingInView = release; frame = requestAnimationFrame(step);
 }
 
 export function initializeMedia(): void {
