@@ -3,7 +3,7 @@ import RecordCard from "./RecordCard.astro";
 import RecordFilters from "./RecordFilters.astro";
 import Icon from "./Icon.astro";
 import { baseUrl as base } from "../lib/paths";
-import { getAvailableYears, getPopularTags, type LearningRecord } from "../lib/records";
+import { getAllTags, getAvailableYears, getPopularTags, type LearningRecord } from "../lib/records";
 type Props = { readonly records: readonly LearningRecord[] };
 const { records } = Astro.props;
 const months = [...new Set(records.map(record => record.date.slice(0, 7)))];
@@ -14,7 +14,7 @@ const months = [...new Set(records.map(record => record.date.slice(0, 7)))];
         <span class="eyebrow">Records</span><h1 id="records-title">학습 기록</h1>
         <p>검색어와 연도, 태그로 원하는 학습 기록을 찾아보세요.</p>
     </header>
-    <RecordFilters years={getAvailableYears(records)} tags={getPopularTags(records)} />
+    <RecordFilters years={getAvailableYears(records)} tags={getPopularTags(records)} allTags={getAllTags(records)} />
     <h2 class="results-title" data-results-title hidden></h2>
     <div class="record-results" data-record-list>
         {months.map(month => <section class="month-group" data-record-month={month}>

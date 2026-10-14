@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import { z } from "zod";
 
 import { postSchema } from "../../scripts/github/schema.js";
+import { getPopularTagLabels, getSortedTagLabels, groupTags } from "./tags.mjs";
 
 const postsSchema = z.array(postSchema);
 const baseUrl = import.meta.env.BASE_URL.endsWith("/")
@@ -44,15 +45,11 @@ export function getTagHref(tag: string): string {
 }
 
 export function getPopularTags(records: readonly LearningRecord[]): readonly string[] {
-    const usage = new Map<string, { count: number; latest: string }>();
-    for (const record of records) {
-        for (const tag of new Set(record.tags)) {
-            const previous = usage.get(tag);
-            usage.set(tag, { count: (previous?.count ?? 0) + 1, latest: previous?.latest ?? record.date });
-        }
-    }
-    return [...usage].toSorted((a, b) => b[1].count - a[1].count || b[1].latest.localeCompare(a[1].latest))
-        .slice(0, 5).map(([tag]) => tag);
+    return getPopularTagLabels(groupTags(records), 8);
+}
+
+export function getAllTags(records: readonly LearningRecord[]): readonly string[] {
+    return getSortedTagLabels(groupTags(records));
 }
 
 export function getAvailableYears(records: readonly LearningRecord[]): readonly string[] {
