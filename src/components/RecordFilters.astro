@@ -1,8 +1,8 @@
 ---
 import Icon from "./Icon.astro";
 import { baseUrl } from "../lib/paths";
-type Props = { readonly years: readonly string[]; readonly tags: readonly string[]; readonly home?: boolean };
-const { years, tags, home = false } = Astro.props;
+type Props = { readonly years: readonly string[]; readonly tags: readonly string[] };
+const { years, tags } = Astro.props;
 ---
 <div class="record-controls">
     <label class="search-control"><span class="control-label">기록 검색</span>
@@ -11,8 +11,8 @@ const { years, tags, home = false } = Astro.props;
     <label class="year-control"><span class="control-label">연도</span><select data-year-filter><option value="">전체 연도</option>{years.map(year => <option value={year}>{year}</option>)}</select></label>
 </div>
 <div class="quick-filters">
-    <span class="filter-label">{home ? "자주 쓴 태그" : "태그"}</span>
+    <span class="filter-label">태그</span>
     <button type="button" class="filter-chip" data-tag-filter="" aria-pressed="true">전체</button>
     {tags.map(tag => <button type="button" class="filter-chip" data-tag-filter={tag} aria-pressed="false">{tag}<span class="filter-clear" aria-hidden="true">×</span></button>)}
-    <a class="filter-reset" href={home ? "#records" : baseUrl + "records/"} data-filter-reset hidden>필터 초기화</a>
+    <a class="filter-reset" href={baseUrl + "records/"} data-filter-reset hidden>필터 초기화</a>
 </div>

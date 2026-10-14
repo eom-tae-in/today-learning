@@ -8,7 +8,7 @@ type Props = { readonly records: readonly LearningRecord[] };
 const { records } = Astro.props;
 const months = [...new Set(records.map(record => record.date.slice(0, 7)))];
 ---
-<section class="section records-page" data-record-browser="full" data-records-href={`${base}records/`} aria-labelledby="records-title">
+<section class="section records-page" data-record-browser="full" aria-labelledby="records-title">
     <header class="records-page-heading">
         <a class="back-link" href={base}><Icon name="back" size={16} />홈으로</a>
         <span class="eyebrow">Records</span><h1 id="records-title">학습 기록</h1>
