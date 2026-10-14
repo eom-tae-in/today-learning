@@ -38,6 +38,7 @@ export function initializeTables(): void {
         if (rows.length < 10) return;
         const label = document.createElement("label"); label.className = "table-search"; label.append(icon("search", 16));
         const input = document.createElement("input"); input.type = "search"; input.placeholder = "표 안에서 찾기"; input.setAttribute("aria-label", "표 안에서 찾기"); label.append(input); frame.before(label);
+        const empty = document.createElement("p"); empty.className = "table-empty"; empty.setAttribute("role", "status"); frame.append(empty);
         const foldLabel = document.createElement("span"); const fold = action("", "table-fold-button"); fold.append(foldLabel, icon("expand", 14)); wrapper.append(fold); let expanded = false;
         const resizer = createFrameResizer(frame);
         const update = (animate: boolean): void => {
@@ -46,7 +47,7 @@ export function initializeTables(): void {
             const matches = rows.map((row, index) => ({ row, index })).filter(({ row }) => (row.textContent ?? "").toLowerCase().includes(query));
             const visible = new Set(matches.slice(0, expanded ? matches.length : 6).map(({ index }) => index)); const revealed: HTMLElement[] = [];
             rows.forEach((row, index) => { const item = items[index]; const shown = visible.has(index); if (shown && row.hidden) revealed.push(row, ...(item ? [item] : [])); row.hidden = !shown; if (item) item.hidden = !shown; });
-            fold.hidden = matches.length <= 6; fold.setAttribute("aria-expanded", String(expanded)); foldLabel.textContent = expanded ? "표 접기" : "표 전체 보기";
+            empty.textContent = matches.length ? "" : "일치하는 행이 없어요"; fold.hidden = matches.length <= 6; fold.setAttribute("aria-expanded", String(expanded)); foldLabel.textContent = expanded ? "표 접기" : "표 전체 보기";
             if (!animate) { resizer.reset(); return; }
             const shrink = resizer.resize(from); revealRows(revealed);
             if (expanded) releaseView(); else keepInView(fold, foldTop, foldTop - shrink);
