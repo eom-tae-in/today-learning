@@ -58,7 +58,7 @@ function initializeHeadingAnchors(body: HTMLElement): void {
         const showResult = (copied: boolean): void => {
             let bubble = anchor.querySelector<HTMLElement>(".heading-copy-bubble");
             if (!bubble) { bubble = document.createElement("span"); bubble.className = "heading-copy-bubble"; bubble.setAttribute("aria-hidden", "true"); anchor.append(bubble); }
-            bubble.textContent = copied ? "복사됨" : "복사 실패"; placeCopyBubble(anchor, bubble); void getComputedStyle(bubble).opacity; anchor.classList.add("is-copied"); anchor.classList.toggle("is-copy-failed", !copied);
+            bubble.textContent = copied ? "복사됨" : "복사 실패"; anchor.classList.add("is-instant"); placeCopyBubble(anchor, bubble); void getComputedStyle(bubble).opacity; anchor.classList.remove("is-instant"); anchor.classList.add("is-copied"); anchor.classList.toggle("is-copy-failed", !copied);
             announce(copied ? "제목 주소를 복사했어요" : "주소를 복사하지 못했어요");
             window.clearTimeout(hideTimer); hideTimer = window.setTimeout(() => anchor.classList.remove("is-copied"), copyFeedbackDuration);
         };
