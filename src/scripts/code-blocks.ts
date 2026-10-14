@@ -1,4 +1,4 @@
-import { action, icon } from "./dom";
+import { action, copyFeedbackDuration, createFoldRegion, icon, keepInView, releaseView } from "./dom";
 import { findCodeBreakPoints } from "../lib/code-wrap.mjs";
 
 function insertBreakPoints(line: HTMLElement): void {
@@ -38,18 +38,21 @@ export function initializeCodeBlocks(): void {
         copy.addEventListener("click", async () => {
             try { await navigator.clipboard.writeText(source); copy.replaceChildren(icon("check", 14), "복사됨"); }
             catch (error) { if (!(error instanceof DOMException)) throw error; copy.textContent = "복사 실패"; }
-            window.setTimeout(() => copy.replaceChildren(icon("copy", 14), "복사"), 1200);
+            window.setTimeout(() => copy.replaceChildren(icon("copy", 14), "복사"), copyFeedbackDuration);
         });
         header.append(wrap, copy);
         if (lines.length > 15) {
-            const fold = action("코드 전체 보기", "code-fold-button"); fold.append(icon("expand", 14)); panel.append(fold);
-            const setExpanded = (expanded: boolean): void => {
-                panel.classList.toggle("code-collapsed", !expanded); fold.setAttribute("aria-expanded", String(expanded)); fold.replaceChildren(expanded ? "코드 접기" : "코드 전체 보기", icon("expand", 14));
-                lines.slice(10).forEach(line => { if (expanded) line.removeAttribute("hidden"); else line.setAttribute("hidden", "until-found"); });
+            const rest = document.createElement("span"); rest.className = "code-rest"; const restBody = document.createElement("span"); restBody.className = "code-rest-body"; rest.append(restBody);
+            lines[10]?.before(rest); while (rest.nextSibling) restBody.append(rest.nextSibling);
+            const label = document.createElement("span"); const fold = action("", "code-fold-button"); fold.append(label, icon("expand", 14)); panel.append(fold);
+            const foldRest = createFoldRegion(panel, rest, "code-collapsed");
+            const setExpanded = (expanded: boolean, animate: boolean): void => {
+                if (expanded) releaseView(); else if (animate) { const top = fold.getBoundingClientRect().top; keepInView(fold, top, top - rest.getBoundingClientRect().height); }
+                foldRest(expanded, animate); fold.setAttribute("aria-expanded", String(expanded)); label.textContent = expanded ? "코드 접기" : "코드 전체 보기";
             };
-            fold.addEventListener("click", () => setExpanded(fold.getAttribute("aria-expanded") !== "true"));
-            lines.slice(10).forEach(line => line.addEventListener("beforematch", () => setExpanded(true)));
-            setExpanded(false);
+            fold.addEventListener("click", () => setExpanded(fold.getAttribute("aria-expanded") !== "true", true));
+            rest.addEventListener("beforematch", () => setExpanded(true, false));
+            setExpanded(false, false);
         }
     });
 }

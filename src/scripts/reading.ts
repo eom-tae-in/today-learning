@@ -1,4 +1,4 @@
-import { action, icon } from "./dom";
+import { action, copyFeedbackDuration, createFoldRegion, icon } from "./dom";
 import { readPreference, savePreference } from "./storage";
 import { initializeTableOfContents, type ReadingHeading } from "./toc";
 import { decodeHash } from "../lib/hash.mjs";
@@ -16,29 +16,30 @@ function readHeadings(body: HTMLElement): readonly ReadingHeading[] {
 function initializeSections(body: HTMLElement): (target: HTMLElement) => void {
     const sections = [...body.querySelectorAll<HTMLElement>("[data-subsection]")];
     const all = [...document.querySelectorAll<HTMLButtonElement>("[data-collapse-all]")];
-    const setSection = (section: HTMLElement, expanded: boolean): void => {
-        section.classList.toggle("is-collapsed", !expanded);
+    const folds = new Map<HTMLElement, (expanded: boolean, animate: boolean) => void>();
+    const setSection = (section: HTMLElement, expanded: boolean, animate: boolean): void => {
+        if (section.classList.contains("is-collapsed") === expanded) folds.get(section)?.(expanded, animate);
         section.querySelector("[data-fold-section]")?.setAttribute("aria-expanded", String(expanded));
-        const content = section.querySelector<HTMLElement>(".subsection-content");
-        if (expanded) content?.removeAttribute("hidden"); else content?.setAttribute("hidden", "until-found");
     };
     const syncAll = (): void => {
         const expanded = sections.some(section => !section.classList.contains("is-collapsed"));
         all.forEach(button => { button.hidden = !sections.length; button.setAttribute("aria-expanded", String(expanded)); button.textContent = expanded ? "모두 접기" : "모두 펼치기"; });
     };
     sections.forEach(section => {
+        const content = section.querySelector<HTMLElement>(".subsection-content");
+        if (content) { const inner = document.createElement("div"); inner.className = "subsection-body"; inner.append(...content.childNodes); content.append(inner); folds.set(section, createFoldRegion(section, content, "is-collapsed")); }
         const heading = section.querySelector("h4"); const button = action("", "section-fold-toggle"); button.append(icon("chevron", 18)); button.dataset["foldSection"] = ""; button.setAttribute("aria-label", "소주제 접기 또는 펼치기"); button.setAttribute("aria-expanded", "true"); heading?.append(button);
-        button.addEventListener("click", () => { setSection(section, section.classList.contains("is-collapsed")); syncAll(); });
-        section.querySelector(".subsection-content")?.addEventListener("beforematch", () => { setSection(section, true); syncAll(); });
+        button.addEventListener("click", () => { setSection(section, section.classList.contains("is-collapsed"), true); syncAll(); });
+        content?.addEventListener("beforematch", () => { setSection(section, true, false); syncAll(); });
     });
-    all.forEach(button => button.addEventListener("click", () => { const expanded = button.getAttribute("aria-expanded") !== "true"; sections.forEach(section => setSection(section, expanded)); syncAll(); }));
+    all.forEach(button => button.addEventListener("click", () => { const expanded = button.getAttribute("aria-expanded") !== "true"; sections.forEach(section => setSection(section, expanded, true)); syncAll(); }));
     syncAll();
-    return target => { const section = target.closest<HTMLElement>("[data-subsection]"); if (section) { setSection(section, true); syncAll(); } };
+    return target => { const section = target.closest<HTMLElement>("[data-subsection]"); if (section?.classList.contains("is-collapsed")) { setSection(section, true, false); syncAll(); } };
 }
 
 function createAnnouncer(): (message: string) => void {
-    const region = document.querySelector<HTMLElement>("[data-reading-announcer]"); let timer = 0;
-    return message => { if (!region) return; window.clearTimeout(timer); region.textContent = ""; timer = window.setTimeout(() => { region.textContent = message; }, 100); };
+    const announcementDelay = 100; const region = document.querySelector<HTMLElement>("[data-reading-announcer]"); let timer = 0;
+    return message => { if (!region) return; window.clearTimeout(timer); region.textContent = ""; timer = window.setTimeout(() => { region.textContent = message; }, announcementDelay); };
 }
 
 function placeCopyBubble(anchor: HTMLElement, bubble: HTMLElement): void {
@@ -59,7 +60,7 @@ function initializeHeadingAnchors(body: HTMLElement): void {
             if (!bubble) { bubble = document.createElement("span"); bubble.className = "heading-copy-bubble"; bubble.setAttribute("aria-hidden", "true"); anchor.append(bubble); }
             bubble.textContent = copied ? "복사됨" : "복사 실패"; placeCopyBubble(anchor, bubble); void getComputedStyle(bubble).opacity; anchor.classList.add("is-copied"); anchor.classList.toggle("is-copy-failed", !copied);
             announce(copied ? "제목 주소를 복사했어요" : "주소를 복사하지 못했어요");
-            window.clearTimeout(hideTimer); hideTimer = window.setTimeout(() => anchor.classList.remove("is-copied"), 1200);
+            window.clearTimeout(hideTimer); hideTimer = window.setTimeout(() => anchor.classList.remove("is-copied"), copyFeedbackDuration);
         };
         anchor.addEventListener("click", async event => {
             event.preventDefault();
