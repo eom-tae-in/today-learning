@@ -11,14 +11,14 @@ const { years, tags, allTags } = Astro.props;
     <label class="year-control"><span class="control-label">연도</span><select data-year-filter><option value="">전체 연도</option>{years.map(year => <option value={year}>{year}</option>)}</select></label>
 </div>
 <div class="tag-filters" data-tag-filters>
-    <div class="tag-panel"><div class="quick-filters" data-tag-list="popular">
+    <div class="tag-panel"><div class="quick-filters" role="group" aria-label="상위 태그" data-tag-list="popular">
         <span class="filter-label">태그</span>
         <button type="button" class="filter-chip" data-tag-filter="" aria-pressed="true">전체</button>
         {tags.map(tag => <button type="button" class="filter-chip" data-tag-filter={tag} aria-pressed="false">{tag}<span class="filter-clear" aria-hidden="true">×</span></button>)}
         <button type="button" class="tag-toggle" data-tag-toggle aria-expanded="false" aria-controls="all-tags"><span data-tag-toggle-label>태그 전체 보기</span><Icon name="chevron" size={16} /></button>
         <a class="filter-reset" href={baseUrl + "records/"} data-filter-reset hidden>필터 초기화</a>
     </div></div>
-    <div class="tag-panel"><div class="quick-filters" id="all-tags" data-tag-list="all" inert>
+    <div class="tag-panel"><div class="quick-filters" id="all-tags" role="group" aria-label={`전체 태그 ${allTags.length}개`} data-tag-list="all" inert>
         <span class="filter-label">태그</span>
         <button type="button" class="filter-chip" data-tag-filter="" aria-pressed="true">전체</button>
         {allTags.map(tag => <button type="button" class="filter-chip" data-tag-filter={tag} aria-pressed="false">{tag}<span class="filter-clear" aria-hidden="true">×</span></button>)}
