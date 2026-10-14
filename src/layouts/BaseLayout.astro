@@ -2,8 +2,8 @@
 import "../styles/global.css";
 import Icon from "../components/Icon.astro";
 import { baseUrl as base } from "../lib/paths";
-type Props = { readonly title?: string; readonly description?: string; readonly glow?: boolean };
-const { title = "Today Learning", description = "매일의 학습 내용을 TIL 원문과 쉬운 요약으로 읽는 개인 학습 노트입니다.", glow = false } = Astro.props;
+type Props = { readonly title?: string; readonly description?: string; readonly glow?: boolean; readonly noindex?: boolean };
+const { title = "Today Learning", description = "매일의 학습 내용을 TIL 원문과 쉬운 요약으로 읽는 개인 학습 노트입니다.", glow = false, noindex = false } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const isRecordsPage = Astro.url.pathname.replace(/\/?$/, "/") === base + "records/";
 ---
@@ -21,13 +21,13 @@ const isRecordsPage = Astro.url.pathname.replace(/\/?$/, "/") === base + "record
             document.querySelector("[data-theme-color]").content = { light: "#F4F8FB", dark: "#121417", green: "#EEF2EA" }[theme];
         })();
     </script>
-    <link rel="canonical" href={canonicalUrl} /><link rel="icon" href={base + "favicon.svg"} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonicalUrl} />}<link rel="icon" href={base + "favicon.svg"} />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" />
     <meta property="og:title" content={title} /><meta property="og:description" content={description} />
-    <meta property="og:type" content="website" /><meta property="og:url" content={canonicalUrl} /><title>{title}</title>
+    <meta property="og:type" content="website" />{!noindex && <meta property="og:url" content={canonicalUrl} />}<title>{title}</title>
 </head>
 <body class:list={[{ "has-glow": glow }]}>
     <a class="skip-link" href="#main-content">본문으로 바로가기</a>
