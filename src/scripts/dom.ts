@@ -2,7 +2,8 @@ import { baseUrl } from "../lib/paths";
 import { longestTransition, toMilliseconds } from "../lib/motion.mjs";
 
 export const copyFeedbackDuration = 1200;
-let keepInViewFrame = 0;
+const scrollKeys = new Set(["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "]);
+let stopKeepingInView = (): void => {};
 
 export function icon(name: string, size = 18): HTMLSpanElement {
     const span = document.createElement("span"); span.className = "icon"; span.setAttribute("aria-hidden", "true");
@@ -34,22 +35,28 @@ export function createFoldRegion(owner: HTMLElement, region: HTMLElement, collap
 }
 
 export function releaseView(): void {
-    cancelAnimationFrame(keepInViewFrame);
+    stopKeepingInView();
 }
 
-export function keepInView(target: HTMLElement, startTop: number, endTop: number): void {
-    const settleLimit = 500; const stableFramesNeeded = 2;
+export function keepInView(target: HTMLElement, startTop: number, endTop: number, isSettled: () => boolean): void {
+    const settleLimit = 500; const stableFramesNeeded = 2; const userInputs = ["wheel", "touchstart", "pointerdown"] as const;
     releaseView();
-    const style = getComputedStyle(document.documentElement); const coveredTop = parseFloat(style.scrollPaddingTop) || parseFloat(style.getPropertyValue("--header-height")) || 0;
+    const root = document.documentElement; const style = getComputedStyle(root); const coveredTop = parseFloat(style.scrollPaddingTop) || parseFloat(style.getPropertyValue("--header-height")) || 0;
     if (endTop >= coveredTop) return;
-    const end = performance.now() + motionDuration("--duration-normal"); let stableFrames = 0;
-    const step = (): void => {
-        const shift = target.getBoundingClientRect().top - startTop;
-        if (Math.abs(shift) >= .5) { window.scrollBy({ top: shift, behavior: "instant" }); stableFrames = 0; } else stableFrames++;
-        const now = performance.now();
-        if (now <= end + settleLimit && (now <= end || stableFrames < stableFramesNeeded)) keepInViewFrame = requestAnimationFrame(step);
+    const giveUpAt = performance.now() + motionDuration("--duration-normal") + settleLimit; let stableFrames = 0; let frame = 0; let expectedScroll = window.scrollY;
+    const stopOnScrollKey = (event: KeyboardEvent): void => { if (scrollKeys.has(event.key)) release(); };
+    const release = (): void => {
+        cancelAnimationFrame(frame); root.style.removeProperty("overflow-anchor");
+        userInputs.forEach(type => window.removeEventListener(type, release)); window.removeEventListener("keydown", stopOnScrollKey); stopKeepingInView = () => {};
     };
-    keepInViewFrame = requestAnimationFrame(step);
+    const step = (): void => {
+        if (Math.abs(window.scrollY - expectedScroll) >= 1) { release(); return; }
+        const shift = target.getBoundingClientRect().top - startTop;
+        if (Math.abs(shift) >= .5) { window.scrollBy({ top: shift, behavior: "instant" }); expectedScroll = window.scrollY; stableFrames = 0; } else stableFrames++;
+        if (performance.now() <= giveUpAt && !(isSettled() && stableFrames >= stableFramesNeeded)) frame = requestAnimationFrame(step); else release();
+    };
+    root.style.setProperty("overflow-anchor", "none"); userInputs.forEach(type => window.addEventListener(type, release, { passive: true })); window.addEventListener("keydown", stopOnScrollKey, { passive: true });
+    stopKeepingInView = release; frame = requestAnimationFrame(step);
 }
 
 export function initializeMedia(): void {

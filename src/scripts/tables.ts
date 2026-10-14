@@ -50,7 +50,7 @@ export function initializeTables(): void {
             empty.textContent = matches.length ? "" : "일치하는 행이 없어요"; fold.hidden = matches.length <= 6; fold.setAttribute("aria-expanded", String(expanded)); foldLabel.textContent = expanded ? "표 접기" : "표 전체 보기";
             if (!animate) { resizer.reset(); return; }
             const shrink = resizer.resize(from); revealRows(revealed);
-            if (expanded) releaseView(); else keepInView(fold, foldTop, foldTop - shrink);
+            if (expanded) releaseView(); else keepInView(fold, foldTop, foldTop - shrink, () => !frame.classList.contains("is-resizing"));
         };
         input.addEventListener("input", () => { expanded = false; update(false); }); fold.addEventListener("click", () => { expanded = !expanded; update(true); }); update(false);
     });

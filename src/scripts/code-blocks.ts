@@ -47,7 +47,7 @@ export function initializeCodeBlocks(): void {
             const label = document.createElement("span"); const fold = action("", "code-fold-button"); fold.append(label, icon("expand", 14)); panel.append(fold);
             const foldRest = createFoldRegion(panel, rest, "code-collapsed");
             const setExpanded = (expanded: boolean, animate: boolean): void => {
-                if (expanded) releaseView(); else if (animate) { const top = fold.getBoundingClientRect().top; keepInView(fold, top, top - rest.getBoundingClientRect().height); }
+                if (expanded) releaseView(); else if (animate) { const top = fold.getBoundingClientRect().top; keepInView(fold, top, top - rest.getBoundingClientRect().height, () => rest.hasAttribute("hidden")); }
                 foldRest(expanded, animate); fold.setAttribute("aria-expanded", String(expanded)); label.textContent = expanded ? "코드 접기" : "코드 전체 보기";
             };
             fold.addEventListener("click", () => setExpanded(fold.getAttribute("aria-expanded") !== "true", true));
