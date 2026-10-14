@@ -5,6 +5,7 @@ import { baseUrl as base } from "../lib/paths";
 type Props = { readonly title?: string; readonly description?: string; readonly glow?: boolean };
 const { title = "Today Learning", description = "매일의 학습 내용을 TIL 원문과 쉬운 요약으로 읽는 개인 학습 노트입니다.", glow = false } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const isRecordsPage = Astro.url.pathname.replace(/\/?$/, "/") === base + "records/";
 ---
 <!doctype html>
 <html lang="ko">
@@ -33,13 +34,14 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <div class="page-background" aria-hidden="true"></div>
     <header class="site-header"><nav class="site-nav" aria-label="주요 메뉴">
         <a class="brand" href={base}><span class="brand-mark" aria-hidden="true">T</span><span><strong>Today Learning</strong><small>Daily Growth Notes</small></span></a>
-        <div class="nav-actions">
-            <a class="header-menu" href={base + "#graph"}>학습 로그</a><a class="header-menu" href={base + "records/"}>학습 기록</a><span class="nav-separator" aria-hidden="true"></span>
+        <button type="button" class="menu-button" data-menu-button aria-expanded="false" aria-controls="site-menu" aria-label="메뉴 열기"><Icon name="menu" /><Icon name="close" /></button>
+        <div class="nav-actions" id="site-menu" data-menu-panel>
+            <a class="header-menu" href={base + "#graph"}>학습 로그</a><a class="header-menu" href={base + "records/"} aria-current={isRecordsPage ? "page" : undefined}>학습 기록</a><span class="nav-separator" aria-hidden="true"></span>
             <a class="header-link" href="https://github.com/eom-tae-in/today-learning" target="_blank" rel="noreferrer"><Icon name="github" />Repository</a>
-            <div class="theme-switch" role="radiogroup" aria-label="색 테마">
+            <div class="menu-theme"><span class="menu-theme-label" aria-hidden="true">테마</span><div class="theme-switch" role="radiogroup" aria-label="색 테마">
                 {([["light", "Light 밝은 테마", "sun"], ["dark", "Dark 어두운 테마", "moon"], ["green", "Green 읽기 테마", "leaf"]] as const).map(([theme, label, icon]) =>
                     <button type="button" role="radio" aria-label={label} aria-checked={theme === "light" ? "true" : "false"} data-theme-option={theme}><Icon name={icon} /></button>)}
-            </div>
+            </div></div>
         </div>
     </nav></header>
     <main id="main-content"><slot /></main>
