@@ -264,6 +264,7 @@ input,select { min-width: 0; }
 .skip-link { position: fixed; top: -80px; left: 20px; z-index: 100; padding: var(--spacing-12) var(--spacing-20); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); }
 .skip-link:focus { top: 8px; }
 .site-header { position: sticky; top: 0; height: var(--header-height); background: var(--surface); border-bottom: 1px solid var(--border); z-index: 32; }
+.site-header :is(a,button) { scroll-margin-top: -100vh; }
 .site-nav,.footer-content,.section,.hero,.reader-page { width: min(1120px,calc(100% - 64px)); margin-inline: auto; }
 .site-nav { display: flex; height: 100%; align-items: center; justify-content: space-between; gap: var(--spacing-20); }
 .brand { display: flex; align-items: center; gap: var(--spacing-12); min-height: 44px; flex-shrink: 0; }
