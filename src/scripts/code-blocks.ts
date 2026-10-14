@@ -1,4 +1,14 @@
 import { action, icon } from "./dom";
+import { findCodeBreakPoints } from "../lib/code-wrap.mjs";
+
+function insertBreakPoints(line: HTMLElement): void {
+    const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT); const nodes: { readonly node: Text; readonly start: number }[] = []; let text = "";
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) if (node instanceof Text && node.data) { nodes.push({ node, start: text.length }); text += node.data; }
+    findCodeBreakPoints(text).reverse().forEach(point => {
+        const owner = nodes.findLast(({ start }) => start <= point); if (!owner) return;
+        const local = point - owner.start; const target = local ? owner.node.splitText(local) : owner.node; target.before(document.createElement("wbr"));
+    });
+}
 
 export function initializeCodeBlocks(): void {
     document.querySelectorAll<HTMLElement>("[data-code-panel]").forEach(panel => {
@@ -19,9 +29,11 @@ export function initializeCodeBlocks(): void {
         panel.classList.toggle("mobile-wrap", ["java", "javascript", "js", "typescript", "ts", "jsx", "tsx", "json", "css", "html", "xml", "c", "cpp", "go", "rust", "kotlin"].includes(panel.dataset["language"] ?? ""));
         const mobile = matchMedia("(max-width: 679px)");
         const isWrapped = (): boolean => panel.classList.contains("wrap-chosen") ? panel.classList.contains("wrap-code") : mobile.matches && panel.classList.contains("mobile-wrap");
-        const wrap = action("", "code-wrap-toggle"); wrap.append(icon("wrap", 16)); wrap.setAttribute("aria-label", "코드 줄바꿈 전환"); wrap.setAttribute("aria-pressed", String(isWrapped()));
-        wrap.addEventListener("click", () => { const active = !isWrapped(); panel.classList.toggle("wrap-code", active); panel.classList.add("wrap-chosen"); wrap.setAttribute("aria-pressed", String(active)); });
-        mobile.addEventListener("change", () => wrap.setAttribute("aria-pressed", String(isWrapped())));
+        let hasBreakPoints = false;
+        const prepareWrap = (): void => { if (hasBreakPoints || !isWrapped()) return; hasBreakPoints = true; lines.forEach(insertBreakPoints); };
+        const wrap = action("", "code-wrap-toggle"); wrap.append(icon("wrap", 16)); wrap.setAttribute("aria-label", "코드 줄바꿈 전환"); wrap.setAttribute("aria-pressed", String(isWrapped())); prepareWrap();
+        wrap.addEventListener("click", () => { const active = !isWrapped(); panel.classList.toggle("wrap-code", active); panel.classList.add("wrap-chosen"); wrap.setAttribute("aria-pressed", String(active)); prepareWrap(); });
+        mobile.addEventListener("change", () => { wrap.setAttribute("aria-pressed", String(isWrapped())); prepareWrap(); });
         const copy = action("복사", "copy-code-button"); copy.prepend(icon("copy", 14));
         copy.addEventListener("click", async () => {
             try { await navigator.clipboard.writeText(source); copy.replaceChildren(icon("check", 14), "복사됨"); }
