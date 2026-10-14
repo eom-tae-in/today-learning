@@ -3,7 +3,6 @@ import { getRecordHref, type LearningRecord } from "../lib/records";
 
 type Props = { readonly records: readonly LearningRecord[] };
 const { records } = Astro.props;
-const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
 const years = Array.from(new Set(records.map((record) => record.year))).toSorted(
     (left, right) => right.localeCompare(left)
 );
@@ -39,11 +38,12 @@ function getYearCalendar(year: string) {
         </div>
         <div class="graph-layout">
             <div class="graph-panel">
+                <p id="graph-keyboard-hint" class="visually-hidden">방향키로 기록이 있는 날짜를 이동할 수 있어요</p>
                 {displayYears.map((year) => {
                     const calendar = getYearCalendar(year);
                     return (
                         <div class="graph-scroll" data-graph-year={year} hidden={year !== newestYear}>
-                            <div class="calendar" aria-label={`${year}년 TIL 기록 달력`}>
+                            <div class="calendar" role="group" aria-label={`${year}년 TIL 기록 달력`} aria-describedby="graph-keyboard-hint">
                                 <div class="graph-months" aria-hidden="true">
                                     {calendar.months.map(({ label, column }) => <span style={`grid-column: ${column}`}>{label}</span>)}
                                 </div>
@@ -53,10 +53,10 @@ function getYearCalendar(year: string) {
                                 <div class="graph-grid">
                                     {Array.from({ length: calendar.offset }, () => <span class="graph-spacer" aria-hidden="true" />)}
                                     {calendar.days.map(({ date, record }) => record === undefined ? (
-                                        <span class:list={["graph-cell", { "is-today": date === today }]} data-calendar-date={date} title={`${date} · TIL 없음`} aria-label={`${date} · TIL 없음`} />
+                                        <span class="graph-cell" data-calendar-date={date} title={`${date} · TIL 없음`} />
                                     ) : (
                                         <a
-                                            class:list={["graph-cell has-record", { "is-today": date === today }]}
+                                            class="graph-cell has-record"
                                             data-calendar-date={date}
                                             data-record-date={date}
                                             href={getRecordHref(date)}

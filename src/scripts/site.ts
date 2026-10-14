@@ -1,4 +1,5 @@
 import { decodeHash } from "../lib/hash.mjs";
+import { initializeGraph } from "./graph";
 import { initializeMarkdown, renderMermaid } from "./markdown";
 import { initializeMenu } from "./menu";
 import { initializeRecordFilters } from "./record-filters";
@@ -48,24 +49,6 @@ function initializeTheme(): void {
         });
     });
     system.addEventListener("change", () => { if (!explicit) change(system.matches ? "dark" : "light"); });
-}
-
-function initializeGraph(): void {
-    const graphs = [...document.querySelectorAll<HTMLElement>("[data-graph-year]")];
-    const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-graph-year-option]")];
-    const position = (graph: HTMLElement): void => {
-        if (matchMedia("(max-width: 679px)").matches) {
-            const today = graph.querySelector<HTMLElement>(".is-today");
-            const recent = graph.querySelectorAll<HTMLElement>("[data-record-date]");
-            const target = today ?? recent.item(recent.length - 1);
-            graph.scrollLeft = target ? Math.max(0, target.offsetLeft - graph.offsetLeft - graph.clientWidth + 36) : graph.scrollWidth;
-        }
-    };
-    buttons.forEach(button => button.addEventListener("click", () => {
-        graphs.forEach(graph => { graph.hidden = graph.dataset["graphYear"] !== button.dataset["graphYearOption"]; if (!graph.hidden) position(graph); });
-        buttons.forEach(option => option.setAttribute("aria-pressed", String(option === button)));
-    }));
-    graphs.forEach(graph => { if (!graph.hidden) position(graph); });
 }
 
 function scrollToHashTarget(): void {
