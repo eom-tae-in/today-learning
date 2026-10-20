@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 240">
+  <title>Finite and repeating CSS animation regression</title>
+  <style>
+    .finished { opacity: 1; animation: reveal 1s linear; }
+    .loop { animation: travel 10s linear infinite; }
+    .duplicate { animation: reveal 1s linear, reveal 10s linear infinite; }
+    @keyframes reveal { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes travel { from { transform: translateX(0); } to { transform: translateX(100px); } }
+  </style>
+  <rect class="finished" x="10" y="10" width="80" height="50" fill="#3566b1"/>
+  <rect class="loop" x="10" y="80" width="80" height="50" fill="#237c54"/>
+  <rect class="duplicate" x="10" y="150" width="80" height="50" fill="#3566b1"/>
+</svg>

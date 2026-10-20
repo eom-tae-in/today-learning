@@ -1,0 +1,25 @@
+.animated-svg { min-width: 0; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); color: var(--text-secondary); font: 400 var(--font-size-14)/var(--leading-1-5) var(--font-sans); }
+.animated-svg-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-8); padding: var(--spacing-8) var(--spacing-12); border-bottom: 1px solid var(--border); }
+.animated-svg-label { margin-right: auto; color: var(--text-tertiary); font: 700 var(--font-size-12)/var(--leading-1-5) var(--font-mono); letter-spacing: .06em; }
+.animated-svg-toolbar button,.animated-svg-toolbar a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: var(--spacing-8); border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-secondary); font: inherit; text-decoration: none; }
+.animated-svg-toolbar [hidden] { display: none; }
+.animated-svg-toolbar button:hover,.animated-svg-toolbar a:hover { background: var(--surface-soft); text-decoration: none; }
+.animated-svg-toolbar button:active { background: var(--surface-soft); color: var(--text-primary); }
+.animated-svg-toolbar :is(button,a):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.animated-svg-viewport { overflow: auto; }
+.animated-svg-pan-hint { display: none; }
+[data-svg-host] { display: block; overflow: hidden; min-width: 0; width: 100%; max-width: var(--svg-width); margin-inline: auto; }
+[data-svg-fallback] { display: block; width: 100%; height: auto; }
+.markdown-body [data-svg-host] { cursor: zoom-in; }
+.animated-svg figcaption { padding: var(--spacing-12) var(--spacing-16); border-top: 1px solid var(--border); color: var(--text-secondary); word-break: keep-all; overflow-wrap: anywhere; }
+.media-dialog:has(.animated-svg) { width: min(1200px,calc(100% - 24px)); }
+.media-dialog:not([open]):has(.animated-svg) { display: block; visibility: hidden; position: fixed; pointer-events: none; }
+.media-dialog [data-svg-host] { max-width: calc(var(--svg-width) * 1.4); }
+@media (max-width: 679px) {
+    .animated-svg-label { flex-basis: 100%; padding-left: var(--spacing-8); }
+    .animated-svg-toolbar { gap: var(--spacing-4); }
+    .media-dialog:has(.animated-svg) { padding: var(--spacing-8); }
+    .media-dialog .animated-svg-viewport { max-height: 60dvh; }
+    .media-dialog [data-svg-host] { width: calc(var(--svg-width) * 1.4); min-width: 100%; max-width: none; }
+    .media-dialog .animated-svg-pan-hint { display: block; padding: var(--spacing-8) var(--spacing-12); color: var(--text-secondary); }
+}

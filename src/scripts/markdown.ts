@@ -82,7 +82,7 @@ export function renderMermaid(): Promise<void> {
 
 export function initializeMarkdown(): void {
     initializeCodeBlocks(); initializeTables(); initializeMedia();
-    document.querySelectorAll<HTMLImageElement>(".markdown-body img").forEach(image => {
+    document.querySelectorAll<HTMLImageElement>(".markdown-body img:not([data-svg-fallback])").forEach(image => {
         const figure = document.createElement("figure"); figure.className = "image-figure"; const button = action("", "image-zoom-button"); button.setAttribute("aria-label", image.alt ? image.alt + " 크게 보기" : "이미지 크게 보기");
         const parent = image.parentElement; image.before(figure); button.append(image); figure.append(button);
         if (image.alt) { const caption = document.createElement("figcaption"); caption.textContent = image.alt; figure.append(caption); }

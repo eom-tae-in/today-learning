@@ -5,6 +5,7 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 
 import { rehypeMermaid } from "./src/lib/rehype-mermaid.mjs";
+import { rehypeAnimatedSvg } from "./src/lib/rehype-animated-svg.mjs";
 import { remarkReading, readingCodeTransformer } from "./src/lib/remark-reading.mjs";
 import { rehypeReading } from "./src/lib/rehype-reading.mjs";
 
@@ -32,6 +33,7 @@ export default defineConfig({
                     },
                 ],
                 rehypeMermaid,
+                rehypeAnimatedSvg,
                 rehypeReading,
             ],
         }),

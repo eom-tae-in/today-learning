@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" aria-labelledby="title description">
+  <title id="title">소스에서 배포까지</title>
+  <desc id="description">소스 작성, 빌드, 배포의 세 단계를 순서대로 강조하고 파일이 아래로 이동한다. 한 주기는 8초다.</desc>
+  <style>
+    text { font-family: sans-serif; fill: #182b40; }
+    .panel { fill: #ffffff; stroke: #cfdae7; stroke-width: 2; }
+    .label { font-size: 25px; font-weight: 700; }
+    .detail { font-size: 19px; fill: #506379; }
+    .step { font-size: 17px; fill: #3566b1; font-weight: 700; }
+    .one { animation: source-stage 8s linear infinite; }
+    .two { animation: build-stage 8s linear infinite; }
+    .three { animation: deploy-stage 8s linear infinite; }
+    .result { animation: reveal-result 8s linear infinite; }
+    @keyframes source-stage { 0%,25% { fill: #dceaff; stroke: #3566b1; } 35%,100% { fill: #fff; stroke: #cfdae7; } }
+    @keyframes build-stage { 0%,25%,65%,100% { fill: #fff; stroke: #cfdae7; } 35%,55% { fill: #dceaff; stroke: #3566b1; } }
+    @keyframes deploy-stage { 0%,55%,100% { fill: #fff; stroke: #cfdae7; } 65%,90% { fill: #dceaff; stroke: #3566b1; } }
+    @keyframes reveal-result { 0%,65% { opacity: 0; } 75%,95% { opacity: 1; } 100% { opacity: 0; } }
+  </style>
+  <rect width="480" height="600" fill="#f4f8fc" rx="12"/>
+  <text x="32" y="44" class="step">BUILD PIPELINE · 8초 순환</text>
+  <path d="M240 180V245 M240 355V420" fill="none" stroke="#a9bacd" stroke-width="3" stroke-dasharray="5 7"/>
+  <rect x="32" y="70" width="416" height="110" rx="12" class="panel one"/>
+  <text x="56" y="105" class="step">01 / SOURCE</text>
+  <text x="56" y="138" class="label">소스 코드 작성</text>
+  <text x="56" y="165" class="detail">Markdown · CSS · SVG</text>
+  <rect x="32" y="245" width="416" height="110" rx="12" class="panel two"/>
+  <text x="56" y="280" class="step">02 / BUILD</text>
+  <text x="56" y="313" class="label">정적 페이지 생성</text>
+  <text x="56" y="340" class="detail">Astro → HTML · 첨부 파일</text>
+  <rect x="32" y="420" width="416" height="110" rx="12" class="panel three"/>
+  <text x="56" y="455" class="step">03 / DEPLOY</text>
+  <text x="56" y="488" class="label">GitHub Pages 배포</text>
+  <text x="56" y="515" class="detail">브라우저에서 학습 기록 열기</text>
+  <circle r="8" fill="#3566b1" stroke="#fff" stroke-width="3">
+    <animateMotion dur="8s" repeatCount="indefinite" path="M240 195 L240 225 L240 370 L240 400" keyPoints="0;0;0.15;0.15;0.85;1;1" keyTimes="0;0.2;0.3;0.4;0.6;0.7;1" calcMode="linear"/>
+  </circle>
+  <g class="result"><circle cx="44" cy="567" r="5" fill="#237c54"/><text x="60" y="574" class="detail">배포 완료 · 다음 주기에서 다시 시작</text></g>
+</svg>

@@ -1,3 +1,4 @@
+@import "./animated-svg.css";
 .tool-button,.toc-expand,.summary-toggle,.toc-item,.toc-button,.icon-button,.font-controls button,.section-fold-toggle,.code-wrap-toggle,.copy-code-button,.code-fold-button,.table-fold-button,.mermaid-header button,.markdown-body a:not(.heading-anchor) { transition: var(--transition-control); }
 .heading-anchor { transition: opacity var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard); }
 .section-fold-toggle .icon,.summary-toggle .icon,.code-fold-button .icon,.table-fold-button .icon { transition: transform var(--duration-fast) var(--ease-standard); }

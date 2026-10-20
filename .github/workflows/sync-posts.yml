@@ -16,6 +16,7 @@ on:
       - "scripts/github/**"
       - "prompts/github/**"
       - "public/**"
+      - "docs/examples/**"
       - "posts.json"
       - "astro.config.mjs"
       - "package*.json"

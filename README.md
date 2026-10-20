@@ -27,6 +27,9 @@ npm run preview
 
 Astro가 정적 페이지를 생성합니다. GitHub Pages의 기본 경로는 `/today-learning/`입니다.
 TIL은 GitHub Flavored Markdown으로 작성하며 표, 이미지, 코드 하이라이트와 Mermaid를 지원합니다.
+독립 SVG의 CSS·SVG 애니메이션과 재생·일시정지·다시 재생·확대를 지원합니다.
+[작성 규칙](docs/animated-svg.md)에 따라 `public/attachments/`에 저장하고 본문에서 상대 경로로 참조합니다.
+[애니메이션 예제](https://eom-tae-in.github.io/today-learning/examples/animated-svg/)는 배포 후 확인할 수 있습니다.
 코드 블록의 `title="파일명"`과 `{줄 범위}` 강조, `↓`로 시작하는 줄이 있는 `text` 흐름도, `> [!NOTE]`·`> [!TIP]`·`> [!WARNING]` 알림은 전용 화면 요소로 표시됩니다.
 
 ## 요약 갱신

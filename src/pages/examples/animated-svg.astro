@@ -1,0 +1,13 @@
+---
+import Example from "../../../docs/examples/animated-svg.md";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReadingControls from "../../components/ReadingControls.astro";
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+---
+<BaseLayout title="애니메이션 SVG 예제 | Today Learning" description="TIL 본문에 삽입되는 독립 SVG의 재생과 확대 예제" noindex>
+    <ReadingControls />
+    <article class="reader-page" data-reader-page>
+        <header class="reader-hero"><a class="back-link" href={base}>홈으로</a><h1>애니메이션 SVG</h1><p>움직임으로 읽는 빌드 과정</p></header>
+        <div class="reader-main"><section class="reader-body"><div class="markdown-body"><Example /></div></section></div>
+    </article>
+</BaseLayout>

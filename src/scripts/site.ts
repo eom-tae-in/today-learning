@@ -1,6 +1,7 @@
 import { decodeHash } from "../lib/hash.mjs";
 import { initializeGraph } from "./graph";
 import { initializeMarkdown, renderMermaid } from "./markdown";
+import { initializeAnimatedSvgs } from "./animated-svg";
 import { initializeMenu } from "./menu";
 import { initializeRecordFilters } from "./record-filters";
 import { initializeReading } from "./reading";
@@ -58,5 +59,5 @@ function scrollToHashTarget(): void {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    initializeTheme(); initializeMenu(); initializeRecordFilters(); initializeRecordsReturn(); initializeGraph(); initializeMarkdown(); initializeSummaryCard(); initializeReading(); scrollToHashTarget(); void renderMermaid();
+    initializeTheme(); initializeMenu(); initializeRecordFilters(); initializeRecordsReturn(); initializeGraph(); initializeAnimatedSvgs(); initializeMarkdown(); initializeSummaryCard(); initializeReading(); scrollToHashTarget(); void renderMermaid();
 });
