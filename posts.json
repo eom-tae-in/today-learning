@@ -1309,5 +1309,35 @@
       "개발자",
       "LGNSINSPIRECMAP"
     ]
+  },
+  {
+    "title": "연쇄 장애 차단과 분산 추적 정리",
+    "summary": "서비스 장애가 번지는 문제를 CircuitBreaker와 Zipkin 추적으로 다룬 글이다.",
+    "tags": [
+      "CircuitBreaker",
+      "Resilience4j",
+      "Spring Cloud Sleuth",
+      "Zipkin",
+      "Micrometer Tracing"
+    ],
+    "readerSummary": {
+      "overview": "이 글은 주문 서비스 장애가 회원 조회 오류로 이어지는 상황에서 출발한다. 실패한 원격 호출을 끊는 CircuitBreaker와, 여러 서비스를 지난 요청을 하나로 이어 보는 분산 추적을 순서대로 설명한다.",
+      "flow": [
+        "먼저 회원 서비스가 주문 서비스를 호출하는 구조에서 주문 서비스가 멈추면 회원 조회까지 500 오류가 되는 과정을 살핀다. 이런 연쇄 장애는 뒤쪽 서비스의 실패와 지연이 앞쪽 서비스의 자원까지 묶기 때문에 생긴다.",
+        "이 문제를 막기 위해 CircuitBreaker를 설명한다. CircuitBreaker는 최근 호출 실패율을 보고 호출을 통과시키거나, 막거나, 시험 호출로 회복을 확인하는 상태를 오간다.",
+        "이어서 Resilience4j와 Spring Cloud CircuitBreaker로 주문 조회를 감싸는 방법을 정리한다. 주문 조회가 실패하면 fallback, 즉 대신 돌려줄 응답으로 빈 주문 목록을 반환해 회원 조회 자체는 끝낼 수 있게 한다.",
+        "기본 설정으로는 실습에서 회로가 잘 열리지 않기 때문에 실패율, 기록 범위, 대기 시간, 제한 시간을 조정한다. 글은 강의 설정에서 최근 두 번 중 한 번만 실패해도 회로가 열리는 이유와 3초 지연이 타임아웃이 되지 않는 이유를 계산해 설명한다.",
+        "후반부는 분산 추적을 다룬다. Trace ID는 같은 요청을 묶는 값이고 Span ID는 각 작업 구간을 나타내는 값이며, Zipkin은 이 기록을 모아 정상 요청과 장애 요청의 느린 구간과 오류 지점을 보여 준다. 마지막으로 Spring Boot 3 이후에는 Sleuth 대신 Micrometer Tracing을 써야 하며 기본 전파 형식과 설정이 달라졌다고 정리한다."
+      ]
+    },
+    "date": "2026-10-16",
+    "paths": {
+      "til": "TIL/2026/10/2026-10-16.md"
+    },
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ]
   }
 ]
