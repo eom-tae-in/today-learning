@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 905" width="420" height="905" role="img" aria-labelledby="selection-title selection-desc">
+  <title id="selection-title">멀티 스테이지의 선택 복사와 최종 이미지 경계</title>
+  <desc id="selection-desc">build 단계의 소스와 개발 도구는 그대로 남겨 두고 dist 복사본만 아래의 새 runtime 이미지에 넣습니다. prod-deps 단계에서도 운영용 node_modules와 package 설정만 복사합니다. 실행 이미지는 자체 Node와 OS 베이스에서 출발합니다. 준비 단계 전체를 상속하지 않습니다. 파일 모양과 면적은 실제 용량을 나타내지 않으며 24초마다 반복하는 설명용 예시입니다.</desc>
+  <defs>
+    <g id="folder-shape">
+      <path d="M 0 7 H 12 L 18 13 H 34 V 35 H 0 Z" fill="#daf0e6" stroke="#25745c" stroke-width="2"/>
+      <path d="M 1 17 H 33" fill="none" stroke="#25745c" stroke-width="1.5"/>
+    </g>
+    <g id="file-shape">
+      <path d="M 4 0 H 24 L 34 10 V 35 H 4 Z" fill="#daf0e6" stroke="#25745c" stroke-width="2"/>
+      <path d="M 24 1 V 10 H 33 M 11 20 H 27 M 11 26 H 27" fill="none" stroke="#25745c" stroke-width="1.5"/>
+    </g>
+  </defs>
+  <g font-family="system-ui, -apple-system, sans-serif" fill="#27352f">
+    <rect width="420" height="905" fill="#faf8f1"/>
+    <text x="24" y="40" font-size="25" font-weight="700">빌드 전체를 담지 않는다</text>
+    <text x="24" y="71" font-size="18" fill="#5d675d">필요한 경로만 새 이미지로 · 설명용</text>
+
+    <text x="26" y="115" font-size="23" font-weight="700">build</text>
+    <text x="122" y="115" font-size="18" fill="#5d675d">/app</text>
+    <path d="M 36 137 V 264 M 36 155 H 60 M 36 197 H 60 M 36 258 H 60" fill="none" stroke="#b09b73" stroke-width="2"/>
+    <text id="source-stays" x="73" y="162" font-size="22" fill="#82683c">src/</text>
+    <text id="dev-stays" x="73" y="204" font-size="22" fill="#82683c">node_modules/</text>
+    <text x="73" y="226" font-size="16" fill="#82683c">개발 도구 포함</text>
+    <use href="#folder-shape" x="65" y="240"/>
+    <text x="111" y="265" font-size="22" font-weight="700" fill="#21634e">dist/</text>
+    <path d="M 180 258 H 338" fill="none" stroke="#8eb59f" stroke-width="2" stroke-dasharray="4 5"/>
+    <text x="73" y="299" font-size="17" fill="#82683c">소스·개발 도구는 준비 단계에 유지</text>
+
+    <text x="26" y="340" font-size="23" font-weight="700">prod-deps</text>
+    <text x="192" y="340" font-size="18" fill="#5d675d">/app</text>
+    <use href="#folder-shape" x="65" y="352"/>
+    <text x="111" y="377" font-size="21" font-weight="700" fill="#21634e">node_modules/</text>
+    <path d="M 285 370 H 338" fill="none" stroke="#8eb59f" stroke-width="2" stroke-dasharray="4 5"/>
+    <text x="111" y="399" font-size="16" fill="#5d675d">운영 의존성만</text>
+    <use href="#file-shape" x="65" y="417"/>
+    <text x="111" y="442" font-size="21" font-weight="700" fill="#21634e">package*.json</text>
+    <path d="M 285 435 H 338" fill="none" stroke="#8eb59f" stroke-width="2" stroke-dasharray="4 5"/>
+
+    <path d="M 24 477 H 396" fill="none" stroke="#9caba0" stroke-width="2" stroke-dasharray="6 6"/>
+    <text x="26" y="506" font-size="19" fill="#41614e">COPY --from 으로 경로 선택</text>
+
+    <path d="M 24 553 L 53 529 H 367 L 396 553 V 822 L 367 846 H 53 L 24 822 Z" fill="#ffffff" stroke="#326d55" stroke-width="2.5"/>
+    <path d="M 24 553 H 396 M 367 553 V 846" fill="none" stroke="#b4cbbd" stroke-width="1.5"/>
+    <text x="45" y="587" font-size="23" font-weight="700">runtime</text>
+    <text x="170" y="587" font-size="17" fill="#5d675d">새 베이스의 /app</text>
+    <path d="M 42 605 H 349 M 42 662 H 349 M 42 717 H 349 M 42 772 H 349" fill="none" stroke="#dde8df" stroke-width="1.5"/>
+
+    <g id="runtime-dist" opacity="0">
+      <use href="#folder-shape" x="56" y="616"/>
+      <text x="105" y="642" font-size="22" font-weight="700" fill="#21634e">dist/</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.166667;1" calcMode="discrete" dur="24s" repeatCount="indefinite"/>
+    </g>
+    <g id="runtime-deps" opacity="0">
+      <use href="#folder-shape" x="56" y="671"/>
+      <text x="105" y="697" font-size="21" font-weight="700" fill="#21634e">node_modules/</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.25;1" calcMode="discrete" dur="24s" repeatCount="indefinite"/>
+    </g>
+    <g id="runtime-package" opacity="0">
+      <use href="#file-shape" x="56" y="726"/>
+      <text x="105" y="752" font-size="21" font-weight="700" fill="#21634e">package*.json</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.333333;1" calcMode="discrete" dur="24s" repeatCount="indefinite"/>
+    </g>
+    <path d="M 25 785 H 366 V 822 H 25 Z" fill="#e5ebe6"/>
+    <text x="54" y="811" font-size="20" font-weight="700">실행용 Node + OS</text>
+
+    <g id="copy-dist" opacity="0">
+      <use href="#folder-shape" x="350" y="246"/>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 370;-294 370;-294 370" keyTimes="0;0.083333;0.15;0.166667;1" dur="24s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0;0" keyTimes="0;0.083333;0.166667;1" calcMode="discrete" dur="24s" repeatCount="indefinite"/>
+    </g>
+    <g id="copy-deps" opacity="0">
+      <use href="#folder-shape" x="350" y="352"/>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 319;-294 319;-294 319" keyTimes="0;0.166667;0.233333;0.25;1" dur="24s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0;0" keyTimes="0;0.166667;0.25;1" calcMode="discrete" dur="24s" repeatCount="indefinite"/>
+    </g>
+    <g id="copy-package" opacity="0">
+      <use href="#file-shape" x="350" y="417"/>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 309;-294 309;-294 309" keyTimes="0;0.25;0.316667;0.333333;1" dur="24s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0;0" keyTimes="0;0.25;0.333333;1" calcMode="discrete" dur="24s" repeatCount="indefinite"/>
+    </g>
+
+    <g id="selection-before">
+      <text x="210" y="881" text-anchor="middle" font-size="19" font-weight="700">준비 단계 전체를 상속하지 않음</text>
+      <animate attributeName="opacity" values="1;0;0" keyTimes="0;0.333333;1" calcMode="discrete" dur="24s" repeatCount="indefinite"/>
+    </g>
+    <g id="selection-after" opacity="0">
+      <text x="210" y="881" text-anchor="middle" font-size="19" font-weight="700" fill="#21634e">복사한 파일 + 실행용 베이스</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.333333;1" calcMode="discrete" dur="24s" repeatCount="indefinite"/>
+    </g>
+  </g>
+</svg>
