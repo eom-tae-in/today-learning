@@ -1459,5 +1459,35 @@
       "개발자",
       "LGNSINSPIRECMAP"
     ]
+  },
+  {
+    "title": "이미지 공유부터 Kubernetes 클러스터 구축까지",
+    "summary": "Docker 이미지 저장소와 AWS CLI, Ubuntu VM 기반 Kubernetes 구축 순서를 정리한 글이다.",
+    "tags": [
+      "Docker",
+      "AWS CLI",
+      "Amazon ECR",
+      "Ubuntu VM",
+      "Kubernetes"
+    ],
+    "readerSummary": {
+      "overview": "Docker 이미지를 어디에 저장하고 어떻게 올리는지부터 시작해, AWS ECR을 쓰기 위한 AWS CLI 준비를 다룬다. 이어서 Ubuntu 가상머신을 여러 대 준비하고, 각 노드를 연결해 Kubernetes 클러스터 상태를 확인하는 흐름으로 이어진다.",
+      "flow": [
+        "먼저 Docker 이미지를 보관하는 서버인 레지스트리의 종류를 비교한다. Docker Hub, 직접 운영하는 Registry, Amazon ECR은 운영 주체와 로그인 방식은 다르지만, 이미지에 저장소 주소를 붙이고 push·pull하는 흐름은 같다.",
+        "AWS ECR을 사용하려면 터미널에서 AWS에 명령을 보내는 도구인 AWS CLI를 설치해야 한다. 설치 후 자격 증명과 실제 사용 계정을 확인하고, ECR에 로그인한 뒤 이미지를 태그로 연결해 업로드한다.",
+        "그다음 Kubernetes를 올릴 서버 역할로 Ubuntu 가상머신을 준비한다. NAT 네트워크, 고정 IP, 호스트 이름, SSH 접속을 맞추고, 복제한 VM들이 서로 다른 노드로 동작하도록 주소와 이름을 확인한다.",
+        "각 VM에서 Docker 실행 상태를 확인하고, Nginx 이미지를 실행해 포트와 응답을 점검한다. 페이지를 바꾸려면 이미지를 다시 빌드하고 저장소에 올린 뒤, 기존 컨테이너를 새 버전 이미지로 다시 실행한다.",
+        "마지막으로 모든 노드에 Kubernetes 실행에 필요한 런타임과 도구를 준비한다. 마스터에서 클러스터를 초기화하고 네트워크 구성을 적용한 뒤, 워커에서 join 명령으로 참여시키고 모든 노드가 Ready인지 확인한다."
+      ]
+    },
+    "date": "2026-10-26",
+    "paths": {
+      "til": "TIL/2026/10/2026-10-26.md"
+    },
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ]
   }
 ]
