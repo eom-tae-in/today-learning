@@ -1489,5 +1489,35 @@
       "개발자",
       "LGNSINSPIRECMAP"
     ]
+  },
+  {
+    "title": "Kubernetes에서 앱 실행과 접속 관리하기",
+    "summary": "Pod부터 Deployment, Service까지 앱을 실행하고 관리하는 흐름을 정리한 글이다.",
+    "tags": [
+      "Kubernetes",
+      "kubectl",
+      "Pod",
+      "Deployment",
+      "Service"
+    ],
+    "readerSummary": {
+      "overview": "이 글은 Kubernetes 클러스터 위에서 애플리케이션을 실행하고, 실행 개수와 버전, 접속 경로를 관리하는 과정을 다룬다. Pod 생성 흐름을 이해한 뒤 Deployment로 복제와 배포를 관리하고, Service로 사용자가 접근할 길을 만든다.",
+      "flow": [
+        "먼저 Kubernetes가 서버와 컨테이너가 늘어날 때 원하는 실행 상태를 유지하는 구조임을 설명한다. API 서버, 스케줄러, kubelet, 런타임이 각각 요청 처리, 배치 결정, 노드 실행을 맡는다.",
+        "다음으로 kubectl과 YAML을 사용해 Pod를 만든다. Pod는 Kubernetes가 실행하는 가장 작은 단위이며, 상태 조회, 이벤트, 로그를 나누어 보면서 실행 여부와 문제 원인을 확인한다.",
+        "이후 단독 Pod 대신 Deployment를 사용해 같은 앱을 여러 개 유지하는 방법을 다룬다. Deployment는 ReplicaSet을 통해 필요한 Pod 수를 맞추고, 템플릿 변경으로 버전 교체와 롤백을 관리한다.",
+        "Pod는 교체될 수 있으므로 Service로 일정한 접속 경로를 만든다. Service는 레이블로 연결할 Pod를 고르고, ClusterIP, NodePort, LoadBalancer처럼 환경에 맞는 접속 방식을 제공한다.",
+        "마지막으로 Metrics Server로 자원 사용량을 보고, Secret과 imagePullSecrets로 비공개 이미지 인증을 준비한다. Namespace, 레이블, 노드 관리 명령은 적용 범위가 다르므로 조회와 변경 대상을 구분한다."
+      ]
+    },
+    "date": "2026-10-27",
+    "paths": {
+      "til": "TIL/2026/10/2026-10-27.md"
+    },
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ]
   }
 ]
