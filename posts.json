@@ -1519,5 +1519,35 @@
       "개발자",
       "LGNSINSPIRECMAP"
     ]
+  },
+  {
+    "title": "이미지부터 Argo CD GitOps 배포까지",
+    "summary": "컨테이너 이미지와 Git 설정을 Argo CD로 Kubernetes에 배포하는 학습 정리.",
+    "tags": [
+      "Docker",
+      "Kubernetes",
+      "Argo CD",
+      "GitOps",
+      "GitHub"
+    ],
+    "readerSummary": {
+      "overview": "컨테이너 이미지(실행 파일 묶음)를 만들고, Kubernetes(컨테이너 실행을 관리하는 시스템)에 배포 설정을 적용하는 흐름을 다룬다. 이어서 GitOps(Git의 설정을 기준으로 운영하는 방식)로 Argo CD가 Git과 클러스터 상태를 맞추는 과정을 연결한다.",
+      "flow": [
+        "먼저 수동 배포의 한계를 설명하고, 이미지·Git 설정·Kubernetes 실행 상태가 서로 다른 위치에 있음을 나눈다. 이후 VM 이름, IP, 네트워크 대역, 클러스터 설치 작업을 구분해 배포 기반을 준비한다.",
+        "다음으로 Docker로 웹 페이지가 들어간 이미지를 만들고 v1.0과 v2.0 태그로 레지스트리에 올린다. Kubernetes YAML은 실행할 이미지, Pod 수, Service 연결 방식을 적는 설정이며, selector와 포트가 맞는지 먼저 확인한다.",
+        "그 뒤 Argo CD를 설치하고 접속 방식을 정리한다. Argo CD는 Git의 선언과 클러스터 상태를 비교해 맞추는 도구이며, 설치 버전, 초기 로그인, 서버 접속, 인증서 옵션을 서로 다른 단계로 다룬다.",
+        "GitHub 저장소에는 배포 YAML을 올리고, Argo CD가 이를 읽을 권한을 연결한다. 개발자가 Git에 push하는 인증, Argo CD의 저장소 읽기 인증, Kubernetes의 이미지 pull 인증은 각각 다른 권한으로 설명한다.",
+        "마지막으로 Application이 저장소의 revision·path와 배포할 namespace를 묶어 실제 배포 단위가 된다. 수동 Sync, 자동 동기화, self-heal, prune, Git 변경 반영, 롤백과 상태 확인을 순서대로 연결한다."
+      ]
+    },
+    "date": "2026-10-29",
+    "paths": {
+      "til": "TIL/2026/10/2026-10-29.md"
+    },
+    "hashtags": [
+      "LG CNS 6기",
+      "개발자",
+      "LGNSINSPIRECMAP"
+    ]
   }
 ]
